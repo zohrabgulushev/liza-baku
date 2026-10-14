@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="ru" class="h-full bg-[#FAF8F5]">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <title>Управление сайтом · Liza Aidaraliyeva</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "alabaster": "#FAF8F5",
+            "eggshell": "#F3EFEA",
+            "linen": "#E7E2DA",
+            "ink": "#1A1918",
+            "ink-muted": "#635F5B",
+            "ink-faint": "#9E9992",
+            "clay": "#8E5B53",
+            "clay-subtle": "#F2E8E5"
+          },
+          fontFamily: {
+            "serif": ["'Playfair Display'", "Georgia", "serif"],
+            "sans": ["'Plus Jakarta Sans'", "-apple-system", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-thumb { background: #E7E2DA; border-radius: 2px; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .touch-scroll { -webkit-overflow-scrolling: touch; }
+    .pb-safe { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px); }
+    .pt-safe { padding-top: max(env(safe-area-inset-top, 0px), 8px); }
+    .tab-btn.active {
+      background-color: #1A1918 !important;
+      color: #FAF8F5 !important;
+      border-color: #1A1918 !important;
+    }
+    @media (max-width: 640px) {
+      input, select, textarea {
+        font-size: 16px !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-alabaster font-sans text-ink min-h-screen flex flex-col">
+
+  <!-- ==================== LOGIN SCREEN MODAL ==================== -->
+  <div id="login-modal" class="fixed inset-0 z-50 bg-ink/75 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="max-w-sm w-full bg-alabaster border border-linen p-6 rounded-sm shadow-2xl flex flex-col gap-5">
+      <div class="flex flex-col items-center text-center gap-1.5">
+        <div class="w-12 h-12 rounded-full border border-ink/20 bg-eggshell flex items-center justify-center mb-1">
+          <span class="font-serif italic text-[20px] text-ink">L</span>
+          <span class="font-serif font-light text-[17px] text-clay">A</span>
+        </div>
+        <h1 class="font-serif text-[22px] font-normal text-ink">Панель управления</h1>
+        <p class="text-[12px] text-ink-muted">Введите пароль для редактирования портфолио, фото и текстов</p>
+      </div>
+
+      <form id="login-form" onsubmit="handleLogin(event)" class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1">
+          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="login-pass">Пароль</label>
+          <div class="relative">
+            <input type="password" id="login-pass" class="w-full bg-eggshell/60 border border-linen rounded-sm px-3 py-2.5 text-[13px] text-ink focus:border-ink focus:ring-1 focus:ring-ink focus:outline-none" placeholder="Введите пароль..." required autofocus/>
+            <button type="button" onclick="togglePassVisibility('login-pass')" class="absolute right-2.5 top-2.5 text-ink-faint hover:text-ink">
+              <span class="material-symbols-outlined text-[18px]">visibility</span>
+            </button>
+          </div>
+          <p id="login-error" class="text-[11px] text-red-600 hidden mt-1">Неверный пароль. Попробуйте снова.</p>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 px-4 rounded-sm bg-ink text-alabaster text-[12px] font-medium tracking-wide uppercase hover:bg-clay transition-all shadow-md mt-1 cursor-pointer">
+          Войти в панель
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN ADMIN APPLICATION ==================== -->
+  <div id="admin-app" class="hidden flex-1 flex flex-col">
+    <!-- Top Header -->
+    <header class="sticky top-0 z-40 bg-alabaster/95 backdrop-blur-md border-b border-linen shadow-xs">
+      <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full border border-ink/20 bg-eggshell flex items-center justify-center shrink-0">
+            <span class="font-serif italic text-[15px] text-ink">L</span>
+            <span class="font-serif font-light text-[13px] text-clay">A</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-serif text-[14px] font-medium tracking-wide uppercase">Liza Aidaraliyeva</span>
+            <span class="text-[10px] text-clay tracking-wider font-semibold uppercase">Управление сайтом</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a href="/" target="_blank" class="px-3 py-1.5 rounded-sm border border-linen bg-eggshell/60 hover:bg-eggshell text-[11px] font-medium text-ink flex items-center gap-1.5 transition-all shadow-xs" title="Открыть сайт в новой вкладке">
+            <span class="material-symbols-outlined text-[15px]">visibility</span>
+            <span class="hidden sm:inline">Открыть сайт</span>
+          </a>
+
+          <button onclick="saveAllChanges()" class="px-4 py-1.5 rounded-sm bg-ink text-alabaster text-[11px] font-medium tracking-wide uppercase hover:bg-clay transition-all shadow-sm flex items-center gap-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-[15px]">save</span>
+            <span>Сохранить всё</span>
+          </button>
+
+          <button onclick="logout()" class="p-1.5 rounded-sm text-ink-muted hover:text-red-600 hover:bg-eggshell transition-all ml-1 cursor-pointer" title="Выйти">
+            <span class="material-symbols-outlined text-[18px]">logout</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="bg-eggshell/70 border-b border-linen overflow-x-auto no-scrollbar touch-scroll">
+      <div class="max-w-5xl mx-auto px-3 sm:px-4 flex items-center gap-1.5 sm:gap-2 py-2">
+        <button onclick="switchTab('hero')" id="tab-btn-hero" class="tab-btn active px-3.5 py-1.5 rounded-sm text-[12px] font-medium border border-linen bg-alabaster text-ink flex items-center gap-1.5 whitespace-nowrap transition-all shadow-xs cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">view_agenda</span>
+          <span>1. Первый экран (Коллаж и фото)</span>
+        </button>
+
+        <button onclick="switchTab('directions')" id="tab-btn-directions" class="tab-btn px-3.5 py-1.5 rounded-sm text-[12px] font-medium border border-linen bg-alabaster text-ink flex items-center gap-1.5 whitespace-nowrap transition-all shadow-xs cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">category</span>
+          <span>2. Раздел «Направления» (Тату и Перманент)</span>
+        </button>
+
+        <button onclick="switchTab('portfolio')" id="tab-btn-portfolio" class="tab-btn px-3.5 py-1.5 rounded-sm text-[12px] font-medium border border-linen bg-alabaster text-ink flex items-center gap-1.5 whitespace-nowrap transition-all shadow-xs cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">photo_library</span>
+          <span>3. Портфолио и Бейджи</span>
+        </button>
+
+        <button onclick="switchTab('texts')" id="tab-btn-texts" class="tab-btn px-3.5 py-1.5 rounded-sm text-[12px] font-medium border border-linen bg-alabaster text-ink flex items-center gap-1.5 whitespace-nowrap transition-all shadow-xs cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">edit_note</span>
+          <span>4. Тексты и Контакты</span>
+        </button>
+
+        <button onclick="switchTab('bookings')" id="tab-btn-bookings" class="tab-btn px-3.5 py-1.5 rounded-sm text-[12px] font-medium border border-linen bg-alabaster text-ink flex items-center gap-1.5 whitespace-nowrap transition-all shadow-xs cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">inbox</span>
+          <span>5. Заявки клиентов</span>
+          <span id="bookings-count-badge" class="ml-1 px-1.5 py-0.2 bg-clay text-alabaster text-[9px] rounded-full hidden">0</span>
+        </button>
+
+        <button onclick="switchTab('security')" id="tab-btn-security" class="tab-btn px-3.5 py-1.5 rounded-sm text-[12px] font-medium border border-linen bg-alabaster text-ink flex items-center gap-1.5 whitespace-nowrap transition-all shadow-xs cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">key</span>
+          <span>6. Пароль</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Admin Container -->
+    <main class="max-w-5xl w-full mx-auto px-4 py-8 flex-1 flex flex-col gap-6">
+
+      <!-- ==================== TAB 1: HERO COLLAGE (ПЕРВЫЙ ЭКРАН) ==================== -->
+      <section id="tab-content-hero" class="flex flex-col gap-5">
+        <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <h2 class="font-serif text-[20px] text-ink font-normal">Первый экран: Коллаж, фото и заголовок</h2>
+            <span class="text-[10px] uppercase tracking-wider bg-eggshell px-2.5 py-1 rounded-sm border border-linen font-semibold text-clay">Главный экран сайта</span>
+          </div>
+          <p class="text-[12px] text-ink-muted">Здесь настраивается всё, что посетитель видит сразу при входе: главный заголовок, подзаголовок, бейдж локации и оба фото коллажа (тату и перманент губ) с плавающим бейджем.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left Column: Live Mobile Mockup Preview -->
+          <div class="lg:col-span-5 bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-4">
+            <div class="flex items-center justify-between border-b border-linen pb-3">
+              <span class="font-serif text-[15px] font-medium text-ink">Предпросмотр (как на телефоне)</span>
+              <span class="text-[9px] uppercase tracking-wider bg-eggshell border border-linen px-2 py-0.5 rounded-sm text-ink-muted">Live Preview</span>
+            </div>
+
+            <div class="p-4 bg-eggshell/40 border border-linen rounded-sm flex flex-col gap-3 select-none">
+              <!-- Location Tag -->
+              <div class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#8E5B53]"></span>
+                <span id="hero-preview-loc" class="text-[9px] font-medium tracking-[0.2em] text-ink-muted uppercase">Студия в Баку</span>
+              </div>
+              
+              <!-- Main Headline & Subtitle -->
+              <div class="flex flex-col gap-1">
+                <div id="hero-preview-title" class="font-serif text-[20px] leading-[1.18] font-normal tracking-tight text-ink">
+                  Искусство, которое<br/>остаётся с вами
+                </div>
+                <div id="hero-preview-sub" class="text-[11px] leading-relaxed text-ink-muted font-light">
+                  Авторские татуировки и деликатный перманент
+                </div>
+              </div>
+
+              <!-- Collage Mockup -->
+              <div class="relative w-full max-w-[280px] mx-auto mt-1 mb-2">
+                <!-- Main photo card -->
+                <div class="relative w-[76%] h-[180px] rounded-xl overflow-hidden shadow-md bg-eggshell border border-linen">
+                  <img id="hero-preview-main-img" src="assets/hero-fine-line.jpg" alt="Главное фото" class="w-full h-full object-cover"/>
+                  <div class="absolute bottom-2 left-2 bg-alabaster/90 px-2 py-0.5 rounded-full border border-white/70 text-[8.5px] font-medium text-ink shadow-xs">
+                    <span id="hero-preview-badge">Fine line · Авторские эскизы</span>
+                  </div>
+                </div>
+
+                <!-- Overlapping inset card -->
+                <div class="absolute right-0 bottom-2 w-[48%] h-[115px] rounded-xl overflow-hidden border-2 border-alabaster shadow-lg bg-eggshell">
+                  <img id="hero-preview-inset-img" src="assets/lip-blush.jpg" alt="Накладное фото" class="w-full h-full object-cover"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Settings & Uploads -->
+          <div class="lg:col-span-7 flex flex-col gap-5">
+            <!-- Text settings -->
+            <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-3.5">
+              <h3 class="font-serif text-[16px] font-medium text-ink border-b border-linen pb-2">1. Тексты первого экрана</h3>
+              
+              <div class="flex flex-col gap-1.5">
+                <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Главный заголовок (перенос строки делит на 2 строки)</label>
+                <textarea id="txt-hero-title" rows="2" oninput="updateHeroPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Подзаголовок</label>
+                  <input type="text" id="txt-hero-subtitle-tab1" oninput="updateHeroPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Бейдж локации</label>
+                  <input type="text" id="txt-location-badge-tab1" oninput="updateHeroPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Photos & Badges -->
+            <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-4">
+              <h3 class="font-serif text-[16px] font-medium text-ink border-b border-linen pb-2">2. Фотографии коллажа</h3>
+
+              <!-- Photo 1: Main (Tattoo) -->
+              <div class="bg-eggshell/40 border border-linen p-3.5 rounded-sm flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[12px] font-semibold text-ink">Основное фото коллажа (Татуировка)</span>
+                  <span class="text-[9px] uppercase tracking-wider bg-ink text-alabaster px-2 py-0.5 rounded-sm">76% ширины</span>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] uppercase tracking-wider text-ink-muted font-medium">Ссылка на фото или загрузка</label>
+                  <input type="text" id="hero-main-img-src" oninput="updateHeroPreview()" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] uppercase tracking-wider text-ink-muted font-medium">Плавающий бейдж на фото</label>
+                  <input type="text" id="hero-badge-input" oninput="updateHeroPreview()" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+
+                <label class="py-2 px-3 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-xs">
+                  <span class="material-symbols-outlined text-[15px] text-clay">upload_file</span>
+                  <span>Загрузить основное фото с устройства</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="uploadHeroImageFile(this, 'hero-main-img-src')"/>
+                </label>
+              </div>
+
+              <!-- Photo 2: Inset (PMU) -->
+              <div class="bg-eggshell/40 border border-linen p-3.5 rounded-sm flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[12px] font-semibold text-ink">Накладное фото коллажа (Перманент)</span>
+                  <span class="text-[9px] uppercase tracking-wider bg-clay text-alabaster px-2 py-0.5 rounded-sm">48% ширины</span>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] uppercase tracking-wider text-ink-muted font-medium">Ссылка на фото или загрузка</label>
+                  <input type="text" id="hero-inset-img-src" oninput="updateHeroPreview()" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+
+                <label class="py-2 px-3 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-xs">
+                  <span class="material-symbols-outlined text-[15px] text-clay">upload_file</span>
+                  <span>Загрузить накладное фото с устройства</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="uploadHeroImageFile(this, 'hero-inset-img-src')"/>
+                </label>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-1">
+              <button type="button" onclick="saveAllChanges()" class="px-5 py-2.5 rounded-sm bg-ink text-alabaster text-[12px] font-semibold tracking-wide uppercase hover:bg-clay transition-all shadow-xs flex items-center gap-2 cursor-pointer">
+                <span class="material-symbols-outlined text-[16px]">save</span>
+                <span>Сохранить первый экран</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 2: DIRECTIONS SECTION (НАПРАВЛЕНИЯ) ==================== -->
+      <section id="tab-content-directions" class="hidden flex flex-col gap-5">
+        <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <h2 class="font-serif text-[20px] text-ink font-normal">Раздел «Направления» (Татуировки и перманент)</h2>
+            <span class="text-[10px] uppercase tracking-wider bg-eggshell px-2.5 py-1 rounded-sm border border-linen font-semibold text-clay">Секция на сайте</span>
+          </div>
+          <p class="text-[12px] text-ink-muted">В этом блоке на сайте отображаются два параллельных направления. Здесь вы можете обновить их фотографии, бейджи (например «Tattoo» и «PMU»), заголовки и описания стилей.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Direction 1: Tattoo -->
+          <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-4">
+            <div class="flex items-center justify-between border-b border-linen pb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-ink"></span>
+                <h3 class="font-serif text-[16px] font-medium text-ink">Направление 1: Татуировки</h3>
+              </div>
+              <span class="text-[9px] uppercase tracking-wider bg-ink text-alabaster px-2 py-0.5 rounded-sm">Левая карточка</span>
+            </div>
+
+            <!-- Preview mirroring site card -->
+            <div class="bg-alabaster rounded-sm border border-linen p-3 flex flex-col gap-2 shadow-xs">
+              <div class="h-44 w-full rounded-sm overflow-hidden bg-eggshell relative border border-linen">
+                <img id="dir-tattoo-preview-img" src="assets/hero-hand-tattoo.jpg" alt="Татуировки" class="w-full h-full object-cover"/>
+                <div id="dir-tattoo-preview-badge" class="absolute top-2 left-2 bg-alabaster/95 px-2 py-0.5 rounded-sm border border-linen text-[9px] uppercase tracking-wider font-semibold text-ink shadow-xs">
+                  Tattoo
+                </div>
+              </div>
+              <div class="flex flex-col gap-0.5 pt-1">
+                <div id="dir-tattoo-preview-title" class="font-serif text-[15px] text-ink font-medium">Татуировки</div>
+                <div id="dir-tattoo-preview-desc" class="text-[11px] text-ink-muted leading-relaxed">Ботаника, надписи, минимализм.</div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-tattoo-badge">Бейдж на фото</label>
+                <span class="text-[10px] text-ink-faint">Нажмите для выбора:</span>
+              </div>
+              <input type="text" id="dir-tattoo-badge" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="Tattoo"/>
+              <div class="flex flex-wrap gap-1.5 pt-0.5" id="dir-tattoo-chips">
+                <button type="button" onclick="setDirectionBadge('tattoo', 'Tattoo')" class="text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer">Tattoo</button>
+                <button type="button" onclick="setDirectionBadge('tattoo', 'Татуировка')" class="text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer">Татуировка</button>
+                <button type="button" onclick="setDirectionBadge('tattoo', 'Ботаника')" class="text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer">Ботаника</button>
+                <button type="button" onclick="setDirectionBadge('tattoo', 'Минимализм')" class="text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer">Минимализм</button>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-tattoo-title">Заголовок направления</label>
+              <input type="text" id="dir-tattoo-title" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="Татуировки"/>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-tattoo-desc">Краткое описание (стили)</label>
+              <input type="text" id="dir-tattoo-desc" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="Ботаника, надписи, минимализм."/>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-tattoo-src">Ссылка на фото или загрузка</label>
+              <input type="text" id="dir-tattoo-src" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="assets/hero-hand-tattoo.jpg"/>
+            </div>
+
+            <label class="w-full py-2.5 px-3 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-xs">
+              <span class="material-symbols-outlined text-[16px] text-clay">upload_file</span>
+              <span>Загрузить фото тату с устройства</span>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadDirectionPhoto(this, 'dir-tattoo-src', 'dir-tattoo-preview-img')"/>
+            </label>
+          </div>
+
+          <!-- Direction 2: PMU -->
+          <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-4">
+            <div class="flex items-center justify-between border-b border-linen pb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-clay"></span>
+                <h3 class="font-serif text-[16px] font-medium text-ink">Направление 2: Перманентный макияж</h3>
+              </div>
+              <span class="text-[9px] uppercase tracking-wider bg-clay text-alabaster px-2 py-0.5 rounded-sm">Правая карточка</span>
+            </div>
+
+            <!-- Preview mirroring site card -->
+            <div class="bg-alabaster rounded-sm border border-linen p-3 flex flex-col gap-2 shadow-xs">
+              <div class="h-44 w-full rounded-sm overflow-hidden bg-eggshell relative border border-linen">
+                <img id="dir-pmu-preview-img" src="assets/powder-brows.jpg" alt="Перманент" class="w-full h-full object-cover"/>
+                <div id="dir-pmu-preview-badge" class="absolute top-2 left-2 bg-alabaster/95 px-2 py-0.5 rounded-sm border border-linen text-[9px] uppercase tracking-wider font-semibold text-clay shadow-xs">
+                  PMU
+                </div>
+              </div>
+              <div class="flex flex-col gap-0.5 pt-1">
+                <div id="dir-pmu-preview-title" class="font-serif text-[15px] text-ink font-medium">Перманент</div>
+                <div id="dir-pmu-preview-desc" class="text-[11px] text-ink-muted leading-relaxed">Губы, брови, межресничка.</div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-pmu-badge">Бейдж на фото</label>
+                <span class="text-[10px] text-ink-faint">Нажмите для выбора:</span>
+              </div>
+              <input type="text" id="dir-pmu-badge" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="PMU"/>
+              <div class="flex flex-wrap gap-1.5 pt-0.5" id="dir-pmu-chips">
+                <button type="button" onclick="setDirectionBadge('pmu', 'PMU')" class="text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer">PMU</button>
+                <button type="button" onclick="setDirectionBadge('pmu', 'Перманент')" class="text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer">Перманент</button>
+                <button type="button" onclick="setDirectionBadge('pmu', 'Пудровые брови')" class="text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer">Пудровые брови</button>
+                <button type="button" onclick="setDirectionBadge('pmu', 'Губы')" class="text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer">Губы</button>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-pmu-title">Заголовок направления</label>
+              <input type="text" id="dir-pmu-title" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="Перманент"/>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-pmu-desc">Краткое описание (зоны)</label>
+              <input type="text" id="dir-pmu-desc" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="Губы, брови, межресничка."/>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-pmu-src">Ссылка на фото или загрузка</label>
+              <input type="text" id="dir-pmu-src" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="assets/powder-brows.jpg"/>
+            </div>
+
+            <label class="w-full py-2.5 px-3 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-xs">
+              <span class="material-symbols-outlined text-[16px] text-clay">upload_file</span>
+              <span>Загрузить фото перманента с устройства</span>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadDirectionPhoto(this, 'dir-pmu-src', 'dir-pmu-preview-img')"/>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button type="button" onclick="saveAllChanges()" class="px-5 py-2.5 rounded-sm bg-ink text-alabaster text-[12px] font-semibold tracking-wide uppercase hover:bg-clay transition-all shadow-xs flex items-center gap-2 cursor-pointer">
+            <span class="material-symbols-outlined text-[16px]">save</span>
+            <span>Сохранить направления</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 3: PORTFOLIO & BADGES ==================== -->
+      <section id="tab-content-portfolio" class="hidden flex flex-col gap-6">
+        
+        <!-- Works List -->
+        <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-linen pb-3">
+            <div>
+              <h2 class="font-serif text-[20px] text-ink font-normal">Работы портфолио</h2>
+              <p class="text-[12px] text-ink-muted">Реальные работы с простыми понятными названиями и отметкой «Зажившая работа» или «Свежая работа»</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="addNewPortfolioItem('image')" class="px-3.5 py-2 rounded-sm bg-ink text-alabaster text-[11px] uppercase tracking-wider font-medium hover:bg-clay transition-all shadow-xs flex items-center gap-1.5 cursor-pointer">
+                <span class="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+                <span>Добавить работу</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="portfolio-items-list" class="flex flex-col gap-3">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Custom Badges Manager -->
+        <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-4">
+          <div class="border-b border-linen pb-3">
+            <h3 class="font-serif text-[18px] text-ink font-normal">Управление бейджами</h3>
+            <p class="text-[12px] text-ink-muted">Создавайте бейджи («Зажившая работа», «Свежая работа», «Ботаника», «Перманент губ») для быстрого выбора в один клик</p>
+          </div>
+
+          <div class="flex flex-wrap gap-2 items-center min-h-[40px] p-3 bg-eggshell/40 border border-linen rounded-sm" id="tab-badge-chips-container">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <div class="flex gap-2">
+            <input type="text" id="tab-new-badge-input" placeholder="Введите название нового бейджа..." class="flex-1 bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+            <button type="button" onclick="createBadgeFromTabInput()" class="px-4 py-2 rounded-sm bg-ink text-alabaster text-[11px] uppercase font-semibold hover:bg-clay transition-all shadow-xs flex items-center gap-1.5 shrink-0 cursor-pointer">
+              <span class="material-symbols-outlined text-[16px]">add</span>
+              <span>Создать бейдж</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 3: TEXTS & CONTACTS ==================== -->
+      <section id="tab-content-texts" class="hidden flex flex-col gap-5">
+        <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-5">
+          <h2 class="font-serif text-[20px] text-ink font-normal border-b border-linen pb-3">Основные тексты сайта (MVP)</h2>
+
+          <!-- Row 1: Names & Brand -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Имя мастера (Русский)</label>
+              <input type="text" id="txt-artist-name" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Имя мастера (Латиница)</label>
+              <input type="text" id="txt-brand-latin" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+            </div>
+          </div>
+
+          <!-- Row 2: Location & Hero Subtitle -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Бейдж локации (Один раз на первом экране)</label>
+              <input type="text" id="txt-location-badge" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Подзаголовок первого экрана</label>
+              <input type="text" id="txt-hero-subtitle" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+            </div>
+          </div>
+
+          <!-- Row 3: Hero Description -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Короткое позиционирование (без лишнего тумана)</label>
+            <input type="text" id="txt-hero-desc" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+          </div>
+
+          <!-- Row 4: About Quote & Bio -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-linen">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Цитата мастера в разделе «О мастере»</label>
+              <textarea id="txt-about-quote" rows="3" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"></textarea>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Короткая справка (максимум два предложения)</label>
+              <textarea id="txt-about-bio" rows="3" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"></textarea>
+            </div>
+          </div>
+
+          <!-- Row 5: About Photo & Location -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-linen">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Фото мастера</label>
+              <div class="flex gap-2">
+                <input type="text" id="txt-about-photo" class="flex-1 bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+                <label class="px-3 py-2 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center gap-1.5 shrink-0 transition-all">
+                  <span class="material-symbols-outlined text-[15px]">upload</span>
+                  <span>Загрузить</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="uploadMediaFile(this, 'txt-about-photo')"/>
+                </label>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Адрес в футере</label>
+              <input type="text" id="txt-footer-address" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+            </div>
+          </div>
+
+          <!-- Row 6: Two Dedicated Contact Pairs -->
+          <div class="pt-3 border-t border-linen flex flex-col gap-4">
+            <div class="border-b border-linen pb-2">
+              <h3 class="font-serif text-[17px] text-ink font-normal">Контакты по двум направлениям</h3>
+              <p class="text-[12px] text-ink-muted">Отдельные WhatsApp и Instagram для Татуировок и Перманентного макияжа</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <!-- Tattoo Contacts -->
+              <div class="bg-eggshell/40 border border-linen p-4 rounded-sm flex flex-col gap-3">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-ink"></span>
+                  <span class="font-serif text-[15px] font-medium text-ink">Татуировки</span>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp (для ссылок: 99450...)</label>
+                  <input type="text" id="txt-phone-tattoo" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp (отображение: +994 50 ...)</label>
+                  <input type="text" id="txt-phone-tattoo-disp" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">Instagram (без @: leyla.ink)</label>
+                  <input type="text" id="txt-ig-tattoo" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+              </div>
+
+              <!-- PMU Contacts -->
+              <div class="bg-eggshell/40 border border-linen p-4 rounded-sm flex flex-col gap-3">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-clay"></span>
+                  <span class="font-serif text-[15px] font-medium text-ink">Перманентный макияж</span>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp (для ссылок: 99450...)</label>
+                  <input type="text" id="txt-phone-pmu" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp (отображение: +994 50 ...)</label>
+                  <input type="text" id="txt-phone-pmu-disp" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">Instagram (без @: leyla.permanent)</label>
+                  <input type="text" id="txt-ig-pmu" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-2">
+            <button type="button" onclick="saveAllChanges()" class="px-5 py-2.5 rounded-sm bg-ink text-alabaster text-[12px] font-semibold tracking-wide uppercase hover:bg-clay transition-all shadow-xs flex items-center gap-2 cursor-pointer">
+              <span class="material-symbols-outlined text-[16px]">save</span>
+              <span>Сохранить тексты и контакты</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 4: CLIENT BOOKINGS ==================== -->
+      <section id="tab-content-bookings" class="hidden flex flex-col gap-5">
+        <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex items-center justify-between">
+          <div>
+            <h2 class="font-serif text-[20px] text-ink font-normal">Заявки клиентов и прикрепленные эскизы</h2>
+            <p class="text-[12px] text-ink-muted">Здесь отображаются все отправленные через форму запросы на консультацию с прикрепленными файлами</p>
+          </div>
+          <button onclick="renderBookings()" class="px-3 py-1.5 rounded-sm bg-eggshell border border-linen hover:border-ink text-[11px] font-medium text-ink flex items-center gap-1.5 shadow-xs cursor-pointer">
+            <span class="material-symbols-outlined text-[15px]">refresh</span>
+            <span>Обновить</span>
+          </button>
+        </div>
+
+        <div id="bookings-list" class="flex flex-col gap-3">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- ==================== TAB 5: PASSWORD ==================== -->
+      <section id="tab-content-security" class="hidden flex flex-col gap-5">
+        <div class="max-w-md bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-4">
+          <div class="border-b border-linen pb-3">
+            <h2 class="font-serif text-[20px] text-ink font-normal">Смена пароля администратора</h2>
+            <p class="text-[12px] text-ink-muted">Используйте надежный пароль для защиты управления сайтом</p>
+          </div>
+
+          <form onsubmit="handlePasswordChange(event)" class="flex flex-col gap-3">
+            <div class="flex flex-col gap-1">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Текущий пароль</label>
+              <input type="password" id="old-pass" required class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Новый пароль</label>
+              <input type="password" id="new-pass" required minlength="4" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+            </div>
+
+            <p id="pass-msg" class="text-[11px] hidden"></p>
+
+            <button type="submit" class="w-full py-2.5 px-4 rounded-sm bg-ink text-alabaster text-[12px] font-semibold uppercase tracking-wide hover:bg-clay transition-all shadow-xs mt-1 cursor-pointer">
+              Обновить пароль
+            </button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ==================== UNIVERSAL ITEM MODAL (PORTFOLIO) ==================== -->
+  <div id="item-modal" onclick="if(event.target.id==='item-modal') closeItemModal()" class="fixed inset-0 z-50 bg-ink/75 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="max-w-lg w-full max-h-[88vh] overflow-y-auto bg-alabaster border border-linen rounded-sm shadow-2xl p-4 sm:p-5 flex flex-col gap-4">
+      <div class="flex items-center justify-between border-b border-linen pb-3">
+        <div>
+          <h3 id="item-modal-heading" class="font-serif text-[18px] text-ink font-medium">Редактировать работу</h3>
+          <p id="item-modal-subheading" class="text-[11px] text-ink-muted">Измените параметры работы в портфолио</p>
+        </div>
+        <button type="button" onclick="closeItemModal()" class="p-1 rounded-sm text-ink-muted hover:text-ink cursor-pointer">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <form id="item-modal-form" onsubmit="submitItemModal(event)" class="flex flex-col gap-3.5">
+        <input type="hidden" id="item-modal-index" value="-1"/>
+
+        <!-- Live Preview -->
+        <div class="w-full h-44 rounded-sm overflow-hidden bg-eggshell border border-linen relative shadow-xs">
+          <img id="item-modal-preview-img" src="assets/botanical-tattoo.jpg" alt="Превью" class="w-full h-full object-cover"/>
+          <div id="item-modal-preview-badge" class="absolute top-2 left-2 bg-alabaster/95 px-2 py-0.5 rounded-sm border border-linen text-[8px] uppercase tracking-wider font-semibold text-ink shadow-xs">
+            Татуировка
+          </div>
+          <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent p-2.5 text-alabaster">
+            <span id="item-modal-preview-title" class="font-serif text-[12px] font-medium block">Название</span>
+            <span id="item-modal-preview-meta" class="text-[9px] text-alabaster/80 block font-light">Зажившая работа</span>
+          </div>
+        </div>
+
+        <!-- Image URL & Upload -->
+        <div class="flex flex-col gap-1">
+          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Изображение (URL или загрузка)</label>
+          <div class="flex gap-2">
+            <input type="text" id="item-modal-src" required oninput="updateItemModalLivePreview()" class="flex-1 bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+            <label class="px-3 py-2 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center gap-1.5 shrink-0 transition-all shadow-xs">
+              <span class="material-symbols-outlined text-[15px]">upload</span>
+              <span>Файл</span>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadItemModalMedia(this)"/>
+            </label>
+          </div>
+        </div>
+
+        <!-- Category & Meta -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Направление</label>
+            <select id="item-modal-category" onchange="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none">
+              <option value="tattoo">Татуировка</option>
+              <option value="pmu">Перманентный макияж</option>
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Статус / Этап (Meta)</label>
+            <input type="text" id="item-modal-meta" placeholder="Зажившая работа или Свежая работа" oninput="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div class="flex flex-col gap-1">
+          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Название работы (Ботаника, Перманент губ...)</label>
+          <input type="text" id="item-modal-title" required oninput="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+        </div>
+
+        <!-- Badge with Quick Chips -->
+        <div class="flex flex-col gap-1">
+          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Бейдж на фото</label>
+          <input type="text" id="item-modal-badge" oninput="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+          
+          <div class="flex flex-wrap gap-1.5 mt-1" id="modal-badge-chips-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="flex flex-col gap-1">
+          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Описание (для всплывающего окна)</label>
+          <textarea id="item-modal-desc" rows="2" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"></textarea>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-linen">
+          <button type="button" onclick="closeItemModal()" class="px-4 py-2 rounded-sm bg-eggshell hover:bg-linen text-ink text-[12px] font-medium transition-all cursor-pointer">
+            Отмена
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-sm bg-ink hover:bg-clay text-alabaster text-[12px] font-semibold tracking-wide flex items-center gap-1.5 shadow-sm transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-[16px]">check</span>
+            <span>Сохранить работу</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-ink text-alabaster px-4 py-3 rounded-sm shadow-2xl flex items-center gap-2.5 pointer-events-none">
+    <span class="material-symbols-outlined text-[18px] text-emerald-400">check_circle</span>
+    <span id="toast-text" class="text-[12px] font-medium">Изменения сохранены!</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT CMS LOGIC ==================== -->
+  <script>
+    let appData = null;
+    let authPassword = sessionStorage.getItem('admin_pass') || '';
+
+    // Check login
+    window.addEventListener('DOMContentLoaded', async () => {
+      if (authPassword) {
+        const ok = await verifyAuth(authPassword);
+        if (ok) {
+          showAdminPanel();
+          return;
+        }
+      }
+      showLoginModal();
+    });
+
+    async function verifyAuth(pass) {
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pass })
+        });
+        const data = await res.json();
+        return data.success;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const pass = document.getElementById('login-pass').value;
+      const ok = await verifyAuth(pass);
+      if (ok) {
+        authPassword = pass;
+        sessionStorage.setItem('admin_pass', pass);
+        showAdminPanel();
+      } else {
+        document.getElementById('login-error').classList.remove('hidden');
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('admin_pass');
+      authPassword = '';
+      location.reload();
+    }
+
+    function showLoginModal() {
+      document.getElementById('login-modal').classList.remove('hidden');
+      document.getElementById('admin-app').classList.add('hidden');
+    }
+
+    async function showAdminPanel() {
+      document.getElementById('login-modal').classList.add('hidden');
+      document.getElementById('admin-app').classList.remove('hidden');
+      await loadData();
+      if (window.location.hash) {
+        const hashTab = window.location.hash.replace('#', '');
+        if (['hero', 'directions', 'portfolio', 'texts', 'bookings', 'security'].includes(hashTab)) {
+          switchTab(hashTab);
+        }
+      }
+    }
+
+    function togglePassVisibility(id) {
+      const el = document.getElementById(id);
+      el.type = el.type === 'password' ? 'text' : 'password';
+    }
+
+    // --- TAB SWITCHING ---
+    function switchTab(tabId) {
+      const tabs = ['hero', 'directions', 'portfolio', 'texts', 'bookings', 'security'];
+      tabs.forEach(t => {
+        const content = document.getElementById('tab-content-' + t);
+        const btn = document.getElementById('tab-btn-' + t);
+        if (t === tabId) {
+          if (content) content.classList.remove('hidden');
+          if (btn) btn.classList.add('active');
+        } else {
+          if (content) content.classList.add('hidden');
+          if (btn) btn.classList.remove('active');
+        }
+      });
+      if (history.replaceState) {
+        history.replaceState(null, '', '#' + tabId);
+      }
+    }
+
+    window.addEventListener('hashchange', () => {
+      if (window.location.hash) {
+        const hashTab = window.location.hash.replace('#', '');
+        if (['hero', 'directions', 'portfolio', 'texts', 'bookings', 'security'].includes(hashTab)) {
+          switchTab(hashTab);
+        }
+      }
+    });
+
+    // --- LOAD DATA ---
+    async function loadData() {
+      try {
+        const res = await fetch('/api/data');
+        appData = await res.json();
+        renderAll();
+      } catch (e) {
+        console.error('Error fetching data:', e);
+        showToast('Ошибка загрузки данных', true);
+      }
+    }
+
+    function renderAll() {
+      renderHeroDuo();
+      renderDirections();
+      renderPortfolio();
+      renderTexts();
+      renderCustomBadges();
+      renderBookings();
+    }
+
+    // --- TAB 1: HERO COLLAGE ---
+    function renderHeroDuo() {
+      renderHero();
+    }
+
+    function renderHero() {
+      const t = appData.texts || {};
+
+      const hTitle = document.getElementById('txt-hero-title');
+      if (hTitle) hTitle.value = t.heroTitle || 'Искусство, которое\nостаётся с вами';
+
+      const hSub1 = document.getElementById('txt-hero-subtitle-tab1');
+      if (hSub1) hSub1.value = t.heroSubtitle || 'Авторские татуировки и деликатный перманент';
+
+      const hLoc1 = document.getElementById('txt-location-badge-tab1');
+      if (hLoc1) hLoc1.value = t.locationBadge || 'Студия в Баку';
+
+      const hMain = document.getElementById('hero-main-img-src');
+      if (hMain) hMain.value = t.heroMainImg || 'assets/hero-fine-line.jpg';
+
+      const hBadge = document.getElementById('hero-badge-input');
+      if (hBadge) hBadge.value = t.heroBadge || 'Fine line · Авторские эскизы';
+
+      const hInset = document.getElementById('hero-inset-img-src');
+      if (hInset) hInset.value = t.heroInsetImg || 'assets/lip-blush.jpg';
+
+      updateHeroPreview();
+    }
+
+    function updateHeroPreview() {
+      const locVal = document.getElementById('txt-location-badge-tab1')?.value || 'Студия в Баку';
+      const titleVal = document.getElementById('txt-hero-title')?.value || 'Искусство, которое\nостаётся с вами';
+      const subVal = document.getElementById('txt-hero-subtitle-tab1')?.value || 'Авторские татуировки и деликатный перманент';
+      const mainSrc = document.getElementById('hero-main-img-src')?.value || 'assets/hero-fine-line.jpg';
+      const badgeVal = document.getElementById('hero-badge-input')?.value || 'Fine line · Авторские эскизы';
+      const insetSrc = document.getElementById('hero-inset-img-src')?.value || 'assets/lip-blush.jpg';
+
+      const pLoc = document.getElementById('hero-preview-loc');
+      if (pLoc) pLoc.textContent = locVal;
+
+      const pTitle = document.getElementById('hero-preview-title');
+      if (pTitle) pTitle.innerHTML = titleVal.replace(/\n/g, '<br/>');
+
+      const pSub = document.getElementById('hero-preview-sub');
+      if (pSub) pSub.textContent = subVal;
+
+      const pMainImg = document.getElementById('hero-preview-main-img');
+      if (pMainImg) pMainImg.src = mainSrc;
+
+      const pBadge = document.getElementById('hero-preview-badge');
+      if (pBadge) pBadge.textContent = badgeVal;
+
+      const pInsetImg = document.getElementById('hero-preview-inset-img');
+      if (pInsetImg) pInsetImg.src = insetSrc;
+
+      // Sync with Tab 4 inputs if present
+      const tSubTab4 = document.getElementById('txt-hero-subtitle');
+      if (tSubTab4 && document.activeElement === document.getElementById('txt-hero-subtitle-tab1')) {
+        tSubTab4.value = subVal;
+      }
+      const tLocTab4 = document.getElementById('txt-location-badge');
+      if (tLocTab4 && document.activeElement === document.getElementById('txt-location-badge-tab1')) {
+        tLocTab4.value = locVal;
+      }
+    }
+
+    async function uploadHeroImageFile(input, targetInputId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      showToast('Загрузка фото...');
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              password: authPassword,
+              fileName: file.name,
+              fileData: e.target.result
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById(targetInputId).value = data.url;
+            updateHeroPreview();
+            showToast('Фото загружено!');
+            await saveAllChanges(true);
+          } else {
+            showToast('Ошибка загрузки: ' + data.error, true);
+          }
+        } catch (err) {
+          showToast('Ошибка связи с сервером', true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // --- TAB 2: DIRECTIONS SECTION ---
+    function renderDirections() {
+      if (!appData.directions) {
+        appData.directions = {
+          tattoo: { src: 'assets/hero-hand-tattoo.jpg', badge: 'Tattoo', title: 'Татуировки', desc: 'Ботаника, надписи, минимализм.' },
+          pmu: { src: 'assets/powder-brows.jpg', badge: 'PMU', title: 'Перманент', desc: 'Губы, брови, межресничка.' }
+        };
+      }
+
+      const t = appData.directions.tattoo || {};
+      const p = appData.directions.pmu || {};
+
+      document.getElementById('dir-tattoo-src').value = t.src || '';
+      document.getElementById('dir-tattoo-badge').value = t.badge || 'Tattoo';
+      document.getElementById('dir-tattoo-title').value = t.title || 'Татуировки';
+      document.getElementById('dir-tattoo-desc').value = t.desc || 'Ботаника, надписи, минимализм.';
+
+      document.getElementById('dir-pmu-src').value = p.src || '';
+      document.getElementById('dir-pmu-badge').value = p.badge || 'PMU';
+      document.getElementById('dir-pmu-title').value = p.title || 'Перманент';
+      document.getElementById('dir-pmu-desc').value = p.desc || 'Губы, брови, межресничка.';
+
+      updateDirectionsPreview();
+      renderDirectionBadgeChips();
+    }
+
+    function renderDirectionBadgeChips() {
+      const tattooChips = document.getElementById('dir-tattoo-chips');
+      const pmuChips = document.getElementById('dir-pmu-chips');
+      if (!tattooChips || !pmuChips) return;
+
+      const baseTattooBadges = ['Tattoo', 'Татуировка', 'Ботаника', 'Минимализм', 'Надпись'];
+      const basePmuBadges = ['PMU', 'Перманент', 'Пудровые брови', 'Губы', 'Межресничка'];
+      const custom = appData.customBadges || [];
+
+      const allTattoo = Array.from(new Set([...baseTattooBadges, ...custom]));
+      const allPmu = Array.from(new Set([...basePmuBadges, ...custom]));
+
+      tattooChips.innerHTML = '';
+      allTattoo.forEach(b => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer';
+        btn.textContent = b;
+        btn.onclick = () => setDirectionBadge('tattoo', b);
+        tattooChips.appendChild(btn);
+      });
+
+      pmuChips.innerHTML = '';
+      allPmu.forEach(b => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer';
+        btn.textContent = b;
+        btn.onclick = () => setDirectionBadge('pmu', b);
+        pmuChips.appendChild(btn);
+      });
+    }
+
+    function updateDirectionsPreview() {
+      const tSrc = document.getElementById('dir-tattoo-src').value || 'assets/hero-hand-tattoo.jpg';
+      const tBadge = document.getElementById('dir-tattoo-badge').value || 'Tattoo';
+      const tTitle = document.getElementById('dir-tattoo-title').value || 'Татуировки';
+      const tDesc = document.getElementById('dir-tattoo-desc').value || 'Ботаника, надписи, минимализм.';
+
+      document.getElementById('dir-tattoo-preview-img').src = tSrc;
+      document.getElementById('dir-tattoo-preview-badge').textContent = tBadge;
+      document.getElementById('dir-tattoo-preview-title').textContent = tTitle;
+      document.getElementById('dir-tattoo-preview-desc').textContent = tDesc;
+
+      const pSrc = document.getElementById('dir-pmu-src').value || 'assets/powder-brows.jpg';
+      const pBadge = document.getElementById('dir-pmu-badge').value || 'PMU';
+      const pTitle = document.getElementById('dir-pmu-title').value || 'Перманент';
+      const pDesc = document.getElementById('dir-pmu-desc').value || 'Губы, брови, межресничка.';
+
+      document.getElementById('dir-pmu-preview-img').src = pSrc;
+      document.getElementById('dir-pmu-preview-badge').textContent = pBadge;
+      document.getElementById('dir-pmu-preview-title').textContent = pTitle;
+      document.getElementById('dir-pmu-preview-desc').textContent = pDesc;
+    }
+
+    function setDirectionBadge(type, badge) {
+      if (type === 'tattoo') {
+        document.getElementById('dir-tattoo-badge').value = badge;
+      } else if (type === 'pmu') {
+        document.getElementById('dir-pmu-badge').value = badge;
+      }
+      updateDirectionsPreview();
+    }
+
+    async function uploadDirectionPhoto(input, targetInputId, targetPreviewImgId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      showToast('Загрузка фото...');
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              password: authPassword,
+              fileName: file.name,
+              fileData: e.target.result
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById(targetInputId).value = data.url;
+            document.getElementById(targetPreviewImgId).src = data.url;
+            updateDirectionsPreview();
+            showToast('Фото направления загружено!');
+            await saveAllChanges(true);
+          } else {
+            showToast('Ошибка загрузки: ' + data.error, true);
+          }
+        } catch (err) {
+          showToast('Ошибка связи с сервером', true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // --- TAB 3: PORTFOLIO & BADGES ---
+    function renderPortfolio() {
+      const container = document.getElementById('portfolio-items-list');
+      container.innerHTML = '';
+      const items = appData.portfolio || [];
+
+      if (items.length === 0) {
+        container.innerHTML = '<div class="p-6 text-center text-ink-muted bg-eggshell/40 rounded-sm border border-linen">Портфолио пока пусто. Нажмите «+ Добавить работу».</div>';
+        return;
+      }
+
+      items.forEach((item, idx) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-eggshell/40 border border-linen rounded-sm hover:border-ink/30 transition-all';
+        itemEl.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-16 h-16 rounded-sm overflow-hidden bg-eggshell border border-linen relative shrink-0">
+              <img src="${item.src || 'assets/botanical-tattoo.jpg'}" alt="${item.title}" class="w-full h-full object-cover"/>
+            </div>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-2">
+                <span class="font-serif text-[14px] font-medium text-ink">${item.title}</span>
+                <span class="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-sm font-semibold ${item.category === 'pmu' ? 'bg-clay text-alabaster' : 'bg-ink text-alabaster'}">
+                  ${item.category === 'pmu' ? 'Перманент' : 'Татуировка'}
+                </span>
+                <span class="text-[9px] text-ink-muted border border-linen bg-alabaster px-1.5 py-0.5 rounded-sm">
+                  ${item.meta || 'Зажившая работа'}
+                </span>
+              </div>
+              <span class="text-[11px] text-ink-muted line-clamp-1 mt-0.5">${item.desc || 'Без описания'}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 self-end sm:self-center">
+            <button onclick="movePortfolioItem(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="p-1.5 rounded-sm border border-linen bg-alabaster text-ink-muted hover:text-ink disabled:opacity-30 cursor-pointer" title="Поднять выше">
+              <span class="material-symbols-outlined text-[16px] block">arrow_upward</span>
+            </button>
+            <button onclick="movePortfolioItem(${idx}, 1)" ${idx === items.length - 1 ? 'disabled' : ''} class="p-1.5 rounded-sm border border-linen bg-alabaster text-ink-muted hover:text-ink disabled:opacity-30 cursor-pointer" title="Опустить ниже">
+              <span class="material-symbols-outlined text-[16px] block">arrow_downward</span>
+            </button>
+            <button onclick="editPortfolioItemModal(${idx})" class="p-1.5 rounded-sm border border-linen bg-alabaster text-ink hover:text-clay cursor-pointer ml-1" title="Редактировать">
+              <span class="material-symbols-outlined text-[16px] block">edit</span>
+            </button>
+            <button onclick="deletePortfolioItem(${idx})" class="p-1.5 rounded-sm border border-linen bg-alabaster text-ink-muted hover:text-red-600 cursor-pointer" title="Удалить">
+              <span class="material-symbols-outlined text-[16px] block">delete</span>
+            </button>
+          </div>
+        `;
+        container.appendChild(itemEl);
+      });
+    }
+
+    async function movePortfolioItem(idx, dir) {
+      const target = idx + dir;
+      if (target < 0 || target >= appData.portfolio.length) return;
+      const temp = appData.portfolio[idx];
+      appData.portfolio[idx] = appData.portfolio[target];
+      appData.portfolio[target] = temp;
+      renderPortfolio();
+      await saveAllChanges(true);
+      showToast('✅ Порядок сохранен!');
+    }
+
+    async function deletePortfolioItem(idx) {
+      if (confirm('Удалить эту работу из портфолио?')) {
+        appData.portfolio.splice(idx, 1);
+        renderPortfolio();
+        await saveAllChanges(true);
+        showToast('✅ Работа удалена!');
+      }
+    }
+
+    function addNewPortfolioItem(type) {
+      openPortfolioItemModal(-1, type);
+    }
+
+    function editPortfolioItemModal(idx) {
+      openPortfolioItemModal(idx);
+    }
+
+    function openPortfolioItemModal(idx, defaultType = 'image') {
+      const isNew = idx === -1;
+      let item = null;
+      if (!isNew) {
+        item = appData.portfolio[idx];
+      } else {
+        item = {
+          type: defaultType,
+          category: 'tattoo',
+          title: 'Ботаника',
+          badge: 'Татуировка',
+          meta: 'Зажившая работа',
+          src: 'assets/botanical-tattoo.jpg',
+          desc: 'Художественная работа с аккуратными тонкими линиями.'
+        };
+      }
+
+      document.getElementById('item-modal-index').value = idx;
+      document.getElementById('item-modal-heading').textContent = isNew ? 'Добавить работу в портфолио' : 'Редактировать работу портфолио';
+
+      document.getElementById('item-modal-src').value = item.src || '';
+      document.getElementById('item-modal-badge').value = item.badge || '';
+      document.getElementById('item-modal-title').value = item.title || '';
+      document.getElementById('item-modal-category').value = item.category || 'tattoo';
+      document.getElementById('item-modal-meta').value = item.meta || 'Зажившая работа';
+      document.getElementById('item-modal-desc').value = item.desc || '';
+
+      updateItemModalLivePreview();
+      renderModalBadges();
+      document.getElementById('item-modal').classList.remove('hidden');
+    }
+
+    function closeItemModal() {
+      document.getElementById('item-modal').classList.add('hidden');
+    }
+
+    function updateItemModalLivePreview() {
+      const src = document.getElementById('item-modal-src').value || 'assets/botanical-tattoo.jpg';
+      const badge = document.getElementById('item-modal-badge').value || 'Татуировка';
+      const title = document.getElementById('item-modal-title').value || 'Название';
+      const meta = document.getElementById('item-modal-meta').value || 'Зажившая работа';
+
+      document.getElementById('item-modal-preview-img').src = src;
+      document.getElementById('item-modal-preview-badge').textContent = badge;
+      document.getElementById('item-modal-preview-title').textContent = title;
+      document.getElementById('item-modal-preview-meta').textContent = meta;
+    }
+
+    function renderModalBadges() {
+      const container = document.getElementById('modal-badge-chips-container');
+      container.innerHTML = '';
+      const badges = appData.customBadges || ["Татуировка", "Перманент", "Зажившая работа", "Свежая работа"];
+
+      badges.forEach(b => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer';
+        btn.textContent = b;
+        btn.onclick = () => {
+          document.getElementById('item-modal-badge').value = b;
+          updateItemModalLivePreview();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    async function uploadItemModalMedia(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      showToast('Загрузка файла...');
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              password: authPassword,
+              fileName: file.name,
+              fileData: e.target.result
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById('item-modal-src').value = data.url;
+            updateItemModalLivePreview();
+            showToast('Файл загружен!');
+          } else {
+            showToast('Ошибка загрузки: ' + data.error, true);
+          }
+        } catch (err) {
+          showToast('Ошибка загрузки на сервер', true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function submitItemModal(e) {
+      e.preventDefault();
+      const idx = parseInt(document.getElementById('item-modal-index').value, 10);
+      const src = document.getElementById('item-modal-src').value.trim();
+      const badge = document.getElementById('item-modal-badge').value.trim();
+      const title = document.getElementById('item-modal-title').value.trim();
+      const cat = document.getElementById('item-modal-category').value;
+      const meta = document.getElementById('item-modal-meta').value.trim();
+      const desc = document.getElementById('item-modal-desc').value.trim();
+
+      const itemData = {
+        id: idx >= 0 ? appData.portfolio[idx].id : ('port-' + Date.now()),
+        type: 'image',
+        category: cat,
+        title: title,
+        badge: badge || (cat === 'tattoo' ? 'Татуировка' : 'Перманент'),
+        meta: meta || 'Зажившая работа',
+        src: src,
+        desc: desc
+      };
+
+      if (!appData.portfolio) appData.portfolio = [];
+      if (idx >= 0) {
+        appData.portfolio[idx] = itemData;
+      } else {
+        appData.portfolio.push(itemData);
+      }
+
+      renderPortfolio();
+      closeItemModal();
+      await saveAllChanges(true);
+      showToast('✅ Работа сохранена!');
+    }
+
+    // --- CUSTOM BADGES ---
+    function renderCustomBadges() {
+      const container = document.getElementById('tab-badge-chips-container');
+      if (!container) return;
+      container.innerHTML = '';
+      const badges = appData.customBadges || [];
+
+      badges.forEach(b => {
+        const chip = document.createElement('div');
+        chip.className = 'inline-flex items-center gap-1.5 text-[11px] bg-white text-ink border border-linen rounded-full pl-2.5 pr-1.5 py-1 shadow-xs hover:border-ink transition-all';
+        chip.innerHTML = `
+          <span class="font-medium text-ink">${b}</span>
+          <button type="button" onclick="deleteCustomBadge('${escapeQuotes(b)}', event)" class="text-ink-faint hover:text-red-600 rounded-full p-0.5 transition-colors cursor-pointer" title="Удалить бейдж">
+            <span class="material-symbols-outlined text-[13px] block">close</span>
+          </button>
+        `;
+        container.appendChild(chip);
+      });
+      renderDirectionBadgeChips();
+    }
+
+    function escapeQuotes(str) {
+      return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    async function createBadgeFromTabInput() {
+      const input = document.getElementById('tab-new-badge-input');
+      const val = (input.value || '').trim();
+      if (!val) return;
+
+      if (!appData.customBadges) appData.customBadges = [];
+      if (!appData.customBadges.includes(val)) {
+        appData.customBadges.push(val);
+      }
+      input.value = '';
+      renderCustomBadges();
+      await saveAllChanges(true);
+      showToast(`✅ Бейдж «${val}» создан!`);
+    }
+
+    async function deleteCustomBadge(badge, e) {
+      if (e) e.stopPropagation();
+      if (!confirm(`Удалить бейдж «${badge}»?`)) return;
+      appData.customBadges = (appData.customBadges || []).filter(b => b !== badge);
+      renderCustomBadges();
+      await saveAllChanges(true);
+      showToast(`Бейдж «${badge}» удален`);
+    }
+
+    // --- TAB 3: TEXTS & CONTACTS ---
+    function renderTexts() {
+      const t = appData.texts || {};
+      document.getElementById('txt-artist-name').value = t.artistName || 'Лиза Аидаралиева';
+      document.getElementById('txt-brand-latin').value = t.brandLatin || 'Liza Aidaraliyeva';
+      const locVal = t.locationBadge || 'Студия в Баку';
+      const subVal = t.heroSubtitle || 'Авторские татуировки и деликатный перманент';
+      document.getElementById('txt-location-badge').value = locVal;
+      document.getElementById('txt-hero-subtitle').value = subVal;
+      const hSubTab1 = document.getElementById('txt-hero-subtitle-tab1');
+      if (hSubTab1) hSubTab1.value = subVal;
+      const hLocTab1 = document.getElementById('txt-location-badge-tab1');
+      if (hLocTab1) hLocTab1.value = locVal;
+      document.getElementById('txt-hero-desc').value = t.heroDesc || 'Индивидуальные эскизы и деликатный перманент с учётом ваших пожеланий.';
+      document.getElementById('txt-about-quote').value = t.aboutQuote || '«Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий».';
+      document.getElementById('txt-about-bio').value = t.aboutBio || 'Соблюдаю правила стерильности и использую одноразовые расходные материалы.';
+      document.getElementById('txt-about-photo').value = t.aboutPhoto || 'assets/artist.jpg';
+      document.getElementById('txt-footer-address').value = t.footerAddress || 'Баку · 28 Мая (точный адрес высылается после записи)';
+      document.getElementById('txt-phone-tattoo').value = t.phoneTattoo || '994500000001';
+      document.getElementById('txt-phone-tattoo-disp').value = t.phoneTattooDisplay || '+994 50 000-00-01';
+      document.getElementById('txt-phone-pmu').value = t.phonePmu || '994500000002';
+      document.getElementById('txt-phone-pmu-disp').value = t.phonePmuDisplay || '+994 50 000-00-02';
+      document.getElementById('txt-ig-tattoo').value = t.igTattoo || 'leyla.ink';
+      document.getElementById('txt-ig-pmu').value = t.igPmu || 'leyla.permanent';
+    }
+
+    function collectAllInputs() {
+      if (!appData.texts) appData.texts = {};
+      appData.texts.artistName = document.getElementById('txt-artist-name')?.value || appData.texts.artistName || 'Лиза Аидаралиева';
+      appData.texts.brandLatin = document.getElementById('txt-brand-latin')?.value || appData.texts.brandLatin || 'Liza Aidaraliyeva';
+      appData.texts.locationBadge = document.getElementById('txt-location-badge-tab1')?.value || document.getElementById('txt-location-badge')?.value || appData.texts.locationBadge || 'Студия в Баку';
+      appData.texts.heroTitle = document.getElementById('txt-hero-title')?.value || appData.texts.heroTitle || 'Искусство, которое\nостаётся с вами';
+      appData.texts.heroSubtitle = document.getElementById('txt-hero-subtitle-tab1')?.value || document.getElementById('txt-hero-subtitle')?.value || appData.texts.heroSubtitle || 'Авторские татуировки и деликатный перманент';
+      appData.texts.heroMainImg = document.getElementById('hero-main-img-src')?.value || appData.texts.heroMainImg || 'assets/hero-fine-line.jpg';
+      appData.texts.heroBadge = document.getElementById('hero-badge-input')?.value || appData.texts.heroBadge || 'Fine line · Авторские эскизы';
+      appData.texts.heroInsetImg = document.getElementById('hero-inset-img-src')?.value || appData.texts.heroInsetImg || 'assets/lip-blush.jpg';
+      appData.texts.heroDesc = document.getElementById('txt-hero-desc')?.value || appData.texts.heroDesc || 'Индивидуальные эскизы и деликатный перманент с учётом ваших пожеланий.';
+      appData.texts.aboutQuote = document.getElementById('txt-about-quote')?.value || appData.texts.aboutQuote || '';
+      appData.texts.aboutBio = document.getElementById('txt-about-bio')?.value || appData.texts.aboutBio || '';
+      appData.texts.aboutPhoto = document.getElementById('txt-about-photo')?.value || appData.texts.aboutPhoto || 'assets/artist.jpg';
+      appData.texts.footerAddress = document.getElementById('txt-footer-address')?.value || appData.texts.footerAddress || '';
+      appData.texts.phoneTattoo = document.getElementById('txt-phone-tattoo')?.value || appData.texts.phoneTattoo || '';
+      appData.texts.phoneTattooDisplay = document.getElementById('txt-phone-tattoo-disp')?.value || appData.texts.phoneTattooDisplay || '';
+      appData.texts.phonePmu = document.getElementById('txt-phone-pmu')?.value || appData.texts.phonePmu || '';
+      appData.texts.phonePmuDisplay = document.getElementById('txt-phone-pmu-disp')?.value || appData.texts.phonePmuDisplay || '';
+      appData.texts.igTattoo = document.getElementById('txt-ig-tattoo')?.value || appData.texts.igTattoo || '';
+      appData.texts.igPmu = document.getElementById('txt-ig-pmu')?.value || appData.texts.igPmu || '';
+
+      // Directions Section
+      if (!appData.directions) appData.directions = {};
+      if (!appData.directions.tattoo) appData.directions.tattoo = {};
+      appData.directions.tattoo.src = document.getElementById('dir-tattoo-src')?.value || appData.directions.tattoo.src || 'assets/hero-hand-tattoo.jpg';
+      appData.directions.tattoo.badge = document.getElementById('dir-tattoo-badge')?.value || appData.directions.tattoo.badge || 'Tattoo';
+      appData.directions.tattoo.title = document.getElementById('dir-tattoo-title')?.value || appData.directions.tattoo.title || 'Татуировки';
+      appData.directions.tattoo.desc = document.getElementById('dir-tattoo-desc')?.value || appData.directions.tattoo.desc || 'Ботаника, надписи, минимализм.';
+
+      if (!appData.directions.pmu) appData.directions.pmu = {};
+      appData.directions.pmu.src = document.getElementById('dir-pmu-src')?.value || appData.directions.pmu.src || 'assets/powder-brows.jpg';
+      appData.directions.pmu.badge = document.getElementById('dir-pmu-badge')?.value || appData.directions.pmu.badge || 'PMU';
+      appData.directions.pmu.title = document.getElementById('dir-pmu-title')?.value || appData.directions.pmu.title || 'Перманент';
+      appData.directions.pmu.desc = document.getElementById('dir-pmu-desc')?.value || appData.directions.pmu.desc || 'Губы, брови, межресничка.';
+    }
+
+    // --- TAB 5: BOOKINGS ---
+    function renderBookings() {
+      const container = document.getElementById('bookings-list');
+      const badgeCount = document.getElementById('bookings-count-badge');
+      const bookings = appData.bookings || [];
+
+      if (badgeCount) {
+        if (bookings.length > 0) {
+          badgeCount.textContent = bookings.length;
+          badgeCount.classList.remove('hidden');
+        } else {
+          badgeCount.classList.add('hidden');
+        }
+      }
+
+      if (bookings.length === 0) {
+        container.innerHTML = '<div class="p-8 text-center text-ink-muted bg-eggshell/40 rounded-sm border border-linen">Заявок пока нет. Когда клиент заполнит форму на сайте, она появится здесь с прикрепленным эскизом.</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      bookings.forEach(b => {
+        const item = document.createElement('div');
+        item.className = 'p-4 bg-alabaster border border-linen rounded-sm shadow-xs flex flex-col sm:flex-row sm:items-start justify-between gap-4';
+
+        const dateStr = b.date ? new Date(b.date).toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+        const cleanPhone = (b.phone || '').replace(/[^0-9]/g, '');
+
+        let refHtml = '';
+        if (b.referenceUrl) {
+          refHtml = `
+            <div class="mt-2 flex items-center gap-2">
+              <a href="${b.referenceUrl}" target="_blank" class="w-14 h-14 rounded-sm overflow-hidden bg-eggshell border border-linen block hover:opacity-80 transition-opacity shrink-0">
+                <img src="${b.referenceUrl}" alt="Референс" class="w-full h-full object-cover"/>
+              </a>
+              <div class="flex flex-col">
+                <span class="text-[11px] font-medium text-ink">Прикрепленный референс</span>
+                <a href="${b.referenceUrl}" target="_blank" class="text-[10px] text-clay hover:underline flex items-center gap-0.5 mt-0.5">
+                  <span>Открыть оригинал</span>
+                  <span class="material-symbols-outlined text-[12px]">north_east</span>
+                </a>
+              </div>
+            </div>
+          `;
+        }
+
+        item.innerHTML = `
+          <div class="flex flex-col gap-1.5 flex-1">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-sm font-semibold ${b.service === 'Перманентный макияж' ? 'bg-clay text-alabaster' : 'bg-ink text-alabaster'}">
+                ${b.service || 'Татуировка'}
+              </span>
+              <span class="text-[11px] text-ink-faint font-mono">${dateStr}</span>
+            </div>
+
+            <div class="flex items-center gap-3 mt-1">
+              <span class="font-serif text-[15px] font-medium text-ink">${b.name || 'Без имени'}</span>
+              <span class="text-[12px] text-ink-muted font-mono">${b.phone || ''}</span>
+            </div>
+
+            <p class="text-[12px] text-ink leading-relaxed mt-0.5 bg-eggshell/40 p-2.5 rounded-sm border border-linen/70">
+              ${b.idea || 'Пожелания не указаны'}
+            </p>
+
+            ${refHtml}
+          </div>
+
+          <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+            ${cleanPhone ? `
+              <a href="https://wa.me/${cleanPhone}" target="_blank" class="px-3.5 py-2 rounded-sm bg-[#128C7E] text-white text-[11px] font-medium tracking-wide flex items-center gap-1.5 shadow-xs hover:bg-[#075E54] transition-all">
+                <span>Чат в WhatsApp</span>
+                <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+              </a>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // --- SAVE ALL CHANGES ---
+    async function saveAllChanges(silent = false) {
+      collectAllInputs();
+      if (!silent) showToast('Сохранение изменений...');
+      try {
+        const res = await fetch('/api/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            password: authPassword,
+            payload: appData
+          })
+        });
+        const resData = await res.json();
+        if (resData.success) {
+          showToast('✅ Все изменения сохранены!');
+          return true;
+        } else {
+          showToast('❌ Ошибка: ' + resData.error, true);
+          return false;
+        }
+      } catch (e) {
+        showToast('❌ Ошибка связи с сервером', true);
+        return false;
+      }
+    }
+
+    // --- CHANGE PASSWORD ---
+    async function handlePasswordChange(e) {
+      e.preventDefault();
+      const oldPass = document.getElementById('old-pass').value;
+      const newPass = document.getElementById('new-pass').value;
+      const msg = document.getElementById('pass-msg');
+
+      try {
+        const res = await fetch('/api/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            oldPassword: oldPass,
+            newPassword: newPass
+          })
+        });
+        const d = await res.json();
+        if (d.success) {
+          authPassword = newPass;
+          sessionStorage.setItem('admin_pass', newPass);
+          msg.textContent = 'Пароль успешно изменен!';
+          msg.className = 'text-[11px] text-emerald-600 block';
+          document.getElementById('old-pass').value = '';
+          document.getElementById('new-pass').value = '';
+          showToast('Пароль обновлен!');
+        } else {
+          msg.textContent = d.error || 'Ошибка смены пароля';
+          msg.className = 'text-[11px] text-red-600 block';
+        }
+      } catch (err) {
+        msg.textContent = 'Ошибка сети';
+        msg.className = 'text-[11px] text-red-600 block';
+      }
+    }
+
+    // --- MEDIA UPLOAD HELPER ---
+    async function uploadMediaFile(input, targetInputId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      showToast('Загрузка файла...');
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              password: authPassword,
+              fileName: file.name,
+              fileData: e.target.result
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById(targetInputId).value = data.url;
+            showToast('Файл успешно загружен!');
+            await saveAllChanges(true);
+          } else {
+            showToast('Ошибка загрузки: ' + data.error, true);
+          }
+        } catch (err) {
+          showToast('Ошибка связи с сервером', true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // --- TOAST NOTIFICATION ---
+    let toastTimeout = null;
+    function showToast(text, isError = false) {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+      toastText.textContent = text;
+      
+      if (isError) {
+        toast.className = 'fixed bottom-6 right-6 z-50 transform translate-y-0 opacity-100 transition-all duration-300 bg-red-800 text-alabaster px-4 py-3 rounded-sm shadow-2xl flex items-center gap-2.5';
+      } else {
+        toast.className = 'fixed bottom-6 right-6 z-50 transform translate-y-0 opacity-100 transition-all duration-300 bg-ink text-alabaster px-4 py-3 rounded-sm shadow-2xl flex items-center gap-2.5';
+      }
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeItemModal();
+    });
+  </script>
+</body>
+</html>

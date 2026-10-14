@@ -1,0 +1,224 @@
+{
+  "texts": {
+    "artistName": "Лиза Аидаралиева",
+    "brandLatin": "Liza Aidaraliyeva",
+    "monogram": "LA",
+    "locationBadge": "Студия в Баку",
+    "heroTitle": "Искусство, которое\nостаётся с вами",
+    "heroSubtitle": "Авторские татуировки и деликатный перманент",
+    "heroBadge": "Fine line · Авторские эскизы",
+    "heroMainImg": "assets/hero-fine-line.jpg",
+    "heroInsetImg": "assets/lip-blush.jpg",
+    "heroDesc": "Индивидуальные эскизы и деликатный перманент с учётом ваших пожеланий.",
+    "aboutTitle": "О мастере",
+    "aboutQuote": "«Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий».",
+    "aboutBio": "Соблюдаю правила стерильности и использую одноразовые расходные материалы.",
+    "aboutBadge": "Баку · рядом с метро 28 Мая",
+    "aboutPhoto": "assets/artist.jpg",
+    "footerAddress": "Баку · рядом с метро 28 Мая (точный адрес высылается после записи)",
+    "footerLocation": "Баку · рядом с метро 28 Мая",
+    "phoneTattoo": "994773572021",
+    "phoneTattooDisplay": "+994 77 357 20 21",
+    "phonePmu": "994554982957",
+    "phonePmuDisplay": "+994 55 498 29 57",
+    "igTattoo": "liza_tattoo_baku",
+    "igPmu": "liza_brows_permanent"
+  },
+  "directions": {
+    "tattoo": {
+      "src": "assets/botanical-tattoo.jpg",
+      "badge": "Татуировка",
+      "title": "Татуировки",
+      "desc": "Ботаника, надписи, тонкие линии"
+    },
+    "pmu": {
+      "src": "assets/lip-blush.jpg",
+      "badge": "Перманент",
+      "title": "Перманент",
+      "desc": "Губы, брови, межресничная линия"
+    }
+  },
+  "portfolio": [
+    {
+      "id": "port-1",
+      "type": "image",
+      "src": "assets/botanical-tattoo.jpg",
+      "category": "tattoo",
+      "title": "Ботаника",
+      "badge": "Татуировка",
+      "meta": "Зажившая татуировка",
+      "desc": "Художественная ботаническая композиция. Заживший результат спустя 8 месяцев."
+    },
+    {
+      "id": "port-2",
+      "type": "image",
+      "src": "assets/lip-blush.jpg",
+      "category": "pmu",
+      "title": "Губы",
+      "badge": "Перманент",
+      "meta": "Результат после заживления",
+      "desc": "Мягкая растушевка без плотной помадной заливки. Естественный чистый тон."
+    },
+    {
+      "id": "port-3",
+      "type": "image",
+      "src": "assets/calligraphy-tattoo.jpg",
+      "category": "tattoo",
+      "title": "Надпись",
+      "badge": "Татуировка",
+      "meta": "Свежая работа",
+      "desc": "Филигранная авторская надпись на ключице с тонкими засечками."
+    },
+    {
+      "id": "port-4",
+      "type": "image",
+      "src": "assets/powder-brows.jpg",
+      "category": "pmu",
+      "title": "Пудровые брови",
+      "badge": "Перманент",
+      "meta": "Результат после заживления",
+      "desc": "Воздушное пудровое напыление с сохранением природной текстуры волосков."
+    },
+    {
+      "id": "port-5",
+      "type": "image",
+      "src": "assets/hero-hand-tattoo.jpg",
+      "category": "tattoo",
+      "title": "Минимализм",
+      "badge": "Татуировка",
+      "meta": "Зажившая татуировка",
+      "desc": "Лаконичный акцентный элемент. Тончайшая работа без утолщения контура."
+    },
+    {
+      "id": "port-6",
+      "type": "image",
+      "src": "assets/pmu-lips.jpg",
+      "category": "pmu",
+      "title": "Межресничный контур",
+      "badge": "Перманент",
+      "meta": "Деликатный контур",
+      "desc": "Глубокий взгляд без эффекта накрашенных глаз. Чистая аккуратная линия."
+    }
+  ],
+  "customBadges": [
+    "Татуировка",
+    "Перманент",
+    "Зажившая татуировка",
+    "Свежая работа",
+    "Результат после заживления",
+    "Ботаника",
+    "Надпись",
+    "Пудровые брови"
+  ],
+  "bookings": [
+    {
+      "id": "bk_1791965299309",
+      "date": "2026-10-14T08:08:19.309Z",
+      "service": "Перманентный макияж",
+      "idea": "Гашларымы ала билярсиз",
+      "name": "Gülməxmər",
+      "phone": "+994 55 555 55 55",
+      "referenceUrl": ""
+    },
+    {
+      "id": "bk_1791964820793",
+      "date": "2026-10-14T08:00:20.793Z",
+      "service": "Татуировка",
+      "idea": "Лазат хочу твою фотку на мое сердце сделаешь мне такое тату?",
+      "name": "Zohrab",
+      "phone": "+994 50 616 92 66",
+      "referenceUrl": "https://procurement-additions-demonstration-tag.trycloudflare.com/uploads/ref_1791964820695_b2308002-74b3-44d7-8c89-e64fce5b3d9c.jpeg"
+    },
+    {
+      "id": "bk_1791963783718",
+      "date": "2026-10-14T07:43:03.718Z",
+      "service": "Перманентный макияж",
+      "idea": "Лазат хочу твою фотку на мое сердце сделаешь мне такое тату?",
+      "name": "Zohrab",
+      "phone": "+994506169266",
+      "referenceUrl": ""
+    },
+    {
+      "id": "bk_1791963772226",
+      "date": "2026-10-14T07:42:52.226Z",
+      "service": "Перманентный макияж",
+      "idea": "Лазат хочу твою фотку на мое сердце сделаешь мне такое тату?",
+      "name": "Zohrab",
+      "phone": "+994506169266",
+      "referenceUrl": ""
+    },
+    {
+      "id": "bk_1791963761398",
+      "date": "2026-10-14T07:42:41.398Z",
+      "service": "Татуировка",
+      "idea": "Лазат хочу твою фотку на мое сердце сделаешь мне такое тату?",
+      "name": "Zohrab",
+      "phone": "+994506169266",
+      "referenceUrl": ""
+    },
+    {
+      "id": "bk_1791963601882",
+      "date": "2026-10-14T07:40:01.882Z",
+      "service": "Татуировка",
+      "idea": "Лазат хочу твою фотку на мое сердце сделаешь мне такое тату?",
+      "name": "Zohrab",
+      "phone": "+994506169266",
+      "referenceUrl": ""
+    },
+    {
+      "id": "bk_1791963590264",
+      "date": "2026-10-14T07:39:50.264Z",
+      "service": "Татуировка",
+      "idea": "Лазат хочу твою фотку на мое сердце сделаешь мне такое тату?",
+      "name": "Zohrab",
+      "phone": "+994506169266",
+      "referenceUrl": "https://procurement-additions-demonstration-tag.trycloudflare.com/uploads/ref_1791963590019_b2308002-74b3-44d7-8c89-e64fce5b3d9c.jpeg"
+    },
+    {
+      "id": "bk_1791962557920",
+      "date": "2026-10-14T07:22:37.920Z",
+      "service": "Татуировка",
+      "idea": "Şir tattoo",
+      "name": "Zohrab",
+      "phone": "+994506169266",
+      "referenceUrl": "https://procurement-additions-demonstration-tag.trycloudflare.com/uploads/ref_1791962557757_IMG_6409.jpeg"
+    },
+    {
+      "id": "bk_1791952755060",
+      "date": "2026-10-14T04:39:15.060Z",
+      "service": "Перманентный макияж",
+      "idea": "Salam korona isteyirm",
+      "name": "Zohrab",
+      "phone": "+994506169266",
+      "referenceUrl": "https://grade-housewares-space-holds.trycloudflare.com/uploads/ref_1791952754756_IMG_6411.jpeg"
+    },
+    {
+      "id": "bk_1791952731207",
+      "date": "2026-10-14T04:38:51.207Z",
+      "service": "Татуировка",
+      "idea": "Salam korona isteyirm",
+      "name": "Zohrab",
+      "phone": "+994506169266",
+      "referenceUrl": "https://grade-housewares-space-holds.trycloudflare.com/uploads/ref_1791952730829_IMG_6411.jpeg"
+    },
+    {
+      "id": "bk_1791952721074",
+      "date": "2026-10-14T04:38:41.074Z",
+      "service": "Татуировка",
+      "idea": "Salam korona isteyirm",
+      "name": "Zohrab",
+      "phone": "+994506169266",
+      "referenceUrl": "https://grade-housewares-space-holds.trycloudflare.com/uploads/ref_1791952720691_IMG_6411.jpeg"
+    },
+    {
+      "id": "bk_1791807093348",
+      "date": "2026-10-12T12:11:33.348Z",
+      "service": "Татуировка",
+      "idea": "Ветка",
+      "name": "Айсель",
+      "phone": "+99450",
+      "referenceUrl": ""
+    }
+  ],
+  "adminPassword": "Qwerty12345"
+}

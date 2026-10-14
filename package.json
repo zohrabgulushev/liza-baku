@@ -1,0 +1,12 @@
+{
+  "name": "tattoo-website",
+  "version": "1.0.0",
+  "description": "Tattoo & Permanent Studio Baku",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

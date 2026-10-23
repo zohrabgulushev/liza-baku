@@ -770,19 +770,20 @@
           <div class="flex flex-col gap-1">
             <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted flex items-center justify-between">
               <span>Бейдж (RU)</span>
-              <span class="text-[9px] text-ink-faint">Татуировка / Перманент</span>
+              <span class="text-[9px] text-ink-faint">Быстрый выбор:</span>
             </label>
-            <input type="text" id="item-modal-badge" oninput="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+            <input type="text" id="item-modal-badge" oninput="updateItemModalLivePreview()" placeholder="Например: Ботаника" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+            <div class="flex flex-wrap gap-1 mt-1" id="modal-badge-chips-ru"></div>
           </div>
           <div class="flex flex-col gap-1">
             <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted flex items-center justify-between">
               <span>Birkə (AZ)</span>
-              <span class="text-[9px] text-ink-faint">Tatuaj / Permanent</span>
+              <span class="text-[9px] text-ink-faint">Sürətli seçim:</span>
             </label>
-            <input type="text" id="item-modal-badge-az" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+            <input type="text" id="item-modal-badge-az" oninput="updateItemModalLivePreview()" placeholder="Məsələn: Botanika" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+            <div class="flex flex-wrap gap-1 mt-1" id="modal-badge-chips-az"></div>
           </div>
         </div>
-        <div class="flex flex-wrap gap-1.5" id="modal-badge-chips-container"></div>
 
         <!-- Description: RU & AZ -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -843,6 +844,8 @@
 
       renderHero();
       renderDirections();
+      renderPortfolio();
+      renderCustomBadges();
       renderTexts();
       showToast(lang === 'az' ? '🇦🇿 Переключено на азербайджанскую версию' : '🇷🇺 Переключено на русскую версию');
     }
@@ -1095,9 +1098,14 @@
       const pmuChips = document.getElementById('dir-pmu-chips');
       if (!tattooChips || !pmuChips) return;
 
-      const baseTattooBadges = ['Tattoo', 'Татуировка', 'Ботаника', 'Минимализм', 'Надпись'];
-      const basePmuBadges = ['PMU', 'Перманент', 'Пудровые брови', 'Губы', 'Межресничка'];
-      const custom = appData.customBadges || [];
+      const isAz = (currentAdminLang === 'az');
+      const baseTattooBadges = isAz
+        ? ['Tatu', 'Tatuaj', 'Botanika', 'Minimalizm', 'Yazı']
+        : ['Tattoo', 'Татуировка', 'Ботаника', 'Минимализм', 'Надпись'];
+      const basePmuBadges = isAz
+        ? ['PMU', 'Permanent', 'Pudralı qaşlar', 'Dodaqlar', 'Kiprikarası']
+        : ['PMU', 'Перманент', 'Пудровые брови', 'Губы', 'Межресничка'];
+      const custom = isAz ? (appData.customBadges_az || []) : (appData.customBadges || []);
 
       const allTattoo = Array.from(new Set([...baseTattooBadges, ...custom]));
       const allPmu = Array.from(new Set([...basePmuBadges, ...custom]));
@@ -1199,25 +1207,35 @@
         return;
       }
 
+      const isAz = (currentAdminLang === 'az');
+
       items.forEach((item, idx) => {
         const itemEl = document.createElement('div');
         itemEl.className = 'flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-eggshell/40 border border-linen rounded-sm hover:border-ink/30 transition-all';
+        
+        const displayTitle = (isAz && item.title_az) ? item.title_az : item.title;
+        const displayCategory = item.category === 'pmu' ? (isAz ? 'Permanent' : 'Перманент') : (isAz ? 'Tatuaj' : 'Татуировка');
+        const displayBadge = (isAz && item.badge_az) ? item.badge_az : (item.badge || displayCategory);
+        const displayMeta = (isAz && item.meta_az) ? item.meta_az : (item.meta || (isAz ? 'Sağalmış iş' : 'Зажившая работа'));
+        const displayDesc = (isAz && item.desc_az) ? item.desc_az : (item.desc || (isAz ? 'Təsvir yoxdur' : 'Без описания'));
+
         itemEl.innerHTML = `
           <div class="flex items-center gap-3">
             <div class="w-16 h-16 rounded-sm overflow-hidden bg-eggshell border border-linen relative shrink-0">
-              <img src="${item.src || 'assets/botanical-tattoo.jpg'}" alt="${item.title}" class="w-full h-full object-cover"/>
+              <img src="${item.src || 'assets/botanical-tattoo.jpg'}" alt="${displayTitle}" class="w-full h-full object-cover"/>
             </div>
             <div class="flex flex-col">
-              <div class="flex items-center gap-2">
-                <span class="font-serif text-[14px] font-medium text-ink">${item.title}</span>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-serif text-[14px] font-medium text-ink">${displayTitle}</span>
                 <span class="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-sm font-semibold ${item.category === 'pmu' ? 'bg-clay text-alabaster' : 'bg-ink text-alabaster'}">
-                  ${item.category === 'pmu' ? 'Перманент' : 'Татуировка'}
+                  ${displayBadge}
                 </span>
                 <span class="text-[9px] text-ink-muted border border-linen bg-alabaster px-1.5 py-0.5 rounded-sm">
-                  ${item.meta || 'Зажившая работа'}
+                  ${displayMeta}
                 </span>
+                <span class="text-[9px] text-ink-faint uppercase font-mono">${isAz ? 'AZ' : 'RU'}</span>
               </div>
-              <span class="text-[11px] text-ink-muted line-clamp-1 mt-0.5">${item.desc || 'Без описания'}</span>
+              <span class="text-[11px] text-ink-muted line-clamp-1 mt-0.5">${displayDesc}</span>
             </div>
           </div>
 
@@ -1308,11 +1326,38 @@
       document.getElementById('item-modal').classList.add('hidden');
     }
 
+    const BADGE_MAP = {
+      'Татуировка': 'Tatuaj',
+      'Перманент': 'Permanent',
+      'Зажившая работа': 'Sağalmış iş',
+      'Зажившая татуировка': 'Sağalmış tatuaj',
+      'Свежая работа': 'Təzə iş',
+      'Результат после заживления': 'Sağalmadan sonrakı nəticə',
+      'Ботаника': 'Botanika',
+      'Минимализм': 'Minimalizm',
+      'Надпись': 'Yazı',
+      'Губы': 'Dodaqlar',
+      'Пудровые брови': 'Pudra qaşlar',
+      'Межресничка': 'Kiprikarası',
+      'Tattoo': 'Tatu',
+      'PMU': 'PMU'
+    };
+
     function updateItemModalLivePreview() {
       const src = document.getElementById('item-modal-src').value || 'assets/botanical-tattoo.jpg';
-      const badge = document.getElementById('item-modal-badge').value || 'Татуировка';
-      const title = document.getElementById('item-modal-title').value || 'Название';
-      const meta = document.getElementById('item-modal-meta').value || 'Зажившая работа';
+      const isAz = (currentAdminLang === 'az');
+
+      const titleRu = document.getElementById('item-modal-title')?.value || 'Название';
+      const titleAz = document.getElementById('item-modal-title-az')?.value;
+      const title = (isAz && titleAz) ? titleAz : titleRu;
+
+      const badgeRu = document.getElementById('item-modal-badge')?.value || 'Татуировка';
+      const badgeAz = document.getElementById('item-modal-badge-az')?.value;
+      const badge = (isAz && badgeAz) ? badgeAz : badgeRu;
+
+      const metaRu = document.getElementById('item-modal-meta')?.value || 'Зажившая работа';
+      const metaAz = document.getElementById('item-modal-meta-az')?.value;
+      const meta = (isAz && metaAz) ? metaAz : metaRu;
 
       document.getElementById('item-modal-preview-img').src = src;
       document.getElementById('item-modal-preview-badge').textContent = badge;
@@ -1321,21 +1366,46 @@
     }
 
     function renderModalBadges() {
-      const container = document.getElementById('modal-badge-chips-container');
-      container.innerHTML = '';
-      const badges = appData.customBadges || ["Татуировка", "Перманент", "Зажившая работа", "Свежая работа"];
+      const containerRu = document.getElementById('modal-badge-chips-ru');
+      const containerAz = document.getElementById('modal-badge-chips-az');
 
-      badges.forEach(b => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'text-[10px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer';
-        btn.textContent = b;
-        btn.onclick = () => {
-          document.getElementById('item-modal-badge').value = b;
-          updateItemModalLivePreview();
-        };
-        container.appendChild(btn);
-      });
+      const ruBadges = appData.customBadges || ["Татуировка", "Перманент", "Зажившая работа", "Свежая работа", "Ботаника", "Минимализм"];
+      const azBadges = appData.customBadges_az || ["Tatuaj", "Permanent", "Sağalmış iş", "Təzə iş", "Botanika", "Minimalizm"];
+
+      if (containerRu) {
+        containerRu.innerHTML = '';
+        ruBadges.forEach(b => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'text-[9.5px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer';
+          btn.textContent = b;
+          btn.onclick = () => {
+            document.getElementById('item-modal-badge').value = b;
+            // Smart suggestion: if AZ badge is empty or matches translation of previous standard badge, auto-set AZ translation
+            const azInput = document.getElementById('item-modal-badge-az');
+            if (azInput && (!azInput.value || Object.values(BADGE_MAP).includes(azInput.value))) {
+              if (BADGE_MAP[b]) azInput.value = BADGE_MAP[b];
+            }
+            updateItemModalLivePreview();
+          };
+          containerRu.appendChild(btn);
+        });
+      }
+
+      if (containerAz) {
+        containerAz.innerHTML = '';
+        azBadges.forEach(b => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'text-[9.5px] px-2 py-0.5 rounded-sm border border-linen bg-eggshell hover:border-ink transition-colors cursor-pointer';
+          btn.textContent = b;
+          btn.onclick = () => {
+            document.getElementById('item-modal-badge-az').value = b;
+            updateItemModalLivePreview();
+          };
+          containerAz.appendChild(btn);
+        });
+      }
     }
 
     async function uploadItemModalMedia(input) {
@@ -1385,19 +1455,46 @@
       const metaAz = document.getElementById('item-modal-meta-az').value.trim();
       const descAz = document.getElementById('item-modal-desc-az').value.trim();
 
+      const prevItem = (idx >= 0 && appData.portfolio) ? appData.portfolio[idx] : null;
+
+      // Smart resolution: NEVER wipe out existing AZ badges when user changes RU badge
+      let resolvedBadgeAz = badgeAz;
+      if (!resolvedBadgeAz) {
+        if (prevItem && prevItem.badge_az) {
+          resolvedBadgeAz = prevItem.badge_az;
+        } else if (BADGE_MAP[badge]) {
+          resolvedBadgeAz = BADGE_MAP[badge];
+        } else {
+          resolvedBadgeAz = (cat === 'tattoo' ? 'Tatuaj' : 'Permanent');
+        }
+      }
+
+      let resolvedMetaAz = metaAz;
+      if (!resolvedMetaAz) {
+        if (prevItem && prevItem.meta_az) {
+          resolvedMetaAz = prevItem.meta_az;
+        } else if (meta === 'Зажившая работа') {
+          resolvedMetaAz = 'Sağalmış iş';
+        } else if (meta === 'Свежая работа') {
+          resolvedMetaAz = 'Təzə iş';
+        } else {
+          resolvedMetaAz = 'Sağalmış iş';
+        }
+      }
+
       const itemData = {
-        id: idx >= 0 ? appData.portfolio[idx].id : ('port-' + Date.now()),
+        id: prevItem ? prevItem.id : ('port-' + Date.now()),
         type: 'image',
         category: cat,
         title: title,
-        title_az: titleAz || title,
+        title_az: titleAz || (prevItem?.title_az) || title,
         badge: badge || (cat === 'tattoo' ? 'Татуировка' : 'Перманент'),
-        badge_az: badgeAz || (cat === 'tattoo' ? 'Tatuaj' : 'Permanent'),
+        badge_az: resolvedBadgeAz,
         meta: meta || 'Зажившая работа',
-        meta_az: metaAz || 'Sağalmış iş',
+        meta_az: resolvedMetaAz,
         src: src,
         desc: desc,
-        desc_az: descAz || desc
+        desc_az: descAz || (prevItem?.desc_az) || desc
       };
 
       if (!appData.portfolio) appData.portfolio = [];
@@ -1418,14 +1515,21 @@
       const container = document.getElementById('tab-badge-chips-container');
       if (!container) return;
       container.innerHTML = '';
-      const badges = appData.customBadges || [];
+
+      const isAz = (currentAdminLang === 'az');
+      if (!appData.customBadges) appData.customBadges = ["Татуировка", "Перманент", "Зажившая работа", "Свежая работа", "Ботаника", "Минимализм"];
+      if (!appData.customBadges_az) appData.customBadges_az = ["Tatuaj", "Permanent", "Sağalmış iş", "Təzə iş", "Botanika", "Minimalizm"];
+
+      const badges = isAz ? appData.customBadges_az : appData.customBadges;
+      const input = document.getElementById('tab-new-badge-input');
+      if (input) input.placeholder = isAz ? 'Yeni birkə adını daxil edin (məs: Qrafika, Dodaqlar)...' : 'Введите название нового бейджа...';
 
       badges.forEach(b => {
         const chip = document.createElement('div');
         chip.className = 'inline-flex items-center gap-1.5 text-[11px] bg-white text-ink border border-linen rounded-full pl-2.5 pr-1.5 py-1 shadow-xs hover:border-ink transition-all';
         chip.innerHTML = `
           <span class="font-medium text-ink">${b}</span>
-          <button type="button" onclick="deleteCustomBadge('${escapeQuotes(b)}', event)" class="text-ink-faint hover:text-red-600 rounded-full p-0.5 transition-colors cursor-pointer" title="Удалить бейдж">
+          <button type="button" onclick="deleteCustomBadge('${escapeQuotes(b)}', event)" class="text-ink-faint hover:text-red-600 rounded-full p-0.5 transition-colors cursor-pointer" title="Удалить">
             <span class="material-symbols-outlined text-[13px] block">close</span>
           </button>
         `;
@@ -1443,23 +1547,34 @@
       const val = (input.value || '').trim();
       if (!val) return;
 
+      const isAz = (currentAdminLang === 'az');
       if (!appData.customBadges) appData.customBadges = [];
-      if (!appData.customBadges.includes(val)) {
-        appData.customBadges.push(val);
+      if (!appData.customBadges_az) appData.customBadges_az = [];
+
+      const targetList = isAz ? appData.customBadges_az : appData.customBadges;
+      if (!targetList.includes(val)) {
+        targetList.push(val);
       }
       input.value = '';
       renderCustomBadges();
       await saveAllChanges(true);
-      showToast(`✅ Бейдж «${val}» создан!`);
+      showToast(isAz ? `✅ Birkə «${val}» yaradıldı!` : `✅ Бейдж «${val}» создан!`);
     }
 
     async function deleteCustomBadge(badge, e) {
       if (e) e.stopPropagation();
-      if (!confirm(`Удалить бейдж «${badge}»?`)) return;
-      appData.customBadges = (appData.customBadges || []).filter(b => b !== badge);
+      const isAz = (currentAdminLang === 'az');
+      const confirmMsg = isAz ? `«${badge}» birkəsini silmək istəyirsiniz?` : `Удалить бейдж «${badge}»?`;
+      if (!confirm(confirmMsg)) return;
+
+      if (isAz) {
+        appData.customBadges_az = (appData.customBadges_az || []).filter(b => b !== badge);
+      } else {
+        appData.customBadges = (appData.customBadges || []).filter(b => b !== badge);
+      }
       renderCustomBadges();
       await saveAllChanges(true);
-      showToast(`Бейдж «${badge}» удален`);
+      showToast(isAz ? `«${badge}» birkəsi silindi` : `Бейдж «${badge}» удален`);
     }
 
     // --- TAB 3: TEXTS & CONTACTS ---

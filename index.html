@@ -1629,8 +1629,8 @@
             if (tTitle && dirT.title) tTitle.textContent = dirT.title;
             if (tDesc && dirT.desc) tDesc.textContent = dirT.desc;
           }
-          if (data.directions.pmu) {
-            const dirP = data.directions.pmu;
+          if (activeDirs.pmu) {
+            const dirP = activeDirs.pmu;
             const pImg = document.getElementById('dir-card-pmu-img');
             const pBadge = document.getElementById('dir-card-pmu-badge');
             const pTitle = document.getElementById('dir-card-pmu-title');
@@ -1647,10 +1647,27 @@
           const grid = document.getElementById('portfolio-grid');
           grid.innerHTML = '';
 
+          const BADGE_MAP = {
+            'Татуировка': 'Tatuaj',
+            'Перманент': 'Permanent',
+            'Зажившая работа': 'Sağalmış iş',
+            'Зажившая татуировка': 'Sağalmış tatuaj',
+            'Свежая работа': 'Təzə iş',
+            'Результат после заживления': 'Sağalmadan sonrakı nəticə',
+            'Ботаника': 'Botanika',
+            'Минимализм': 'Minimalizm',
+            'Надпись': 'Yazı',
+            'Губы': 'Dodaqlar',
+            'Пудровые брови': 'Pudra qaşlar',
+            'Межресничка': 'Kiprikarası',
+            'Tattoo': 'Tatu',
+            'PMU': 'PMU'
+          };
+
           data.portfolio.forEach(item => {
             const itemTitle = (isAz && item.title_az) ? item.title_az : item.title;
-            const itemBadge = (isAz && item.badge_az) ? item.badge_az : (item.badge || (item.category === 'pmu' ? (isAz ? 'Permanent' : 'Перманент') : (isAz ? 'Tatu' : 'Татуировка')));
-            const itemMeta = (isAz && item.meta_az) ? item.meta_az : (item.meta || '');
+            const itemBadge = (isAz && item.badge_az) ? item.badge_az : (isAz ? (BADGE_MAP[item.badge] || item.badge || (item.category === 'pmu' ? 'Permanent' : 'Tatu')) : (item.badge || (item.category === 'pmu' ? 'Перманент' : 'Татуировка')));
+            const itemMeta = (isAz && item.meta_az) ? item.meta_az : (isAz && item.meta === 'Зажившая работа' ? 'Sağalmış iş' : (isAz && item.meta === 'Свежая работа' ? 'Təzə iş' : (item.meta || '')));
             const itemDesc = (isAz && item.desc_az) ? item.desc_az : (item.desc || '');
 
             const itemEl = document.createElement('div');

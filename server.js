@@ -282,10 +282,14 @@ const server = http.createServer(async (req, res) => {
 
   // --- STATIC ROUTING ---
   let normalizedPath = reqPath;
-  if (normalizedPath === '/' || normalizedPath === '') {
+  if (normalizedPath === '/' || normalizedPath === '' || normalizedPath === '/az' || normalizedPath === '/az/' || normalizedPath === '/ru' || normalizedPath === '/ru/') {
     normalizedPath = '/index.html';
   } else if (normalizedPath === '/admin' || normalizedPath === '/admin/') {
     normalizedPath = '/admin.html';
+  } else if (normalizedPath.startsWith('/az/')) {
+    normalizedPath = normalizedPath.replace(/^\/az/, '') || '/index.html';
+  } else if (normalizedPath.startsWith('/ru/')) {
+    normalizedPath = normalizedPath.replace(/^\/ru/, '') || '/index.html';
   }
 
   const filePath = path.join(__dirname, normalizedPath);

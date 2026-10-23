@@ -142,12 +142,18 @@
         </div>
         <div class="flex flex-col whitespace-nowrap min-w-0">
           <span class="font-serif text-[14px] tracking-[0.08em] font-medium text-ink uppercase leading-none whitespace-nowrap" id="nav-brand-latin">Liza Aidaraliyeva</span>
-          <span class="font-sans text-[8.5px] tracking-[0.16em] text-ink-muted uppercase mt-1 whitespace-nowrap">Татуировки &amp; Перманент</span>
+          <span class="font-sans text-[8.5px] tracking-[0.16em] text-ink-muted uppercase mt-1 whitespace-nowrap" id="nav-subtitle">Татуировки &amp; Перманент</span>
         </div>
       </a>
       
-      <!-- Quick Actions: Instagram & WhatsApp Menus + Direct CTA -->
+      <!-- Quick Actions: Language Switcher + Instagram & WhatsApp Menus -->
       <div class="flex items-center gap-1.5">
+        <!-- Language Switcher: RU | AZ -->
+        <div class="flex items-center rounded-full bg-eggshell border border-linen p-0.5 text-[10px] shadow-xs select-none mr-0.5">
+          <button id="lang-btn-ru" onclick="switchLanguage('ru')" type="button" class="px-2 py-0.5 rounded-full transition-all text-xs font-semibold bg-ink text-alabaster shadow-xs cursor-pointer">RU</button>
+          <button id="lang-btn-az" onclick="switchLanguage('az')" type="button" class="px-2 py-0.5 rounded-full transition-all text-xs font-medium text-ink-muted hover:text-ink cursor-pointer">AZ</button>
+        </div>
+
         <!-- Instagram Button with Dual Profile Dropdown -->
         <div class="relative">
           <button id="instagram-dropdown-btn" onclick="toggleInstagramMenu(event)" aria-label="Выбрать страницу Instagram" class="w-8 h-8 rounded-full bg-eggshell border border-linen flex items-center justify-center hover:border-pink-500/50 transition-all shadow-xs group cursor-pointer" title="Выбрать профиль Instagram">
@@ -170,7 +176,7 @@
           <!-- Instagram Dropdown Menu -->
           <div id="instagram-dropdown-menu" class="hidden opacity-0 scale-95 transition-all duration-200 absolute right-0 mt-2 w-60 bg-alabaster/95 backdrop-blur-xl border border-linen rounded-sm shadow-[0_16px_36px_rgba(26,25,24,0.18)] p-1.5 z-50 flex flex-col gap-1">
             <div class="px-2.5 py-1 text-[9px] uppercase tracking-wider text-ink-faint font-semibold border-b border-linen/60 flex items-center justify-between">
-              <span>Профиль Instagram:</span>
+              <span id="nav-ig-title">Профиль Instagram:</span>
               <span class="text-clay text-[8px] font-medium">Баку</span>
             </div>
             
@@ -184,7 +190,7 @@
               </div>
               <div class="flex flex-col">
                 <span id="nav-ig-tattoo-handle" class="text-[12px] font-medium text-ink group-hover:text-clay transition-colors leading-tight">@liza_tattoo_baku</span>
-                <span class="text-[10px] text-ink-muted leading-tight mt-0.5">Татуировки</span>
+                <span id="nav-ig-tattoo-sub" class="text-[10px] text-ink-muted leading-tight mt-0.5">Татуировки</span>
               </div>
               <svg class="w-3.5 h-3.5 text-ink-faint ml-auto group-hover:text-clay transition-colors shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
             </a>
@@ -199,7 +205,7 @@
               </div>
               <div class="flex flex-col">
                 <span id="nav-ig-pmu-handle" class="text-[12px] font-medium text-ink group-hover:text-clay transition-colors leading-tight">@liza_brows_permanent</span>
-                <span class="text-[10px] text-ink-muted leading-tight mt-0.5">Перманентный макияж</span>
+                <span id="nav-ig-pmu-sub" class="text-[10px] text-ink-muted leading-tight mt-0.5">Перманентный макияж</span>
               </div>
               <svg class="w-3.5 h-3.5 text-ink-faint ml-auto group-hover:text-clay transition-colors shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
             </a>
@@ -219,7 +225,7 @@
           <!-- WhatsApp Dropdown Menu -->
           <div id="whatsapp-dropdown-menu" class="hidden opacity-0 scale-95 transition-all duration-200 absolute right-0 mt-2 w-64 bg-alabaster/95 backdrop-blur-xl border border-linen rounded-sm shadow-[0_16px_36px_rgba(26,25,24,0.18)] p-1.5 z-50 flex flex-col gap-1">
             <div class="px-2.5 py-1 text-[9px] uppercase tracking-wider text-ink-faint font-semibold border-b border-linen/60 flex items-center justify-between">
-              <span>Чат в WhatsApp:</span>
+              <span id="nav-wp-title">Чат в WhatsApp:</span>
               <span class="text-[#25D366] text-[8px] font-medium">Онлайн</span>
             </div>
             
@@ -232,7 +238,7 @@
                 </span>
               </div>
               <div class="flex flex-col">
-                <span class="text-[12px] font-medium text-ink group-hover:text-clay transition-colors leading-tight">По Татуировкам</span>
+                <span id="nav-wp-tattoo-title" class="text-[12px] font-medium text-ink group-hover:text-clay transition-colors leading-tight">По Татуировкам</span>
                 <span class="text-[10px] text-ink-muted leading-tight mt-0.5" id="nav-wp-tattoo-label">+994 77 357 20 21</span>
               </div>
             </a>
@@ -246,7 +252,7 @@
                 </span>
               </div>
               <div class="flex flex-col">
-                <span class="text-[12px] font-medium text-ink group-hover:text-clay transition-colors leading-tight">По Перманенту</span>
+                <span id="nav-wp-pmu-title" class="text-[12px] font-medium text-ink group-hover:text-clay transition-colors leading-tight">По Перманенту</span>
                 <span class="text-[10px] text-ink-muted leading-tight mt-0.5" id="nav-wp-pmu-label">+994 55 498 29 57</span>
               </div>
             </a>
@@ -305,11 +311,11 @@
       <!-- Action Buttons below the collage -->
       <div class="flex items-center gap-3 pt-1">
         <a class="flex-1 py-3 px-5 rounded-full bg-[#8E5B53] hover:bg-[#7D4D46] active:scale-[0.98] text-[#FAF8F5] text-[11.5px] uppercase tracking-wider font-semibold text-center flex items-center justify-center gap-1.5 shadow-[0_4px_16px_rgba(142,91,83,0.25)] transition-all" href="#booking">
-          <span>ОБСУДИТЬ ИДЕЮ</span>
+          <span id="hero-btn-discuss-text">ОБСУДИТЬ ИДЕЮ</span>
           <span class="text-sm leading-none">→</span>
         </a>
         <a class="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-ink border-b border-ink/70 pb-0.5 hover:text-[#8E5B53] hover:border-[#8E5B53] transition-all whitespace-nowrap" href="#portfolio">
-          <span>Смотреть работы</span>
+          <span id="hero-btn-portfolio-text">Смотреть работы</span>
           <span class="text-xs">→</span>
         </a>
       </div>
@@ -317,7 +323,7 @@
       <!-- Tagline / Divider -->
       <div class="flex items-center justify-center gap-3 pt-2 text-[10.5px] sm:text-[11px] text-ink-muted">
         <span class="h-px bg-linen flex-1 max-w-[35px]"></span>
-        <span class="whitespace-nowrap">Индивидуальные эскизы · Бережный подход · Баку</span>
+        <span id="hero-tagline" class="whitespace-nowrap">Индивидуальные эскизы · Бережный подход · Баку</span>
         <span class="h-px bg-linen flex-1 max-w-[35px]"></span>
       </div>
     </section>
@@ -325,8 +331,8 @@
     <!-- 2. ДВА РАВНЫХ НАПРАВЛЕНИЯ (НАПРАВЛЕНИЯ) -->
     <section class="px-5 py-8 border-t border-linen flex flex-col gap-5" id="directions">
       <div class="flex flex-col gap-1">
-        <span class="text-[10px] uppercase tracking-caps text-clay font-semibold">Направления</span>
-        <h2 class="font-serif text-[24px] text-ink font-normal">Татуировки и перманент</h2>
+        <span id="dir-section-badge" class="text-[10px] uppercase tracking-caps text-clay font-semibold">Направления</span>
+        <h2 id="dir-section-title" class="font-serif text-[24px] text-ink font-normal">Татуировки и перманент</h2>
       </div>
 
       <!-- Strict 1 row, 2 columns on all devices -->
@@ -348,7 +354,7 @@
 
           <div class="flex flex-col gap-1.5 p-2 sm:p-2.5 pt-1.5 border-t border-linen/60 mt-1">
             <button class="w-full py-2 px-1 rounded-full bg-[#8E5B53] text-[#FAF8F5] text-[9.5px] sm:text-[10.5px] font-semibold tracking-wider uppercase text-center hover:bg-[#7D4D46] hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-1 shadow-[0_2px_8px_rgba(142,91,83,0.2)] cursor-pointer whitespace-nowrap" onclick="filterPortfolio('tattoo', true)">
-              <span>СМОТРЕТЬ РАБОТЫ</span>
+              <span id="dir-card-tattoo-btn-text">СМОТРЕТЬ РАБОТЫ</span>
               <span class="text-[11px] leading-none">↗</span>
             </button>
             
@@ -386,7 +392,7 @@
 
           <div class="flex flex-col gap-1.5 p-2 sm:p-2.5 pt-1.5 border-t border-linen/60 mt-1">
             <button class="w-full py-2 px-1 rounded-full bg-[#8E5B53] text-[#FAF8F5] text-[9.5px] sm:text-[10.5px] font-semibold tracking-wider uppercase text-center hover:bg-[#7D4D46] hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-1 shadow-[0_2px_8px_rgba(142,91,83,0.2)] cursor-pointer whitespace-nowrap" onclick="filterPortfolio('pmu', true)">
-              <span>СМОТРЕТЬ РАБОТЫ</span>
+              <span id="dir-card-pmu-btn-text">СМОТРЕТЬ РАБОТЫ</span>
               <span class="text-[11px] leading-none">↗</span>
             </button>
             
@@ -412,17 +418,17 @@
     <!-- 3. ОДНО ПОРТФОЛИО (РАБОТЫ) -->
     <section class="px-5 py-8 border-t border-linen flex flex-col gap-5" id="portfolio">
       <div class="flex flex-col gap-1">
-        <span class="text-[10px] uppercase tracking-caps text-clay font-semibold">Портфолио</span>
-        <h2 class="font-serif text-[24px] text-ink font-normal">Работы</h2>
+        <span id="portfolio-badge" class="text-[10px] uppercase tracking-caps text-clay font-semibold">Портфолио</span>
+        <h2 id="portfolio-title" class="font-serif text-[24px] text-ink font-normal">Работы</h2>
       </div>
 
       <!-- 2 Category Filter Buttons (None selected by default -> shows all) -->
       <div class="grid grid-cols-2 gap-2 p-1.5 bg-[#F4EFEB] rounded-full border border-[#E7DFD7] shadow-xs">
         <button class="py-2.5 px-4 rounded-full text-[12px] font-medium transition-all bg-alabaster text-ink border border-[#E0D7CD] text-center hover:border-[#8E5B53] hover:text-[#8E5B53] flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs" id="tab-tattoo" onclick="togglePortfolioFilter('tattoo')">
-          <span>Татуировки</span>
+          <span id="tab-tattoo-span">Татуировки</span>
         </button>
         <button class="py-2.5 px-4 rounded-full text-[12px] font-medium transition-all bg-alabaster text-ink border border-[#E0D7CD] text-center hover:border-[#8E5B53] hover:text-[#8E5B53] flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs" id="tab-pmu" onclick="togglePortfolioFilter('pmu')">
-          <span>Перманент</span>
+          <span id="tab-pmu-span">Перманент</span>
         </button>
       </div>
 
@@ -463,8 +469,8 @@
     <!-- 5. ЗАПИСЬ И КОНТАКТЫ (ОБСУДИМ ВАШУ ИДЕЮ?) -->
     <section class="px-5 py-9 border-t border-linen flex flex-col gap-5" id="booking">
       <div class="flex flex-col gap-1">
-        <span class="text-[10px] uppercase tracking-caps text-clay font-semibold">Запись</span>
-        <h2 class="font-serif text-[24px] text-ink font-normal">Обсудим вашу идею?</h2>
+        <span id="booking-badge" class="text-[10px] uppercase tracking-caps text-clay font-semibold">Запись</span>
+        <h2 id="booking-title" class="font-serif text-[24px] text-ink font-normal">Обсудим вашу идею?</h2>
         <p class="text-[12px] text-ink-muted leading-relaxed">
           Напишите, что хотите сделать, — продолжим общение в WhatsApp.
         </p>
@@ -473,13 +479,13 @@
       <form class="flex flex-col gap-4 bg-alabaster border border-linen p-4 rounded-sm shadow-xs" id="booking-form" onsubmit="event.preventDefault(); sendToWhatsApp();">
         <!-- Service Direction Switcher -->
         <div class="flex flex-col gap-1.5">
-          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Направление услуги *</label>
+          <label id="booking-service-label" class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Направление услуги *</label>
           <div class="grid grid-cols-2 gap-2 p-1.5 bg-[#F4EFEB] rounded-full border border-[#E7DFD7] shadow-xs">
             <button class="py-2.5 px-4 rounded-full border border-[#8E5B53] bg-[#8E5B53] text-[#FAF8F5] text-[12px] font-medium text-center transition-all shadow-[0_2px_8px_rgba(142,91,83,0.25)] cursor-pointer" id="btn-service-tattoo" onclick="setServiceDirection('Татуировка')" type="button">
-              <span>Татуировка</span>
+              <span id="btn-service-tattoo-span">Татуировка</span>
             </button>
             <button class="py-2.5 px-4 rounded-full border border-transparent bg-transparent text-ink text-[12px] font-medium text-center hover:text-[#8E5B53] transition-all cursor-pointer" id="btn-service-pmu" onclick="setServiceDirection('Перманентный макияж')" type="button">
-              <span>Перманент</span>
+              <span id="btn-service-pmu-span">Перманент</span>
             </button>
           </div>
           <input id="selected-service-field" type="hidden" value="Татуировка"/>
@@ -487,27 +493,27 @@
 
         <!-- Idea / Desired Area -->
         <div class="flex flex-col gap-1.5">
-          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="client-idea">Идея или желаемая зона *</label>
+          <label id="booking-idea-label" class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="client-idea">Идея или желаемая зона *</label>
           <textarea class="w-full bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none placeholder:text-ink-faint min-h-[75px] transition-all" id="client-idea" oninput="saveBookingDraft()" placeholder="Например: небольшая ботаника на ключице или форма бровей..." required=""></textarea>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <!-- Name -->
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="client-name">Ваше имя *</label>
+            <label id="booking-name-label" class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="client-name">Ваше имя *</label>
             <input class="w-full bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none placeholder:text-ink-faint transition-all" id="client-name" oninput="saveBookingDraft()" placeholder="Имя" required="" type="text"/>
           </div>
 
           <!-- WhatsApp Number -->
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="client-contact">Номер WhatsApp *</label>
+            <label id="booking-contact-label" class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="client-contact">Номер WhatsApp *</label>
             <input class="w-full bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink-faint focus:text-ink focus:border-ink focus:outline-none transition-all font-mono" id="client-contact" value="+994 " placeholder="+994 50 123 45 67" required="" type="tel" onfocus="handlePhoneFocus(this)" onblur="handlePhoneBlur(this)" oninput="handlePhoneInput(this)"/>
           </div>
         </div>
 
         <!-- Reference / Sketch File Upload -->
         <div class="flex flex-col gap-1.5">
-          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Прикрепить фото или эскиз (референс)</label>
+          <label id="booking-attach-label" class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Прикрепить фото или эскиз (референс)</label>
           <label class="border border-dashed border-linen hover:border-clay bg-eggshell/40 rounded-sm p-3 flex flex-col items-center justify-center cursor-pointer transition-colors hover:shadow-xs group">
             <svg class="w-5 h-5 text-clay mb-0.5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -517,7 +523,7 @@
               <line x1="9" y1="11" x2="15" y2="11"></line>
             </svg>
             <span class="text-[11px] text-ink font-medium" id="upload-hint">Прикрепить референс (эскиз / фото)</span>
-            <span class="text-[9px] text-ink-faint mt-0.5">Можно прикрепить фото или отправить его напрямую в чате WhatsApp</span>
+            <span id="upload-sub" class="text-[9px] text-ink-faint mt-0.5">Можно прикрепить фото или отправить его напрямую в чате WhatsApp</span>
             <input class="hidden" id="client-file" onchange="handleReferenceFileChange(this)" type="file" accept="image/*"/>
           </label>
           
@@ -573,7 +579,7 @@
       <div class="border-t border-b border-linen/60 text-[11.5px] divide-y divide-linen/60">
         <!-- Tattoo Row -->
         <div class="py-3.5 flex flex-col gap-2">
-          <span class="font-serif text-ink text-[13px] font-medium leading-none">Татуировки</span>
+          <span id="footer-row-tattoo" class="font-serif text-ink text-[13px] font-medium leading-none">Татуировки</span>
           <div class="flex items-center justify-between gap-2">
             <a id="footer-ig-tattoo" href="https://www.instagram.com/liza_tattoo_baku" target="_blank" class="hover:text-clay transition-colors flex items-center gap-1.5 font-medium text-ink-muted group cursor-pointer" title="Instagram: @liza_tattoo_baku">
               <svg style="width: 15px; height: 15px; min-width: 15px;" viewBox="0 0 24 24" fill="none">
@@ -594,7 +600,7 @@
 
         <!-- Permanent Row -->
         <div class="py-3.5 flex flex-col gap-2">
-          <span class="font-serif text-ink text-[13px] font-medium leading-none">Перманент</span>
+          <span id="footer-row-pmu" class="font-serif text-ink text-[13px] font-medium leading-none">Перманент</span>
           <div class="flex items-center justify-between gap-2">
             <a id="footer-ig-pmu" href="https://www.instagram.com/liza_brows_permanent" target="_blank" class="hover:text-clay transition-colors flex items-center gap-1.5 font-medium text-ink-muted group cursor-pointer" title="Instagram: @liza_brows_permanent">
               <svg style="width: 15px; height: 15px; min-width: 15px;" viewBox="0 0 24 24" fill="none">
@@ -614,7 +620,7 @@
         </div>
       </div>
 
-      <div class="pt-2 text-center text-[10.5px] text-ink-faint">
+      <div id="footer-copyright" class="pt-2 text-center text-[10.5px] text-ink-faint">
         © Лиза Аидаралиева
       </div>
     </footer>
@@ -625,7 +631,7 @@
     <!-- Popover for Mobile WhatsApp Choice -->
     <div id="bottom-whatsapp-menu" class="hidden opacity-0 scale-95 transition-all duration-200 absolute bottom-14 left-4 right-4 max-w-md mx-auto bg-alabaster/95 backdrop-blur-xl border border-linen rounded-sm shadow-[0_-8px_32px_rgba(26,25,24,0.18)] p-2 flex flex-col gap-1.5 z-50">
       <div class="px-2 py-1 text-[9px] uppercase tracking-wider text-ink-faint font-semibold border-b border-linen/60 flex items-center justify-between">
-        <span>Связаться в WhatsApp:</span>
+        <span id="bottom-wp-title">Связаться в WhatsApp:</span>
         <button onclick="toggleBottomWhatsAppMenu()" class="text-ink-muted hover:text-ink p-1 flex items-center justify-center">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
@@ -1160,20 +1166,36 @@
         console.warn('Booking logging error:', e);
       }
 
-      const phone = (service === 'Татуировка') ? PHONE_TATTOO : PHONE_PMU;
+      const phone = (service === 'Татуировка' || service === 'Tatuaj') ? PHONE_TATTOO : PHONE_PMU;
+      const isAz = (window.CURRENT_LANG === 'az');
       
-      let messageText = 
-`Здравствуйте, Лиза! Пишу с сайта.
+      let messageText = '';
+      if (isAz) {
+        const srvName = (service === 'Татуировка' || service === 'Tatuaj') ? 'Tatuaj' : 'Permanent makiyaj';
+        messageText = `Salam, Liza! Saytdan yazıram.
 
-• Направление: ${service}
+• Xidmət: ${srvName}
+• Ad: ${name}
+• Nömrə: ${formattedContact}
+• İdeya / zona: ${idea}`;
+        if (uploadedRefUrl) {
+          messageText += `\n\n📷 Foto / eskiz: ${uploadedRefUrl}`;
+        } else if (fileInput && fileInput.files && fileInput.files[0]) {
+          messageText += `\n\n📷 Foto/eskizi birbaşa bura çatda göndərirəm:`;
+        }
+      } else {
+        const srvName = (service === 'Tatuaj' || service === 'Татуировка') ? 'Татуировка' : 'Перманентный макияж';
+        messageText = `Здравствуйте, Лиза! Пишу с сайта.
+
+• Направление: ${srvName}
 • Имя: ${name}
 • Номер: ${formattedContact}
 • Идея / зона: ${idea}`;
-
-      if (uploadedRefUrl) {
-        messageText += `\n\n📷 Фото / эскиз: ${uploadedRefUrl}`;
-      } else if (fileInput && fileInput.files && fileInput.files[0]) {
-        messageText += `\n\n📷 Фото/эскиз прикрепляю прямо сюда в чат:`;
+        if (uploadedRefUrl) {
+          messageText += `\n\n📷 Фото / эскиз: ${uploadedRefUrl}`;
+        } else if (fileInput && fileInput.files && fileInput.files[0]) {
+          messageText += `\n\n📷 Фото/эскиз прикрепляю прямо сюда в чат:`;
+        }
       }
 
       const encodedText = encodeURIComponent(messageText);
@@ -1255,6 +1277,218 @@
       if (e.key === 'Escape') closeModal();
     });
 
+    // ==================== MULTILINGUAL & I18N SYSTEM ====================
+    window.CURRENT_LANG = 'ru';
+    let CMS_DATA = null;
+
+    const I18N = {
+      ru: {
+        siteTitle: 'Лиза Аидаралиева — Татуировка и Перманентный макияж в Баку',
+        navSubtitle: 'Татуировки & Перманент',
+        navIgTitle: 'Профиль Instagram:',
+        navIgTattooSub: 'Татуировки',
+        navIgPmuSub: 'Перманентный макияж',
+        navWpTitle: 'Чат в WhatsApp:',
+        navWpTattooTitle: 'По Татуировкам',
+        navWpPmuTitle: 'По Перманенту',
+        heroLocation: 'Студия в Баку',
+        heroBtnDiscuss: 'ОБСУДИТЬ ИДЕЮ',
+        heroBtnPortfolio: 'Смотреть работы',
+        heroTagline: 'Индивидуальные эскизы · Бережный подход · Баку',
+        dirSectionBadge: 'Направления',
+        dirSectionTitle: 'Татуировки и перманент',
+        dirBtnWorks: 'СМОТРЕТЬ РАБОТЫ',
+        portfolioBadge: 'Портфолио',
+        portfolioTitle: 'Работы',
+        tabTattoo: 'Татуировки',
+        tabPmu: 'Перманент',
+        aboutTitle: 'О мастере',
+        bookingBadge: 'Запись',
+        bookingTitle: 'Обсудим вашу идею?',
+        bookingDesc: 'Напишите, что хотите сделать, — продолжим общение в WhatsApp.',
+        bookingServiceLabel: 'Направление услуги *',
+        serviceTattoo: 'Татуировка',
+        servicePmu: 'Перманент',
+        ideaLabel: 'Идея или желаемая зона *',
+        ideaPlaceholder: 'Например: небольшая ботаника на ключице или форма бровей...',
+        nameLabel: 'Ваше имя *',
+        namePlaceholder: 'Имя',
+        contactLabel: 'Номер WhatsApp *',
+        attachLabel: 'Прикрепить фото или эскиз (референс)',
+        uploadHint: 'Прикрепить референс (эскиз / фото)',
+        uploadSub: 'Можно прикрепить фото или отправить его напрямую в чате WhatsApp',
+        submitBtn: 'Обсудить идею в WhatsApp',
+        submitNote: 'После заполнения формы откроется WhatsApp с готовым сообщением. Проверьте его и нажмите «Отправить».',
+        footerRowTattoo: 'Татуировки',
+        footerRowPmu: 'Перманент',
+        footerCopyright: '© Лиза Аидаралиева',
+        bottomBarDiscuss: 'ОБСУДИТЬ ИДЕЮ',
+        bottomWpTitle: 'Связаться в WhatsApp:',
+        bottomWpTattooTitle: 'WhatsApp по Татуировкам',
+        bottomWpTattooSub: 'Эскизы, консультация, выбор зоны',
+        bottomWpPmuTitle: 'WhatsApp по Перманенту',
+        bottomWpPmuSub: 'Губы, брови, межресничка',
+        zoomHint: 'Нажмите для макро-приближения деталей (2.2×)'
+      },
+      az: {
+        siteTitle: 'Liza Aydarəliyeva — Bakıda Tatu və Permanent makiyaj',
+        navSubtitle: 'Tatuaj & Permanent',
+        navIgTitle: 'Instagram profili:',
+        navIgTattooSub: 'Tatuajlar',
+        navIgPmuSub: 'Permanent makiyaj',
+        navWpTitle: 'WhatsApp çat:',
+        navWpTattooTitle: 'Tatuaj üzrə',
+        navWpPmuTitle: 'Permanent üzrə',
+        heroLocation: 'Bakıda studiya',
+        heroBtnDiscuss: 'İDEYANI MÜZAKİRƏ ET',
+        heroBtnPortfolio: 'İşlərə baxmaq',
+        heroTagline: 'Fərdi eskizlər · Qayğıkeş yanaşma · Bakı',
+        dirSectionBadge: 'İstiqamətlər',
+        dirSectionTitle: 'Tatuaj və permanent',
+        dirBtnWorks: 'İŞLƏRƏ BAXMAQ',
+        portfolioBadge: 'Portfollio',
+        portfolioTitle: 'İşlər',
+        tabTattoo: 'Tatuajlar',
+        tabPmu: 'Permanent',
+        aboutTitle: 'Usta haqqında',
+        bookingBadge: 'Yazılmaq',
+        bookingTitle: 'İdeyanızı müzakirə edək?',
+        bookingDesc: 'Nə etmək istədiyinizi yazın — WhatsApp-da davam edək.',
+        bookingServiceLabel: 'Xidmət istiqaməti *',
+        serviceTattoo: 'Tatuaj',
+        servicePmu: 'Permanent',
+        ideaLabel: 'İdeya və ya istənilən zona *',
+        ideaPlaceholder: 'Məsələn: körpücük sümüyündə zərif botanika və ya qaş forması...',
+        nameLabel: 'Adınız *',
+        namePlaceholder: 'Adınız',
+        contactLabel: 'WhatsApp nömrəsi *',
+        attachLabel: 'Foto və ya eskiz əlavə etmək (referans)',
+        uploadHint: 'Referans əlavə et (eskiz / foto)',
+        uploadSub: 'Şəkli burada əlavə edə və ya birbaşa WhatsApp-da göndərə bilərsiniz',
+        submitBtn: 'İdeyanı WhatsApp-da müzakirə et',
+        submitNote: 'Formu doldurduqdan sonra hazır mesajla WhatsApp açılacaq. Yoxlayın və «Göndər» düyməsinə basın.',
+        footerRowTattoo: 'Tatuajlar',
+        footerRowPmu: 'Permanent',
+        footerCopyright: '© Liza Aydarəliyeva',
+        bottomBarDiscuss: 'İDEYANI MÜZAKİRƏ ET',
+        bottomWpTitle: 'WhatsApp ilə əlaqə:',
+        bottomWpTattooTitle: 'Tatuaj üzrə WhatsApp',
+        bottomWpTattooSub: 'Eskizlər, məsləhət, zona seçimi',
+        bottomWpPmuTitle: 'Permanent üzrə WhatsApp',
+        bottomWpPmuSub: 'Dodaqlar, qaşlar, kiprikarası',
+        zoomHint: 'Detalları yaxından görmək üçün klikləyin (2.2×)'
+      }
+    };
+
+    function applyStaticTranslations(lang) {
+      const dict = I18N[lang] || I18N.ru;
+      document.documentElement.lang = lang;
+      
+      const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      const setPh = (id, val) => { const el = document.getElementById(id); if (el) el.placeholder = val; };
+
+      setTxt('site-title', dict.siteTitle);
+      setTxt('nav-subtitle', dict.navSubtitle);
+      setTxt('nav-ig-title', dict.navIgTitle);
+      setTxt('nav-ig-tattoo-sub', dict.navIgTattooSub);
+      setTxt('nav-ig-pmu-sub', dict.navIgPmuSub);
+      setTxt('nav-wp-title', dict.navWpTitle);
+      setTxt('nav-wp-tattoo-title', dict.navWpTattooTitle);
+      setTxt('nav-wp-pmu-title', dict.navWpPmuTitle);
+      setTxt('hero-location-badge', dict.heroLocation);
+      setTxt('hero-btn-discuss-text', dict.heroBtnDiscuss);
+      setTxt('hero-btn-portfolio-text', dict.heroBtnPortfolio);
+      setTxt('hero-tagline', dict.heroTagline);
+      setTxt('dir-section-badge', dict.dirSectionBadge);
+      setTxt('dir-section-title', dict.dirSectionTitle);
+      setTxt('dir-card-tattoo-btn-text', dict.dirBtnWorks);
+      setTxt('dir-card-pmu-btn-text', dict.dirBtnWorks);
+      setTxt('portfolio-badge', dict.portfolioBadge);
+      setTxt('portfolio-title', dict.portfolioTitle);
+      setTxt('tab-tattoo-span', dict.tabTattoo);
+      setTxt('tab-pmu-span', dict.tabPmu);
+      setTxt('about-artist-name', dict.aboutTitle);
+      setTxt('booking-badge', dict.bookingBadge);
+      setTxt('booking-title', dict.bookingTitle);
+      setTxt('booking-desc', dict.bookingDesc);
+      setTxt('booking-service-label', dict.bookingServiceLabel);
+      setTxt('btn-service-tattoo-span', dict.serviceTattoo);
+      setTxt('btn-service-pmu-span', dict.servicePmu);
+      setTxt('booking-idea-label', dict.ideaLabel);
+      setPh('client-idea', dict.ideaPlaceholder);
+      setTxt('booking-name-label', dict.nameLabel);
+      setPh('client-name', dict.namePlaceholder);
+      setTxt('booking-contact-label', dict.contactLabel);
+      setTxt('booking-attach-label', dict.attachLabel);
+      setTxt('upload-hint', dict.uploadHint);
+      setTxt('upload-sub', dict.uploadSub);
+      setTxt('booking-submit-text', dict.submitBtn);
+      setTxt('booking-note', dict.submitNote);
+      setTxt('footer-row-tattoo', dict.footerRowTattoo);
+      setTxt('footer-row-pmu', dict.footerRowPmu);
+      setTxt('footer-copyright', dict.footerCopyright);
+      setTxt('bottom-bar-discuss', dict.bottomBarDiscuss);
+      setTxt('bottom-wp-title', dict.bottomWpTitle);
+      setTxt('bottom-wp-tattoo-title', dict.bottomWpTattooTitle);
+      setTxt('bottom-wp-tattoo-sub', dict.bottomWpTattooSub);
+      setTxt('bottom-wp-pmu-title', dict.bottomWpPmuTitle);
+      setTxt('bottom-wp-pmu-sub', dict.bottomWpPmuSub);
+      setTxt('zoom-hint-overlay', dict.zoomHint);
+
+      // Update switcher button pill active styles
+      const btnRu = document.getElementById('lang-btn-ru');
+      const btnAz = document.getElementById('lang-btn-az');
+      if (btnRu && btnAz) {
+        if (lang === 'az') {
+          btnAz.className = 'px-2 py-0.5 rounded-full transition-all text-xs font-semibold bg-ink text-alabaster shadow-xs cursor-pointer';
+          btnRu.className = 'px-2 py-0.5 rounded-full transition-all text-xs font-medium text-ink-muted hover:text-ink cursor-pointer';
+        } else {
+          btnRu.className = 'px-2 py-0.5 rounded-full transition-all text-xs font-semibold bg-ink text-alabaster shadow-xs cursor-pointer';
+          btnAz.className = 'px-2 py-0.5 rounded-full transition-all text-xs font-medium text-ink-muted hover:text-ink cursor-pointer';
+        }
+      }
+    }
+
+    function switchLanguage(lang, updateUrl = true) {
+      window.CURRENT_LANG = lang;
+      try { localStorage.setItem('liza_site_lang', lang); } catch (e) {}
+
+      if (updateUrl) {
+        const targetPath = (lang === 'az') ? '/az' : '/';
+        if (window.location.pathname !== targetPath) {
+          history.pushState({ lang }, '', targetPath);
+        }
+      }
+
+      applyStaticTranslations(lang);
+      hydrateFromCMS();
+    }
+
+    window.addEventListener('popstate', () => {
+      const isAz = window.location.pathname.startsWith('/az');
+      switchLanguage(isAz ? 'az' : 'ru', false);
+    });
+
+    function initLanguage() {
+      let lang = 'ru';
+      if (window.location.pathname.startsWith('/az')) {
+        lang = 'az';
+      } else if (window.location.pathname.startsWith('/ru')) {
+        lang = 'ru';
+      } else {
+        try {
+          const saved = localStorage.getItem('liza_site_lang');
+          if (saved === 'az') {
+            lang = 'az';
+            if (window.location.pathname === '/') {
+              history.replaceState({ lang: 'az' }, '', '/az');
+            }
+          }
+        } catch (e) {}
+      }
+      switchLanguage(lang, false);
+    }
+
     // 8. Hydrate Dynamic Data from CMS (/api/data)
     async function hydrateFromCMS() {
       try {
@@ -1262,15 +1496,18 @@
         if (!res.ok) return;
         const data = await res.json();
         
-        // 1. Text & Contacts
-        if (data.texts) {
-          const t = data.texts;
+        CMS_DATA = data;
+        const isAz = (window.CURRENT_LANG === 'az');
+        
+        // 1. Text & Contacts (Choose language version with fallback)
+        const t = isAz ? { ...(data.texts || {}), ...(data.texts_az || {}) } : (data.texts || {});
+        if (t) {
           if (t.artistName) {
             const hArtist = document.getElementById('hero-artist-name');
             if (hArtist) hArtist.textContent = t.artistName;
             const aArtist = document.getElementById('about-artist-name');
             if (aArtist) aArtist.textContent = t.artistName;
-            document.getElementById('site-title').textContent = t.artistName + ' — Татуировка и Перманентный макияж в Баку';
+            document.getElementById('site-title').textContent = isAz ? (t.artistName + ' — Bakıda Tatuaj və Permanent Makiyaj') : (t.artistName + ' — Татуировка и Перманентный макияж в Баку');
           }
           if (t.heroTitle) {
             const hTitle = document.getElementById('hero-main-title');
@@ -1378,10 +1615,11 @@
           }
         }
 
-        // 2.5 Directions Cards (Tattoo & PMU)
-        if (data.directions) {
-          if (data.directions.tattoo) {
-            const dirT = data.directions.tattoo;
+        // 2.5 Directions Cards (Tattoo & PMU - with language selection)
+        const activeDirs = isAz ? (data.directions_az || data.directions || {}) : (data.directions || {});
+        if (activeDirs) {
+          if (activeDirs.tattoo) {
+            const dirT = activeDirs.tattoo;
             const tImg = document.getElementById('dir-card-tattoo-img');
             const tBadge = document.getElementById('dir-card-tattoo-badge');
             const tTitle = document.getElementById('dir-card-tattoo-title');
@@ -1410,18 +1648,23 @@
           grid.innerHTML = '';
 
           data.portfolio.forEach(item => {
+            const itemTitle = (isAz && item.title_az) ? item.title_az : item.title;
+            const itemBadge = (isAz && item.badge_az) ? item.badge_az : (item.badge || (item.category === 'pmu' ? (isAz ? 'Permanent' : 'Перманент') : (isAz ? 'Tatu' : 'Татуировка')));
+            const itemMeta = (isAz && item.meta_az) ? item.meta_az : (item.meta || '');
+            const itemDesc = (isAz && item.desc_az) ? item.desc_az : (item.desc || '');
+
             const itemEl = document.createElement('div');
             itemEl.className = 'portfolio-item photo-card group overflow-hidden rounded-sm border border-linen bg-alabaster';
             itemEl.setAttribute('data-category', item.category || 'tattoo');
-            itemEl.onclick = () => openModal(item.src, item.title, item.badge, item.desc);
+            itemEl.onclick = () => openModal(item.src, itemTitle, itemBadge, itemDesc);
 
             itemEl.innerHTML = `
               <div class="h-52 sm:h-56 overflow-hidden bg-eggshell relative">
-                <img alt="${item.title}" class="w-full h-full object-cover" src="${item.src || 'assets/botanical-tattoo.jpg'}"/>
+                <img alt="${itemTitle}" class="w-full h-full object-cover" src="${item.src || 'assets/botanical-tattoo.jpg'}"/>
                 
                 <!-- Category Badge -->
                 <div class="absolute top-2 left-2 bg-alabaster/95 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-linen/90 text-[8px] uppercase tracking-wider ${item.category === 'pmu' ? 'text-clay' : 'text-ink'} font-semibold shadow-xs">
-                  ${item.badge || (item.category === 'pmu' ? 'Перманент' : 'Татуировка')}
+                  ${itemBadge}
                 </div>
                 
                 <!-- Zoom Indicator -->
@@ -1436,8 +1679,8 @@
 
                 <!-- Bottom Label -->
                 <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent p-2.5 pt-6 transition-all duration-300 group-hover:pb-3">
-                  <span class="text-[12px] font-serif text-alabaster block leading-tight font-medium">${item.title}</span>
-                  <span class="text-[9px] text-alabaster/80 block mt-0.5 font-light">${item.meta || ''}</span>
+                  <span class="text-[12px] font-serif text-alabaster block leading-tight font-medium">${itemTitle}</span>
+                  <span class="text-[9px] text-alabaster/80 block mt-0.5 font-light">${itemMeta}</span>
                 </div>
               </div>
             `;
@@ -1469,7 +1712,7 @@
 
     // Run hydration and restore draft when page loads
     window.addEventListener('DOMContentLoaded', () => {
-      hydrateFromCMS();
+      initLanguage();
       restoreBookingDraft();
       updateBottomBarOnScroll();
     });

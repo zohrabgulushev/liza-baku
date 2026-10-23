@@ -122,6 +122,29 @@
       </div>
     </header>
 
+    <!-- Language Version Switcher for Admin Editing -->
+    <div class="bg-alabaster/95 border-b border-linen py-2 px-4 shadow-2xs sticky top-16 z-30 backdrop-blur-md">
+      <div class="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div class="flex items-center gap-2.5">
+          <span class="text-[11px] font-medium uppercase tracking-wider text-ink-muted shrink-0">Язык редактирования:</span>
+          <div class="flex items-center rounded-sm bg-eggshell border border-linen p-0.5 text-[11px]">
+            <button id="admin-lang-ru" onclick="switchAdminLang('ru')" type="button" class="px-3.5 py-1 rounded-xs font-semibold bg-ink text-alabaster shadow-xs cursor-pointer transition-all flex items-center gap-1.5">
+              <span>🇷🇺</span>
+              <span>Русский (RU)</span>
+            </button>
+            <button id="admin-lang-az" onclick="switchAdminLang('az')" type="button" class="px-3.5 py-1 rounded-xs font-medium text-ink-muted hover:text-ink cursor-pointer transition-all flex items-center gap-1.5">
+              <span>🇦🇿</span>
+              <span>Azərbaycan (AZ)</span>
+            </button>
+          </div>
+        </div>
+        <div class="text-[11px] text-ink-muted flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+          <span id="admin-lang-status-text">Сейчас редактируются тексты для русской версии сайта</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Navigation Tabs -->
     <div class="bg-eggshell/70 border-b border-linen overflow-x-auto no-scrollbar touch-scroll">
       <div class="max-w-5xl mx-auto px-3 sm:px-4 flex items-center gap-1.5 sm:gap-2 py-2">
@@ -716,31 +739,61 @@
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Статус / Этап (Meta)</label>
-            <input type="text" id="item-modal-meta" placeholder="Зажившая работа или Свежая работа" oninput="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Статус / Этап (RU & AZ)</label>
+            <div class="grid grid-cols-2 gap-1.5">
+              <input type="text" id="item-modal-meta" placeholder="RU: Зажившая работа" oninput="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-2.5 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+              <input type="text" id="item-modal-meta-az" placeholder="AZ: Sağalmış iş" class="bg-eggshell/60 border border-linen rounded-sm px-2.5 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+            </div>
           </div>
         </div>
 
-        <!-- Title -->
-        <div class="flex flex-col gap-1">
-          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Название работы (Ботаника, Перманент губ...)</label>
-          <input type="text" id="item-modal-title" required oninput="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
-        </div>
-
-        <!-- Badge with Quick Chips -->
-        <div class="flex flex-col gap-1">
-          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Бейдж на фото</label>
-          <input type="text" id="item-modal-badge" oninput="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
-          
-          <div class="flex flex-wrap gap-1.5 mt-1" id="modal-badge-chips-container">
-            <!-- Rendered dynamically -->
+        <!-- Title: RU & AZ -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted flex items-center justify-between">
+              <span>Название (RU) *</span>
+              <span class="text-[9px] text-ink-faint">Русский</span>
+            </label>
+            <input type="text" id="item-modal-title" required oninput="updateItemModalLivePreview()" placeholder="Например: Ботаника" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted flex items-center justify-between">
+              <span>Adı (AZ)</span>
+              <span class="text-[9px] text-ink-faint">Azərbaycan</span>
+            </label>
+            <input type="text" id="item-modal-title-az" placeholder="Məsələn: Botanika" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
           </div>
         </div>
 
-        <!-- Description -->
-        <div class="flex flex-col gap-1">
-          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Описание (для всплывающего окна)</label>
-          <textarea id="item-modal-desc" rows="2" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"></textarea>
+        <!-- Badge with Quick Chips & AZ Birkə -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted flex items-center justify-between">
+              <span>Бейдж (RU)</span>
+              <span class="text-[9px] text-ink-faint">Татуировка / Перманент</span>
+            </label>
+            <input type="text" id="item-modal-badge" oninput="updateItemModalLivePreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted flex items-center justify-between">
+              <span>Birkə (AZ)</span>
+              <span class="text-[9px] text-ink-faint">Tatuaj / Permanent</span>
+            </label>
+            <input type="text" id="item-modal-badge-az" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5" id="modal-badge-chips-container"></div>
+
+        <!-- Description: RU & AZ -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Описание (RU)</label>
+            <textarea id="item-modal-desc" rows="2" placeholder="Русское описание..." class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"></textarea>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Təsvir (AZ)</label>
+            <textarea id="item-modal-desc-az" rows="2" placeholder="Azərbaycan dilində təsvir..." class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"></textarea>
+          </div>
         </div>
 
         <!-- Action Buttons -->
@@ -767,6 +820,32 @@
   <script>
     let appData = null;
     let authPassword = sessionStorage.getItem('admin_pass') || '';
+    let currentAdminLang = 'ru';
+
+    function switchAdminLang(lang) {
+      if (currentAdminLang === lang) return;
+      collectAllInputs();
+      currentAdminLang = lang;
+
+      const btnRu = document.getElementById('admin-lang-ru');
+      const btnAz = document.getElementById('admin-lang-az');
+      const statusText = document.getElementById('admin-lang-status-text');
+
+      if (lang === 'az') {
+        if (btnAz) btnAz.className = 'px-3.5 py-1 rounded-xs font-semibold bg-ink text-alabaster shadow-xs cursor-pointer transition-all flex items-center gap-1.5';
+        if (btnRu) btnRu.className = 'px-3.5 py-1 rounded-xs font-medium text-ink-muted hover:text-ink cursor-pointer transition-all flex items-center gap-1.5';
+        if (statusText) statusText.textContent = '🇦🇿 İndi saytın Azərbaycan dili versiyası redaktə olunur';
+      } else {
+        if (btnRu) btnRu.className = 'px-3.5 py-1 rounded-xs font-semibold bg-ink text-alabaster shadow-xs cursor-pointer transition-all flex items-center gap-1.5';
+        if (btnAz) btnAz.className = 'px-3.5 py-1 rounded-xs font-medium text-ink-muted hover:text-ink cursor-pointer transition-all flex items-center gap-1.5';
+        if (statusText) statusText.textContent = '🇷🇺 Сейчас редактируются тексты для русской версии сайта';
+      }
+
+      renderHero();
+      renderDirections();
+      renderTexts();
+      showToast(lang === 'az' ? '🇦🇿 Переключено на азербайджанскую версию' : '🇷🇺 Переключено на русскую версию');
+    }
 
     // Check login
     window.addEventListener('DOMContentLoaded', async () => {
@@ -868,6 +947,8 @@
       try {
         const res = await fetch('/api/data');
         appData = await res.json();
+        if (!appData.texts_az) appData.texts_az = {};
+        if (!appData.directions_az) appData.directions_az = {};
         renderAll();
       } catch (e) {
         console.error('Error fetching data:', e);
@@ -890,25 +971,27 @@
     }
 
     function renderHero() {
-      const t = appData.texts || {};
+      const isAz = (currentAdminLang === 'az');
+      const t = isAz ? (appData.texts_az || {}) : (appData.texts || {});
+      const fallback = appData.texts || {};
 
       const hTitle = document.getElementById('txt-hero-title');
-      if (hTitle) hTitle.value = t.heroTitle || 'Искусство, которое\nостаётся с вами';
+      if (hTitle) hTitle.value = t.heroTitle || (isAz ? 'Sizinlə qalan\nincəsənət' : fallback.heroTitle || 'Искусство, которое\nостаётся с вами');
 
       const hSub1 = document.getElementById('txt-hero-subtitle-tab1');
-      if (hSub1) hSub1.value = t.heroSubtitle || 'Авторские татуировки и деликатный перманент';
+      if (hSub1) hSub1.value = t.heroSubtitle || (isAz ? 'Müəllif tatuajları və zərif permanent' : fallback.heroSubtitle || 'Авторские татуировки и деликатный перманент');
 
       const hLoc1 = document.getElementById('txt-location-badge-tab1');
-      if (hLoc1) hLoc1.value = t.locationBadge || 'Студия в Баку';
+      if (hLoc1) hLoc1.value = t.locationBadge || (isAz ? 'Bakıda studiya' : fallback.locationBadge || 'Студия в Баку');
 
       const hMain = document.getElementById('hero-main-img-src');
-      if (hMain) hMain.value = t.heroMainImg || 'assets/hero-fine-line.jpg';
+      if (hMain) hMain.value = appData.texts?.heroMainImg || 'assets/hero-fine-line.jpg';
 
       const hBadge = document.getElementById('hero-badge-input');
-      if (hBadge) hBadge.value = t.heroBadge || 'Fine line · Авторские эскизы';
+      if (hBadge) hBadge.value = t.heroBadge || (isAz ? 'Fine line · Müəllif eskizləri' : fallback.heroBadge || 'Fine line · Авторские эскизы');
 
       const hInset = document.getElementById('hero-inset-img-src');
-      if (hInset) hInset.value = t.heroInsetImg || 'assets/lip-blush.jpg';
+      if (hInset) hInset.value = appData.texts?.heroInsetImg || 'assets/lip-blush.jpg';
 
       updateHeroPreview();
     }
@@ -985,25 +1068,23 @@
 
     // --- TAB 2: DIRECTIONS SECTION ---
     function renderDirections() {
-      if (!appData.directions) {
-        appData.directions = {
-          tattoo: { src: 'assets/hero-hand-tattoo.jpg', badge: 'Tattoo', title: 'Татуировки', desc: 'Ботаника, надписи, минимализм.' },
-          pmu: { src: 'assets/powder-brows.jpg', badge: 'PMU', title: 'Перманент', desc: 'Губы, брови, межресничка.' }
-        };
-      }
+      const isAz = (currentAdminLang === 'az');
+      if (!appData.directions) appData.directions = {};
+      if (!appData.directions_az) appData.directions_az = {};
 
-      const t = appData.directions.tattoo || {};
-      const p = appData.directions.pmu || {};
+      const d = isAz ? appData.directions_az : appData.directions;
+      const t = d.tattoo || {};
+      const p = d.pmu || {};
 
-      document.getElementById('dir-tattoo-src').value = t.src || '';
-      document.getElementById('dir-tattoo-badge').value = t.badge || 'Tattoo';
-      document.getElementById('dir-tattoo-title').value = t.title || 'Татуировки';
-      document.getElementById('dir-tattoo-desc').value = t.desc || 'Ботаника, надписи, минимализм.';
+      document.getElementById('dir-tattoo-src').value = appData.directions?.tattoo?.src || t.src || 'assets/hero-hand-tattoo.jpg';
+      document.getElementById('dir-tattoo-badge').value = t.badge || (isAz ? 'Tatu' : 'Tattoo');
+      document.getElementById('dir-tattoo-title').value = t.title || (isAz ? 'Tatuajlar' : 'Татуировки');
+      document.getElementById('dir-tattoo-desc').value = t.desc || (isAz ? 'Botanika, yazılar, incə xətlər.' : 'Ботаника, надписи, минимализм.');
 
-      document.getElementById('dir-pmu-src').value = p.src || '';
-      document.getElementById('dir-pmu-badge').value = p.badge || 'PMU';
-      document.getElementById('dir-pmu-title').value = p.title || 'Перманент';
-      document.getElementById('dir-pmu-desc').value = p.desc || 'Губы, брови, межресничка.';
+      document.getElementById('dir-pmu-src').value = appData.directions?.pmu?.src || p.src || 'assets/powder-brows.jpg';
+      document.getElementById('dir-pmu-badge').value = p.badge || (isAz ? 'Permanent' : 'PMU');
+      document.getElementById('dir-pmu-title').value = p.title || (isAz ? 'Permanent' : 'Перманент');
+      document.getElementById('dir-pmu-desc').value = p.desc || (isAz ? 'Dodaqlar, qaşlar, kiprikarası xətt.' : 'Губы, брови, межресничка.');
 
       updateDirectionsPreview();
       renderDirectionBadgeChips();
@@ -1209,10 +1290,14 @@
 
       document.getElementById('item-modal-src').value = item.src || '';
       document.getElementById('item-modal-badge').value = item.badge || '';
+      document.getElementById('item-modal-badge-az').value = item.badge_az || '';
       document.getElementById('item-modal-title').value = item.title || '';
+      document.getElementById('item-modal-title-az').value = item.title_az || '';
       document.getElementById('item-modal-category').value = item.category || 'tattoo';
       document.getElementById('item-modal-meta').value = item.meta || 'Зажившая работа';
+      document.getElementById('item-modal-meta-az').value = item.meta_az || 'Sağalmış iş';
       document.getElementById('item-modal-desc').value = item.desc || '';
+      document.getElementById('item-modal-desc-az').value = item.desc_az || '';
 
       updateItemModalLivePreview();
       renderModalBadges();
@@ -1295,15 +1380,24 @@
       const meta = document.getElementById('item-modal-meta').value.trim();
       const desc = document.getElementById('item-modal-desc').value.trim();
 
+      const titleAz = document.getElementById('item-modal-title-az').value.trim();
+      const badgeAz = document.getElementById('item-modal-badge-az').value.trim();
+      const metaAz = document.getElementById('item-modal-meta-az').value.trim();
+      const descAz = document.getElementById('item-modal-desc-az').value.trim();
+
       const itemData = {
         id: idx >= 0 ? appData.portfolio[idx].id : ('port-' + Date.now()),
         type: 'image',
         category: cat,
         title: title,
+        title_az: titleAz || title,
         badge: badge || (cat === 'tattoo' ? 'Татуировка' : 'Перманент'),
+        badge_az: badgeAz || (cat === 'tattoo' ? 'Tatuaj' : 'Permanent'),
         meta: meta || 'Зажившая работа',
+        meta_az: metaAz || 'Sağalmış iş',
         src: src,
-        desc: desc
+        desc: desc,
+        desc_az: descAz || desc
       };
 
       if (!appData.portfolio) appData.portfolio = [];
@@ -1370,45 +1464,62 @@
 
     // --- TAB 3: TEXTS & CONTACTS ---
     function renderTexts() {
-      const t = appData.texts || {};
-      document.getElementById('txt-artist-name').value = t.artistName || 'Лиза Аидаралиева';
-      document.getElementById('txt-brand-latin').value = t.brandLatin || 'Liza Aidaraliyeva';
-      const locVal = t.locationBadge || 'Студия в Баку';
-      const subVal = t.heroSubtitle || 'Авторские татуировки и деликатный перманент';
+      const isAz = (currentAdminLang === 'az');
+      if (!appData.texts) appData.texts = {};
+      if (!appData.texts_az) appData.texts_az = {};
+
+      const t = isAz ? appData.texts_az : appData.texts;
+      const base = appData.texts || {};
+
+      document.getElementById('txt-artist-name').value = t.artistName || (isAz ? 'Liza Aydarəliyeva' : 'Лиза Аидаралиева');
+      document.getElementById('txt-brand-latin').value = t.brandLatin || base.brandLatin || 'Liza Aidaraliyeva';
+      const locVal = t.locationBadge || (isAz ? 'Bakıda studiya' : 'Студия в Баку');
+      const subVal = t.heroSubtitle || (isAz ? 'Müəllif tatuajları və zərif permanent' : 'Авторские татуировки и деликатный перманент');
       document.getElementById('txt-location-badge').value = locVal;
       document.getElementById('txt-hero-subtitle').value = subVal;
       const hSubTab1 = document.getElementById('txt-hero-subtitle-tab1');
       if (hSubTab1) hSubTab1.value = subVal;
       const hLocTab1 = document.getElementById('txt-location-badge-tab1');
       if (hLocTab1) hLocTab1.value = locVal;
-      document.getElementById('txt-hero-desc').value = t.heroDesc || 'Индивидуальные эскизы и деликатный перманент с учётом ваших пожеланий.';
-      document.getElementById('txt-about-quote').value = t.aboutQuote || '«Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий».';
-      document.getElementById('txt-about-bio').value = t.aboutBio || 'Соблюдаю правила стерильности и использую одноразовые расходные материалы.';
-      document.getElementById('txt-about-photo').value = t.aboutPhoto || 'assets/artist.jpg';
-      document.getElementById('txt-footer-address').value = t.footerAddress || 'Баку · 28 Мая (точный адрес высылается после записи)';
-      document.getElementById('txt-phone-tattoo').value = t.phoneTattoo || '994500000001';
-      document.getElementById('txt-phone-tattoo-disp').value = t.phoneTattooDisplay || '+994 50 000-00-01';
-      document.getElementById('txt-phone-pmu').value = t.phonePmu || '994500000002';
-      document.getElementById('txt-phone-pmu-disp').value = t.phonePmuDisplay || '+994 50 000-00-02';
-      document.getElementById('txt-ig-tattoo').value = t.igTattoo || 'leyla.ink';
-      document.getElementById('txt-ig-pmu').value = t.igPmu || 'leyla.permanent';
+      document.getElementById('txt-hero-desc').value = t.heroDesc || (isAz ? 'İstəkləriniz nəzərə alınmaqla fərdi eskizlər və zərif permanent.' : 'Индивидуальные эскизы и деликатный перманент с учётом ваших пожеланий.');
+      document.getElementById('txt-about-quote').value = t.aboutQuote || (isAz ? '«İstəkləriniz nəzərə alınmaqla fərdi tatuaj eskizləri və zərif permanent».' : '«Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий».');
+      document.getElementById('txt-about-bio').value = t.aboutBio || (isAz ? 'Sterillik qaydalarına tam riayət edirəm və birdəfəlik materiallardan istifadə edirəm.' : 'Соблюдаю правила стерильности и использую одноразовые расходные материалы.');
+      document.getElementById('txt-about-photo').value = appData.texts?.aboutPhoto || 'assets/artist.jpg';
+      document.getElementById('txt-footer-address').value = t.footerAddress || (isAz ? 'Bakı · 28 May metrosu yaxınlığında (dəqiq ünvan yazılışdan sonra göndərilir)' : 'Баку · 28 Мая (точный адрес высылается после записи)');
+      document.getElementById('txt-phone-tattoo').value = base.phoneTattoo || '';
+      document.getElementById('txt-phone-tattoo-disp').value = base.phoneTattooDisplay || '';
+      document.getElementById('txt-phone-pmu').value = base.phonePmu || '';
+      document.getElementById('txt-phone-pmu-disp').value = base.phonePmuDisplay || '';
+      document.getElementById('txt-ig-tattoo').value = base.igTattoo || '';
+      document.getElementById('txt-ig-pmu').value = base.igPmu || '';
     }
 
     function collectAllInputs() {
       if (!appData.texts) appData.texts = {};
-      appData.texts.artistName = document.getElementById('txt-artist-name')?.value || appData.texts.artistName || 'Лиза Аидаралиева';
-      appData.texts.brandLatin = document.getElementById('txt-brand-latin')?.value || appData.texts.brandLatin || 'Liza Aidaraliyeva';
-      appData.texts.locationBadge = document.getElementById('txt-location-badge-tab1')?.value || document.getElementById('txt-location-badge')?.value || appData.texts.locationBadge || 'Студия в Баку';
-      appData.texts.heroTitle = document.getElementById('txt-hero-title')?.value || appData.texts.heroTitle || 'Искусство, которое\nостаётся с вами';
-      appData.texts.heroSubtitle = document.getElementById('txt-hero-subtitle-tab1')?.value || document.getElementById('txt-hero-subtitle')?.value || appData.texts.heroSubtitle || 'Авторские татуировки и деликатный перманент';
+      if (!appData.texts_az) appData.texts_az = {};
+      if (!appData.directions) appData.directions = {};
+      if (!appData.directions_az) appData.directions_az = {};
+
+      const isAz = (currentAdminLang === 'az');
+      const targetTexts = isAz ? appData.texts_az : appData.texts;
+      const targetDirs = isAz ? appData.directions_az : appData.directions;
+
+      // Text fields for active language
+      targetTexts.artistName = document.getElementById('txt-artist-name')?.value || targetTexts.artistName || (isAz ? 'Liza Aydarəliyeva' : 'Лиза Аидаралиева');
+      targetTexts.brandLatin = document.getElementById('txt-brand-latin')?.value || targetTexts.brandLatin || 'Liza Aidaraliyeva';
+      targetTexts.locationBadge = document.getElementById('txt-location-badge-tab1')?.value || document.getElementById('txt-location-badge')?.value || targetTexts.locationBadge;
+      targetTexts.heroTitle = document.getElementById('txt-hero-title')?.value || targetTexts.heroTitle;
+      targetTexts.heroSubtitle = document.getElementById('txt-hero-subtitle-tab1')?.value || document.getElementById('txt-hero-subtitle')?.value || targetTexts.heroSubtitle;
+      targetTexts.heroBadge = document.getElementById('hero-badge-input')?.value || targetTexts.heroBadge;
+      targetTexts.heroDesc = document.getElementById('txt-hero-desc')?.value || targetTexts.heroDesc;
+      targetTexts.aboutQuote = document.getElementById('txt-about-quote')?.value || targetTexts.aboutQuote;
+      targetTexts.aboutBio = document.getElementById('txt-about-bio')?.value || targetTexts.aboutBio;
+      targetTexts.footerAddress = document.getElementById('txt-footer-address')?.value || targetTexts.footerAddress;
+
+      // Shared media and contacts
       appData.texts.heroMainImg = document.getElementById('hero-main-img-src')?.value || appData.texts.heroMainImg || 'assets/hero-fine-line.jpg';
-      appData.texts.heroBadge = document.getElementById('hero-badge-input')?.value || appData.texts.heroBadge || 'Fine line · Авторские эскизы';
       appData.texts.heroInsetImg = document.getElementById('hero-inset-img-src')?.value || appData.texts.heroInsetImg || 'assets/lip-blush.jpg';
-      appData.texts.heroDesc = document.getElementById('txt-hero-desc')?.value || appData.texts.heroDesc || 'Индивидуальные эскизы и деликатный перманент с учётом ваших пожеланий.';
-      appData.texts.aboutQuote = document.getElementById('txt-about-quote')?.value || appData.texts.aboutQuote || '';
-      appData.texts.aboutBio = document.getElementById('txt-about-bio')?.value || appData.texts.aboutBio || '';
       appData.texts.aboutPhoto = document.getElementById('txt-about-photo')?.value || appData.texts.aboutPhoto || 'assets/artist.jpg';
-      appData.texts.footerAddress = document.getElementById('txt-footer-address')?.value || appData.texts.footerAddress || '';
       appData.texts.phoneTattoo = document.getElementById('txt-phone-tattoo')?.value || appData.texts.phoneTattoo || '';
       appData.texts.phoneTattooDisplay = document.getElementById('txt-phone-tattoo-disp')?.value || appData.texts.phoneTattooDisplay || '';
       appData.texts.phonePmu = document.getElementById('txt-phone-pmu')?.value || appData.texts.phonePmu || '';
@@ -1416,19 +1527,24 @@
       appData.texts.igTattoo = document.getElementById('txt-ig-tattoo')?.value || appData.texts.igTattoo || '';
       appData.texts.igPmu = document.getElementById('txt-ig-pmu')?.value || appData.texts.igPmu || '';
 
-      // Directions Section
-      if (!appData.directions) appData.directions = {};
-      if (!appData.directions.tattoo) appData.directions.tattoo = {};
-      appData.directions.tattoo.src = document.getElementById('dir-tattoo-src')?.value || appData.directions.tattoo.src || 'assets/hero-hand-tattoo.jpg';
-      appData.directions.tattoo.badge = document.getElementById('dir-tattoo-badge')?.value || appData.directions.tattoo.badge || 'Tattoo';
-      appData.directions.tattoo.title = document.getElementById('dir-tattoo-title')?.value || appData.directions.tattoo.title || 'Татуировки';
-      appData.directions.tattoo.desc = document.getElementById('dir-tattoo-desc')?.value || appData.directions.tattoo.desc || 'Ботаника, надписи, минимализм.';
+      // Directions
+      if (!targetDirs.tattoo) targetDirs.tattoo = {};
+      targetDirs.tattoo.src = document.getElementById('dir-tattoo-src')?.value || appData.directions?.tattoo?.src || 'assets/hero-hand-tattoo.jpg';
+      targetDirs.tattoo.badge = document.getElementById('dir-tattoo-badge')?.value || targetDirs.tattoo.badge;
+      targetDirs.tattoo.title = document.getElementById('dir-tattoo-title')?.value || targetDirs.tattoo.title;
+      targetDirs.tattoo.desc = document.getElementById('dir-tattoo-desc')?.value || targetDirs.tattoo.desc;
 
-      if (!appData.directions.pmu) appData.directions.pmu = {};
-      appData.directions.pmu.src = document.getElementById('dir-pmu-src')?.value || appData.directions.pmu.src || 'assets/powder-brows.jpg';
-      appData.directions.pmu.badge = document.getElementById('dir-pmu-badge')?.value || appData.directions.pmu.badge || 'PMU';
-      appData.directions.pmu.title = document.getElementById('dir-pmu-title')?.value || appData.directions.pmu.title || 'Перманент';
-      appData.directions.pmu.desc = document.getElementById('dir-pmu-desc')?.value || appData.directions.pmu.desc || 'Губы, брови, межресничка.';
+      if (!targetDirs.pmu) targetDirs.pmu = {};
+      targetDirs.pmu.src = document.getElementById('dir-pmu-src')?.value || appData.directions?.pmu?.src || 'assets/powder-brows.jpg';
+      targetDirs.pmu.badge = document.getElementById('dir-pmu-badge')?.value || targetDirs.pmu.badge;
+      targetDirs.pmu.title = document.getElementById('dir-pmu-title')?.value || targetDirs.pmu.title;
+      targetDirs.pmu.desc = document.getElementById('dir-pmu-desc')?.value || targetDirs.pmu.desc;
+
+      // Keep image URLs synced across languages
+      if (appData.directions.tattoo) appData.directions.tattoo.src = document.getElementById('dir-tattoo-src')?.value || appData.directions.tattoo.src;
+      if (appData.directions.pmu) appData.directions.pmu.src = document.getElementById('dir-pmu-src')?.value || appData.directions.pmu.src;
+      if (appData.directions_az.tattoo) appData.directions_az.tattoo.src = appData.directions.tattoo?.src;
+      if (appData.directions_az.pmu) appData.directions_az.pmu.src = appData.directions.pmu?.src;
     }
 
     // --- TAB 5: BOOKINGS ---

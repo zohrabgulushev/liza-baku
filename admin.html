@@ -843,6 +843,98 @@
     </div>
   </div>
 
+  <!-- ==================== INTERACTIVE PHOTO CROP & ADJUST MODAL ==================== -->
+  <div id="crop-modal" class="fixed inset-0 z-50 bg-ink/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4 select-none">
+    <div class="max-w-xl w-full bg-alabaster border border-linen rounded-xl shadow-2xl p-4 sm:p-5 flex flex-col gap-3.5">
+      <!-- Header -->
+      <div class="flex items-center justify-between border-b border-linen pb-2.5">
+        <div>
+          <h3 class="font-serif text-[18px] text-ink font-medium flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px] text-clay">crop</span>
+            <span>Настройка и кадрирование фото</span>
+          </h3>
+          <p class="text-[11px] text-ink-muted">Перетаскивайте фото мышкой/пальцем и зумируйте, чтобы оно идеально село в рамку на сайте</p>
+        </div>
+        <button type="button" onclick="closeCropModal()" class="p-1.5 rounded-md text-ink-muted hover:text-ink hover:bg-eggshell transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Interactive Viewport -->
+      <div class="relative w-full h-[340px] bg-[#141211] rounded-lg overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing border border-linen touch-none" id="crop-viewport-container">
+        <!-- Mask / Frame -->
+        <div id="crop-box" class="relative overflow-hidden border-2 border-white/90 shadow-[0_0_0_9999px_rgba(0,0,0,0.65)] pointer-events-none transition-[width,height] duration-200 z-10">
+          <!-- Guide lines (Rule of thirds) -->
+          <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-30">
+            <div class="border-r border-b border-white"></div>
+            <div class="border-r border-b border-white"></div>
+            <div class="border-b border-white"></div>
+            <div class="border-r border-b border-white"></div>
+            <div class="border-r border-b border-white"></div>
+            <div class="border-b border-white"></div>
+            <div class="border-r border-b border-white"></div>
+            <div class="border-r border-b border-white"></div>
+            <div></div>
+          </div>
+        </div>
+
+        <!-- The image being transformed -->
+        <img id="crop-img" src="" alt="Редактируемое фото" class="absolute max-w-none pointer-events-none transition-none"/>
+      </div>
+
+      <!-- Controls Toolbar -->
+      <div class="flex flex-col gap-2.5 bg-eggshell/40 border border-linen p-3 rounded-lg">
+        <!-- Zoom Slider -->
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[18px] text-ink-muted shrink-0">zoom_out</span>
+          <button type="button" onclick="stepCropZoom(-0.1)" class="w-7 h-7 rounded-sm bg-alabaster border border-linen text-ink hover:border-ink flex items-center justify-center text-[15px] font-bold cursor-pointer">−</button>
+          <input type="range" id="crop-zoom-range" min="0.5" max="3.5" step="0.02" value="1.0" class="flex-1 accent-clay cursor-pointer" oninput="onCropZoomInput(this.value)"/>
+          <button type="button" onclick="stepCropZoom(0.1)" class="w-7 h-7 rounded-sm bg-alabaster border border-linen text-ink hover:border-ink flex items-center justify-center text-[15px] font-bold cursor-pointer">+</button>
+          <span class="material-symbols-outlined text-[18px] text-ink-muted shrink-0">zoom_in</span>
+          <span id="crop-zoom-val" class="text-[11px] font-mono text-ink w-12 text-right font-medium">100%</span>
+        </div>
+
+        <!-- Aspect ratio & Tools row -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-linen/60">
+          <div class="flex items-center gap-1.5 text-[11px]">
+            <span class="text-ink-muted font-medium">Формат:</span>
+            <button type="button" onclick="setCropAspect(4/5, '4:5 (Портрет)')" id="crop-ratio-4-5" class="crop-ratio-btn px-2.5 py-1 rounded-sm border border-ink bg-ink text-alabaster text-[10.5px] font-medium cursor-pointer transition-all">4:5 (Портрет)</button>
+            <button type="button" onclick="setCropAspect(1, '1:1 (Квадрат)')" id="crop-ratio-1-1" class="crop-ratio-btn px-2.5 py-1 rounded-sm border border-linen bg-alabaster text-ink hover:border-ink text-[10.5px] font-medium cursor-pointer transition-all">1:1 (Квадрат)</button>
+            <button type="button" onclick="setCropAspect(4/3, '4:3 (Широкий)')" id="crop-ratio-4-3" class="crop-ratio-btn px-2.5 py-1 rounded-sm border border-linen bg-alabaster text-ink hover:border-ink text-[10.5px] font-medium cursor-pointer transition-all">4:3</button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="rotateCropImage()" class="px-2.5 py-1 rounded-sm bg-alabaster border border-linen text-ink hover:border-ink text-[11px] flex items-center gap-1 cursor-pointer transition-all" title="Повернуть на 90°">
+              <span class="material-symbols-outlined text-[15px]">rotate_right</span>
+              <span>Повернуть 90°</span>
+            </button>
+            <button type="button" onclick="resetCropTransform()" class="px-2.5 py-1 rounded-sm bg-alabaster border border-linen text-ink hover:border-ink text-[11px] flex items-center gap-1 cursor-pointer transition-all" title="Сбросить масштаб и положение">
+              <span class="material-symbols-outlined text-[15px]">center_focus_strong</span>
+              <span>По центру</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-linen">
+        <button type="button" onclick="applyOriginalWithoutCrop()" class="px-3.5 py-2 rounded-sm bg-eggshell border border-linen text-ink hover:border-ink text-[11.5px] font-medium cursor-pointer transition-all">
+          Загрузить как есть (без обрезки)
+        </button>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <button type="button" onclick="closeCropModal()" class="px-4 py-2 rounded-sm bg-alabaster border border-linen text-ink-muted hover:text-ink text-[11.5px] font-medium cursor-pointer transition-all">
+            Отмена
+          </button>
+          <button type="button" id="crop-apply-btn" onclick="applyAndUploadCroppedImage()" class="px-5 py-2 rounded-sm bg-ink text-alabaster text-[12px] font-semibold tracking-wide uppercase hover:bg-clay flex items-center gap-1.5 shadow-sm cursor-pointer transition-all">
+            <span class="material-symbols-outlined text-[16px]">check</span>
+            <span>Применить и сохранить</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-ink text-alabaster px-4 py-3 rounded-sm shadow-2xl flex items-center gap-2.5 pointer-events-none">
     <span class="material-symbols-outlined text-[18px] text-emerald-400">check_circle</span>
@@ -1068,74 +1160,364 @@
       }
     }
 
-    async function uploadHeroImageFile(input, targetInputId) {
-      const file = input.files[0];
+    // --- INTERACTIVE PHOTO CROP & ADJUST ENGINE ---
+    let cropState = {
+      file: null,
+      rawBase64: null,
+      img: null,
+      targetInputId: null,
+      targetPreviewImgId: null,
+      onCompleteCallback: null,
+      aspectRatio: 4 / 5,
+      zoom: 1.0,
+      panX: 0,
+      panY: 0,
+      rotation: 0,
+      isDragging: false,
+      dragStartX: 0,
+      dragStartY: 0,
+      boxWidth: 224,
+      boxHeight: 280
+    };
+
+    function openCropModal({ file, targetInputId, targetPreviewImgId, defaultAspect = (4/5), onComplete = null }) {
       if (!file) return;
 
-      showToast('Загрузка фото...');
       const reader = new FileReader();
-      reader.onload = async function(e) {
-        try {
-          const res = await fetch('/api/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              password: authPassword,
-              fileName: file.name,
-              fileData: e.target.result
-            })
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          cropState.file = file;
+          cropState.rawBase64 = e.target.result;
+          cropState.img = img;
+          cropState.targetInputId = targetInputId;
+          cropState.targetPreviewImgId = targetPreviewImgId;
+          cropState.onCompleteCallback = onComplete;
+          cropState.aspectRatio = defaultAspect;
+          cropState.zoom = 1.0;
+          cropState.panX = 0;
+          cropState.panY = 0;
+          cropState.rotation = 0;
+
+          const cropImgEl = document.getElementById('crop-img');
+          cropImgEl.src = img.src;
+
+          updateCropBoxSize();
+          resetCropTransform();
+
+          // Highlight matching aspect ratio button
+          document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
+            btn.classList.remove('bg-ink', 'text-alabaster', 'border-ink');
+            btn.classList.add('bg-alabaster', 'text-ink', 'border-linen');
           });
-          const data = await res.json();
-          if (data.success) {
-            document.getElementById(targetInputId).value = data.url;
-            updateHeroPreview();
-            showToast('Фото загружено!');
-            await saveAllChanges(true);
-          } else {
-            showToast('Ошибка загрузки: ' + data.error, true);
+          const activeBtn = (Math.abs(defaultAspect - 1) < 0.05)
+            ? document.getElementById('crop-ratio-1-1')
+            : (Math.abs(defaultAspect - 4/3) < 0.05
+              ? document.getElementById('crop-ratio-4-3')
+              : document.getElementById('crop-ratio-4-5'));
+          if (activeBtn) {
+            activeBtn.classList.remove('bg-alabaster', 'text-ink', 'border-linen');
+            activeBtn.classList.add('bg-ink', 'text-alabaster', 'border-ink');
           }
-        } catch (err) {
-          showToast('Ошибка связи с сервером', true);
-        }
+
+          document.getElementById('crop-modal').classList.remove('hidden');
+          initCropMouseEvents();
+        };
+        img.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }
 
-    async function uploadMediaFile(input, targetInputId, targetPreviewImgId) {
+    function closeCropModal() {
+      document.getElementById('crop-modal').classList.add('hidden');
+      cropState.file = null;
+      cropState.img = null;
+    }
+
+    function updateCropBoxSize() {
+      const box = document.getElementById('crop-box');
+      if (!box) return;
+
+      const maxW = 340;
+      const maxH = 280;
+
+      let w, h;
+      if (cropState.aspectRatio >= 1) {
+        w = Math.min(maxW, Math.round(maxH * cropState.aspectRatio));
+        h = Math.round(w / cropState.aspectRatio);
+        if (h > maxH) {
+          h = maxH;
+          w = Math.round(h * cropState.aspectRatio);
+        }
+      } else {
+        h = maxH;
+        w = Math.round(h * cropState.aspectRatio);
+        if (w > maxW) {
+          w = maxW;
+          h = Math.round(w / cropState.aspectRatio);
+        }
+      }
+
+      cropState.boxWidth = w;
+      cropState.boxHeight = h;
+
+      box.style.width = w + 'px';
+      box.style.height = h + 'px';
+    }
+
+    function getCropBaseScale() {
+      if (!cropState.img) return 1.0;
+      const isRotated90 = (cropState.rotation % 180 !== 0);
+      const imgW = isRotated90 ? cropState.img.height : cropState.img.width;
+      const imgH = isRotated90 ? cropState.img.width : cropState.img.height;
+      return Math.max(cropState.boxWidth / imgW, cropState.boxHeight / imgH);
+    }
+
+    function updateCropImgTransform() {
+      const cropImg = document.getElementById('crop-img');
+      if (!cropImg || !cropState.img) return;
+
+      const baseScale = getCropBaseScale();
+      const currentScale = baseScale * cropState.zoom;
+
+      cropImg.style.transform = `translate(${cropState.panX}px, ${cropState.panY}px) rotate(${cropState.rotation}deg) scale(${currentScale})`;
+      document.getElementById('crop-zoom-range').value = cropState.zoom;
+      document.getElementById('crop-zoom-val').textContent = Math.round(cropState.zoom * 100) + '%';
+    }
+
+    function initCropMouseEvents() {
+      const container = document.getElementById('crop-viewport-container');
+      if (!container || container._hasCropEvents) return;
+      container._hasCropEvents = true;
+
+      const onStart = (clientX, clientY) => {
+        cropState.isDragging = true;
+        cropState.dragStartX = clientX - cropState.panX;
+        cropState.dragStartY = clientY - cropState.panY;
+      };
+
+      const onMove = (clientX, clientY) => {
+        if (!cropState.isDragging) return;
+        cropState.panX = clientX - cropState.dragStartX;
+        cropState.panY = clientY - cropState.dragStartY;
+        updateCropImgTransform();
+      };
+
+      const onEnd = () => {
+        cropState.isDragging = false;
+      };
+
+      container.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        onStart(e.clientX, e.clientY);
+      });
+      window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+      window.addEventListener('mouseup', onEnd);
+
+      container.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          onStart(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (cropState.isDragging && e.touches.length === 1) {
+          onMove(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+      window.addEventListener('touchend', onEnd);
+
+      container.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.06 : -0.06;
+        setCropZoom(cropState.zoom + delta);
+      }, { passive: false });
+    }
+
+    function onCropZoomInput(val) {
+      cropState.zoom = parseFloat(val);
+      updateCropImgTransform();
+    }
+
+    function stepCropZoom(delta) {
+      setCropZoom(cropState.zoom + delta);
+    }
+
+    function setCropZoom(val) {
+      cropState.zoom = Math.min(3.5, Math.max(0.5, parseFloat(val)));
+      updateCropImgTransform();
+    }
+
+    function rotateCropImage() {
+      cropState.rotation = (cropState.rotation + 90) % 360;
+      updateCropImgTransform();
+    }
+
+    function resetCropTransform() {
+      cropState.zoom = 1.0;
+      cropState.panX = 0;
+      cropState.panY = 0;
+      updateCropImgTransform();
+    }
+
+    function setCropAspect(aspect, label) {
+      cropState.aspectRatio = aspect;
+      updateCropBoxSize();
+      resetCropTransform();
+
+      document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
+        btn.classList.remove('bg-ink', 'text-alabaster', 'border-ink');
+        btn.classList.add('bg-alabaster', 'text-ink', 'border-linen');
+      });
+      const activeBtn = (Math.abs(aspect - 1) < 0.05)
+        ? document.getElementById('crop-ratio-1-1')
+        : (Math.abs(aspect - 4/3) < 0.05
+          ? document.getElementById('crop-ratio-4-3')
+          : document.getElementById('crop-ratio-4-5'));
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-alabaster', 'text-ink', 'border-linen');
+        activeBtn.classList.add('bg-ink', 'text-alabaster', 'border-ink');
+      }
+    }
+
+    async function applyAndUploadCroppedImage() {
+      if (!cropState.img) return;
+
+      const applyBtn = document.getElementById('crop-apply-btn');
+      applyBtn.disabled = true;
+      applyBtn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">progress_activity</span><span>Сохранение...</span>';
+
+      try {
+        const targetW = 960;
+        const targetH = Math.round(targetW / cropState.aspectRatio);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = targetW;
+        canvas.height = targetH;
+        const ctx = canvas.getContext('2d');
+
+        const scaleRatio = targetW / cropState.boxWidth;
+        const baseScale = getCropBaseScale();
+        const currentScale = baseScale * cropState.zoom;
+
+        ctx.fillStyle = '#FAF8F5';
+        ctx.fillRect(0, 0, targetW, targetH);
+
+        ctx.save();
+        ctx.translate(targetW / 2 + cropState.panX * scaleRatio, targetH / 2 + cropState.panY * scaleRatio);
+        ctx.rotate(cropState.rotation * Math.PI / 180);
+        const drawScale = currentScale * scaleRatio;
+        ctx.drawImage(
+          cropState.img,
+          -cropState.img.width * drawScale / 2,
+          -cropState.img.height * drawScale / 2,
+          cropState.img.width * drawScale,
+          cropState.img.height * drawScale
+        );
+        ctx.restore();
+
+        const croppedDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+        showToast('Загрузка в облако Cloudinary...');
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            password: authPassword,
+            fileName: 'crop_' + (cropState.file?.name || 'photo.jpg'),
+            fileData: croppedDataUrl
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          if (cropState.targetInputId) {
+            const inputEl = document.getElementById(cropState.targetInputId);
+            if (inputEl) {
+              inputEl.value = data.url;
+              inputEl.dispatchEvent(new Event('input'));
+            }
+          }
+          if (cropState.targetPreviewImgId) {
+            const prevEl = document.getElementById(cropState.targetPreviewImgId);
+            if (prevEl) prevEl.src = data.url;
+          }
+          if (cropState.onCompleteCallback) {
+            cropState.onCompleteCallback(data.url);
+          }
+          showToast('✅ Фото откадрировано и сохранено!');
+          closeCropModal();
+          await saveAllChanges(true);
+        } else {
+          showToast('Ошибка загрузки: ' + (data.error || 'Неизвестная ошибка'), true);
+        }
+      } catch (err) {
+        showToast('Ошибка кадрирования: ' + err.message, true);
+      } finally {
+        applyBtn.disabled = false;
+        applyBtn.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span><span>Применить и сохранить</span>';
+      }
+    }
+
+    async function applyOriginalWithoutCrop() {
+      if (!cropState.rawBase64 || !cropState.file) return;
+      showToast('Загрузка оригинала в облако...');
+      closeCropModal();
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            password: authPassword,
+            fileName: cropState.file.name,
+            fileData: cropState.rawBase64
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (cropState.targetInputId) {
+            const inputEl = document.getElementById(cropState.targetInputId);
+            if (inputEl) {
+              inputEl.value = data.url;
+              inputEl.dispatchEvent(new Event('input'));
+            }
+          }
+          if (cropState.targetPreviewImgId) {
+            const prevEl = document.getElementById(cropState.targetPreviewImgId);
+            if (prevEl) prevEl.src = data.url;
+          }
+          if (cropState.onCompleteCallback) {
+            cropState.onCompleteCallback(data.url);
+          }
+          showToast('✅ Оригинальное фото загружено!');
+          await saveAllChanges(true);
+        } else {
+          showToast('Ошибка загрузки: ' + (data.error || 'Неизвестная ошибка'), true);
+        }
+      } catch (err) {
+        showToast('Ошибка: ' + err.message, true);
+      }
+    }
+
+    // --- UPLOAD ROUTERS TO CROP MODAL ---
+    function uploadHeroImageFile(input, targetInputId) {
       const file = input.files[0];
       if (!file) return;
+      input.value = '';
+      const isInset = (targetInputId === 'hero-inset-img-src');
+      openCropModal({
+        file,
+        targetInputId,
+        targetPreviewImgId: isInset ? 'hero-preview-inset-img' : 'hero-preview-main-img',
+        defaultAspect: isInset ? (4/3) : (4/5),
+        onComplete: () => updateHeroPreview()
+      });
+    }
 
-      showToast('Загрузка фото в облако...');
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        try {
-          const res = await fetch('/api/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              password: authPassword,
-              fileName: file.name,
-              fileData: e.target.result
-            })
-          });
-          const data = await res.json();
-          if (data.success) {
-            const inputEl = document.getElementById(targetInputId);
-            if (inputEl) inputEl.value = data.url;
-            if (targetPreviewImgId) {
-              const previewEl = document.getElementById(targetPreviewImgId);
-              if (previewEl) previewEl.src = data.url;
-            }
-            showToast('Фото успешно загружено!');
-            await saveAllChanges(true);
-          } else {
-            showToast('Ошибка загрузки: ' + (data.error || 'Неизвестная ошибка'), true);
-          }
-        } catch (err) {
-          showToast('Ошибка связи с сервером', true);
-        }
-      };
-      reader.readAsDataURL(file);
+    function uploadMediaFile(input, targetInputId, targetPreviewImgId, defaultAspect = (4/5)) {
+      const file = input.files[0];
+      if (!file) return;
+      input.value = '';
+      openCropModal({ file, targetInputId, targetPreviewImgId, defaultAspect });
     }
 
     // --- TAB 2: DIRECTIONS SECTION ---
@@ -1231,38 +1613,17 @@
       updateDirectionsPreview();
     }
 
-    async function uploadDirectionPhoto(input, targetInputId, targetPreviewImgId) {
+    function uploadDirectionPhoto(input, targetInputId, targetPreviewImgId) {
       const file = input.files[0];
       if (!file) return;
-
-      showToast('Загрузка фото...');
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        try {
-          const res = await fetch('/api/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              password: authPassword,
-              fileName: file.name,
-              fileData: e.target.result
-            })
-          });
-          const data = await res.json();
-          if (data.success) {
-            document.getElementById(targetInputId).value = data.url;
-            document.getElementById(targetPreviewImgId).src = data.url;
-            updateDirectionsPreview();
-            showToast('Фото направления загружено!');
-            await saveAllChanges(true);
-          } else {
-            showToast('Ошибка загрузки: ' + data.error, true);
-          }
-        } catch (err) {
-          showToast('Ошибка связи с сервером', true);
-        }
-      };
-      reader.readAsDataURL(file);
+      input.value = '';
+      openCropModal({
+        file,
+        targetInputId,
+        targetPreviewImgId,
+        defaultAspect: (4/5),
+        onComplete: () => updateDirectionsPreview()
+      });
     }
 
     // --- TAB 3: PORTFOLIO & BADGES ---
@@ -1477,11 +1838,25 @@
       }
     }
 
-    async function uploadItemModalMedia(input) {
+    function uploadItemModalMedia(input) {
       const file = input.files[0];
       if (!file) return;
+      input.value = '';
+      if (file.type && file.type.startsWith('video/')) {
+        uploadRawDirect(file, 'item-modal-src', 'item-modal-preview-img', () => updateItemModalLivePreview());
+        return;
+      }
+      openCropModal({
+        file,
+        targetInputId: 'item-modal-src',
+        targetPreviewImgId: 'item-modal-preview-img',
+        defaultAspect: (4/5),
+        onComplete: () => updateItemModalLivePreview()
+      });
+    }
 
-      showToast('Загрузка файла...');
+    async function uploadRawDirect(file, targetInputId, targetPreviewImgId, onComplete) {
+      showToast('Загрузка видео в облако...');
       const reader = new FileReader();
       reader.onload = async function(e) {
         try {
@@ -1496,14 +1871,20 @@
           });
           const data = await res.json();
           if (data.success) {
-            document.getElementById('item-modal-src').value = data.url;
-            updateItemModalLivePreview();
-            showToast('Файл загружен!');
+            const inputEl = document.getElementById(targetInputId);
+            if (inputEl) inputEl.value = data.url;
+            if (targetPreviewImgId) {
+              const prev = document.getElementById(targetPreviewImgId);
+              if (prev) prev.src = data.url;
+            }
+            if (onComplete) onComplete();
+            showToast('✅ Видео загружено!');
+            await saveAllChanges(true);
           } else {
             showToast('Ошибка загрузки: ' + data.error, true);
           }
         } catch (err) {
-          showToast('Ошибка загрузки на сервер', true);
+          showToast('Ошибка связи: ' + err.message, true);
         }
       };
       reader.readAsDataURL(file);

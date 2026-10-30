@@ -861,10 +861,10 @@
         <!-- The image being transformed (centered at 50% 50%) -->
         <img id="crop-img" src="" alt="Редактируемое фото" style="position: absolute; top: 50%; left: 50%; max-width: none; max-height: none; pointer-events: none; will-change: transform;" class="transition-none z-10"/>
 
-        <!-- Mask / Frame (centered at 50% 50%) with dark mask outside -->
-        <div id="crop-box" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="overflow-hidden border-2 border-white shadow-[0_0_0_9999px_rgba(10,9,8,0.72)] pointer-events-none transition-[width,height] duration-200 z-20">
+        <!-- Mask / Frame (centered at 50% 50%) with heavy 95% blackout mask outside -->
+        <div id="crop-box" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="overflow-hidden border-2 border-white shadow-[0_0_0_9999px_rgba(10,9,8,0.95)] pointer-events-none transition-[width,height] duration-200 z-20">
           <!-- Guide lines (Rule of thirds) -->
-          <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-25">
+          <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-20">
             <div class="border-r border-b border-white"></div>
             <div class="border-r border-b border-white"></div>
             <div class="border-b border-white"></div>
@@ -875,12 +875,31 @@
             <div class="border-r border-b border-white"></div>
             <div></div>
           </div>
+          <!-- Corner brackets for clear framing -->
+          <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#8E5B53] pointer-events-none z-30"></div>
+          <div class="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#8E5B53] pointer-events-none z-30"></div>
+          <div class="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#8E5B53] pointer-events-none z-30"></div>
+          <div class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#8E5B53] pointer-events-none z-30"></div>
         </div>
 
         <!-- Live Badge showing which section on the site this is -->
-        <div class="absolute top-2.5 left-2.5 z-30 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-sm text-[10.5px] text-white font-medium tracking-wide flex items-center gap-1.5 border border-white/20 pointer-events-none">
+        <div class="absolute top-2.5 left-2.5 z-30 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-sm text-[10.5px] text-white font-medium tracking-wide flex items-center gap-1.5 border border-white/20 pointer-events-none">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          <span id="crop-frame-title">Рамка фото на сайте (4:5)</span>
+          <span id="crop-frame-title">Рамка фото на сайте</span>
+        </div>
+      </div>
+
+      <!-- Real-time Live Site Card Preview -->
+      <div class="flex items-center justify-between gap-3 p-3 bg-white border border-linen rounded-lg shadow-2xs">
+        <div class="flex flex-col gap-0.5">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-[12px] font-semibold text-ink">Точный вид карточки на сайте:</span>
+          </div>
+          <p class="text-[11px] text-ink-muted leading-tight">В этой миниатюре в реальном времени отображается то, как карточка будет выглядеть на самом сайте (без лишних скрытых частей).</p>
+        </div>
+        <div class="shrink-0 relative overflow-hidden bg-eggshell border-2 border-clay/60 rounded-sm shadow-xs" id="crop-mini-card-preview" style="width: 120px; height: 98px;">
+          <img id="crop-mini-img" src="" alt="Миниатюра" style="position: absolute; top: 50%; left: 50%; max-width: none; max-height: none; pointer-events: none;" class="transition-none"/>
         </div>
       </div>
 
@@ -1254,6 +1273,9 @@
           const cropImgEl = document.getElementById('crop-img');
           cropImgEl.src = img.src;
 
+          const miniImgEl = document.getElementById('crop-mini-img');
+          if (miniImgEl) miniImgEl.src = img.src;
+
           updateCropBoxSize();
           resetCropTransform();
 
@@ -1313,6 +1335,25 @@
 
       box.style.width = w + 'px';
       box.style.height = h + 'px';
+
+      updateCropMiniPreview();
+    }
+
+    function updateCropMiniPreview() {
+      const miniCard = document.getElementById('crop-mini-card-preview');
+      const miniImg = document.getElementById('crop-mini-img');
+      if (!miniCard || !miniImg || !cropState.boxWidth || !cropState.boxHeight || !cropState.img) return;
+
+      const miniW = 120;
+      const miniH = Math.max(30, Math.round(miniW / cropState.aspectRatio));
+      miniCard.style.width = miniW + 'px';
+      miniCard.style.height = miniH + 'px';
+
+      const baseScale = getCropBaseScale();
+      const currentScale = baseScale * cropState.zoom;
+      const miniRatio = miniW / cropState.boxWidth;
+      const miniScale = currentScale * miniRatio;
+      miniImg.style.transform = `translate(-50%, -50%) translate(${cropState.panX * miniRatio}px, ${cropState.panY * miniRatio}px) rotate(${cropState.rotation}deg) scale(${miniScale})`;
     }
 
     function getCropBaseScale() {
@@ -1335,6 +1376,8 @@
       cropImg.style.transform = `translate(-50%, -50%) translate(${cropState.panX}px, ${cropState.panY}px) rotate(${cropState.rotation}deg) scale(${currentScale})`;
       document.getElementById('crop-zoom-range').value = cropState.zoom;
       document.getElementById('crop-zoom-val').textContent = Math.round(cropState.zoom * 100) + '%';
+
+      updateCropMiniPreview();
     }
 
     function initCropMouseEvents() {
@@ -1408,6 +1451,22 @@
       cropState.zoom = 1.0;
       cropState.panX = 0;
       cropState.panY = 0;
+
+      // Smart initial framing: if image is taller than crop box, align top so face/head isn't cut off
+      if (cropState.img) {
+        const isRotated90 = (cropState.rotation % 180 !== 0);
+        const natW = cropState.img.naturalWidth || cropState.img.width;
+        const natH = cropState.img.naturalHeight || cropState.img.height;
+        const imgW = isRotated90 ? natH : natW;
+        const imgH = isRotated90 ? natW : natH;
+        const baseScale = getCropBaseScale();
+        const renderedH = imgH * baseScale;
+        if (renderedH > cropState.boxHeight) {
+          // Align top with a tiny margin so head is near the top edge
+          cropState.panY = Math.round((renderedH - cropState.boxHeight) / 2);
+        }
+      }
+
       updateCropImgTransform();
     }
 

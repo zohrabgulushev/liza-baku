@@ -705,6 +705,7 @@
       <!-- Media Viewport -->
       <div class="w-full max-h-[70vh] overflow-hidden rounded-sm bg-ink/70 border border-linen/20 shadow-2xl relative flex items-center justify-center" id="modal-img-container">
         <img id="modal-img" src="" alt="" class="max-h-[68vh] w-auto object-contain transition-transform duration-500 ease-out select-none cursor-zoom-in" onclick="toggleModalZoom()"/>
+        <video id="modal-video" controls autoplay loop playsinline class="max-h-[68vh] w-auto object-contain hidden"></video>
         
         <div id="zoom-hint-overlay" class="absolute bottom-3 bg-alabaster/90 backdrop-blur-sm text-ink text-[10px] tracking-wide px-2.5 py-1 rounded-full shadow-sm pointer-events-none transition-opacity duration-300">
           Нажмите для макро-приближения деталей (2.2×)
@@ -1214,22 +1215,81 @@
     // 7. Interactive Macro Zoom Lightbox Modal
     let isZoomed = false;
 
+    function isVideoMedia(url) {
+      if (!url) return false;
+      const clean = url.split('?')[0].toLowerCase();
+      return clean.endsWith('.mp4') || clean.endsWith('.webm') || clean.endsWith('.mov') || clean.endsWith('.m4v') || clean.endsWith('.ogv') || clean.endsWith('.avi') || clean.endsWith('.mkv') || url.includes('/video/upload/');
+    }
+
+    function renderDynamicMedia(imgElId, src, alt) {
+      const img = document.getElementById(imgElId);
+      if (!img || !src) return;
+      if (isVideoMedia(src)) {
+        let vid = img.parentElement.querySelector('video.dynamic-media-video');
+        if (!vid) {
+          vid = document.createElement('video');
+          vid.className = img.className + ' dynamic-media-video';
+          vid.autoplay = true;
+          vid.loop = true;
+          vid.muted = true;
+          vid.playsInline = true;
+          vid.setAttribute('playsinline', '');
+          vid.setAttribute('muted', '');
+          img.parentElement.appendChild(vid);
+        }
+        vid.src = src;
+        vid.style.display = '';
+        img.style.display = 'none';
+      } else {
+        img.src = src;
+        img.style.display = '';
+        const vid = img.parentElement?.querySelector('video.dynamic-media-video');
+        if (vid) {
+          vid.style.display = 'none';
+          vid.pause();
+        }
+      }
+    }
+
     function openModal(imageSrc, title, category, description) {
       const modal = document.getElementById('image-modal');
       const img = document.getElementById('modal-img');
+      const video = document.getElementById('modal-video');
       const titleEl = document.getElementById('modal-title');
       const catEl = document.getElementById('modal-category');
       const descEl = document.getElementById('modal-desc');
       const zoomHint = document.getElementById('zoom-hint-overlay');
+      const zoomBtn = document.getElementById('modal-zoom-btn');
 
-      img.src = imageSrc;
+      const isVid = isVideoMedia(imageSrc);
+      if (isVid) {
+        if (img) img.classList.add('hidden');
+        if (video) {
+          video.classList.remove('hidden');
+          video.src = imageSrc;
+        }
+        if (zoomHint) zoomHint.style.display = 'none';
+        if (zoomBtn) zoomBtn.style.display = 'none';
+      } else {
+        if (video) {
+          video.classList.add('hidden');
+          video.pause();
+          video.src = '';
+        }
+        if (img) {
+          img.classList.remove('hidden');
+          img.src = imageSrc;
+        }
+        if (zoomHint) zoomHint.style.display = '';
+        if (zoomBtn) zoomBtn.style.display = '';
+      }
+
       titleEl.textContent = title;
       catEl.textContent = category;
       descEl.textContent = description || '';
 
       isZoomed = false;
-      img.classList.remove('zoom-mode-active');
-      zoomHint.style.opacity = '1';
+      if (img) img.classList.remove('zoom-mode-active');
 
       modal.classList.remove('hidden');
       requestAnimationFrame(() => {
@@ -1241,12 +1301,18 @@
     function closeModal() {
       const modal = document.getElementById('image-modal');
       const img = document.getElementById('modal-img');
+      const video = document.getElementById('modal-video');
       modal.classList.add('opacity-0');
       setTimeout(() => {
         modal.classList.add('hidden');
-        img.src = '';
+        if (img) img.src = '';
+        if (video) {
+          video.pause();
+          video.src = '';
+          video.classList.add('hidden');
+        }
         isZoomed = false;
-        img.classList.remove('zoom-mode-active');
+        if (img) img.classList.remove('zoom-mode-active');
         document.body.style.overflow = '';
       }, 300);
     }
@@ -1522,12 +1588,10 @@
             if (hBadge) hBadge.textContent = t.heroBadge;
           }
           if (t.heroMainImg) {
-            const hMain = document.getElementById('hero-main-img');
-            if (hMain) hMain.src = t.heroMainImg;
+            renderDynamicMedia('hero-main-img', t.heroMainImg, 'Fine line татуировка');
           }
           if (t.heroInsetImg) {
-            const hInset = document.getElementById('hero-inset-img');
-            if (hInset) hInset.src = t.heroInsetImg;
+            renderDynamicMedia('hero-inset-img', t.heroInsetImg, 'Перманентный макияж');
           }
           if (t.brandLatin) {
             document.getElementById('nav-brand-latin').textContent = t.brandLatin;
@@ -1551,8 +1615,7 @@
             document.getElementById('about-location-badge').textContent = t.aboutBadge;
           }
           if (t.aboutPhoto) {
-            const aboutImg = document.getElementById('about-artist-img');
-            if (aboutImg) aboutImg.src = t.aboutPhoto;
+            renderDynamicMedia('about-artist-img', t.aboutPhoto, (t.artistName || 'Лиза Аидаралиева'));
             const aboutCard = document.getElementById('about-artist-card');
             if (aboutCard) {
               aboutCard.onclick = () => openModal(t.aboutPhoto, (t.artistName || 'Лиза Аидаралиева'), t.aboutBadge || 'Баку · рядом с метро 28 Мая', t.aboutQuote || '');
@@ -1620,22 +1683,20 @@
         if (activeDirs) {
           if (activeDirs.tattoo) {
             const dirT = activeDirs.tattoo;
-            const tImg = document.getElementById('dir-card-tattoo-img');
             const tBadge = document.getElementById('dir-card-tattoo-badge');
             const tTitle = document.getElementById('dir-card-tattoo-title');
             const tDesc = document.getElementById('dir-card-tattoo-desc');
-            if (tImg && dirT.src) tImg.src = dirT.src;
+            if (dirT.src) renderDynamicMedia('dir-card-tattoo-img', dirT.src, dirT.title || 'Татуировки');
             if (tBadge && dirT.badge) tBadge.textContent = dirT.badge;
             if (tTitle && dirT.title) tTitle.textContent = dirT.title;
             if (tDesc && dirT.desc) tDesc.textContent = dirT.desc;
           }
           if (activeDirs.pmu) {
             const dirP = activeDirs.pmu;
-            const pImg = document.getElementById('dir-card-pmu-img');
             const pBadge = document.getElementById('dir-card-pmu-badge');
             const pTitle = document.getElementById('dir-card-pmu-title');
             const pDesc = document.getElementById('dir-card-pmu-desc');
-            if (pImg && dirP.src) pImg.src = dirP.src;
+            if (dirP.src) renderDynamicMedia('dir-card-pmu-img', dirP.src, dirP.title || 'Перманент');
             if (pBadge && dirP.badge) pBadge.textContent = dirP.badge;
             if (pTitle && dirP.title) pTitle.textContent = dirP.title;
             if (pDesc && dirP.desc) pDesc.textContent = dirP.desc;
@@ -1670,6 +1731,11 @@
             const itemMeta = (isAz && item.meta_az) ? item.meta_az : (isAz && item.meta === 'Зажившая работа' ? 'Sağalmış iş' : (isAz && item.meta === 'Свежая работа' ? 'Təzə iş' : (item.meta || '')));
             const itemDesc = (isAz && item.desc_az) ? item.desc_az : (item.desc || '');
 
+            const isVid = isVideoMedia(item.src);
+            const mediaHtml = isVid
+              ? `<video src="${item.src}" autoplay loop muted playsinline class="w-full h-full object-cover"></video>`
+              : `<img alt="${itemTitle}" class="w-full h-full object-cover" src="${item.src || 'assets/botanical-tattoo.jpg'}"/>`;
+
             const itemEl = document.createElement('div');
             itemEl.className = 'portfolio-item photo-card group overflow-hidden rounded-sm border border-linen bg-alabaster';
             itemEl.setAttribute('data-category', item.category || 'tattoo');
@@ -1677,7 +1743,7 @@
 
             itemEl.innerHTML = `
               <div class="h-52 sm:h-56 overflow-hidden bg-eggshell relative">
-                <img alt="${itemTitle}" class="w-full h-full object-cover" src="${item.src || 'assets/botanical-tattoo.jpg'}"/>
+                ${mediaHtml}
                 
                 <!-- Category Badge -->
                 <div class="absolute top-2 left-2 bg-alabaster/95 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-linen/90 text-[8px] uppercase tracking-wider ${item.category === 'pmu' ? 'text-clay' : 'text-ink'} font-semibold shadow-xs">

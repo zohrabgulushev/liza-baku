@@ -477,10 +477,16 @@ const server = http.createServer(async (req, res) => {
     } else {
       const ext = path.extname(filePath).toLowerCase();
       const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-      res.writeHead(200, { 
+      const headers = { 
         'Content-Type': contentType,
         'Content-Length': Buffer.byteLength(content)
-      });
+      };
+      if (['.html', '.json', '.js'].includes(ext)) {
+        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+        headers['Pragma'] = 'no-cache';
+        headers['Expires'] = '0';
+      }
+      res.writeHead(200, headers);
       if (req.method === 'HEAD') {
         res.end();
       } else {

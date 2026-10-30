@@ -221,9 +221,10 @@
 
               <!-- Collage Mockup -->
               <div class="relative w-full max-w-[280px] mx-auto mt-1 mb-2">
-                <!-- Main photo card -->
+                <!-- Main photo/video card -->
                 <div class="relative w-[76%] h-[180px] rounded-xl overflow-hidden shadow-md bg-eggshell border border-linen">
                   <img id="hero-preview-main-img" src="assets/hero-fine-line.jpg" alt="Главное фото" class="w-full h-full object-cover"/>
+                  <video id="hero-preview-main-video" autoplay loop muted playsinline class="w-full h-full object-cover hidden"></video>
                   <div class="absolute bottom-2 left-2 bg-alabaster/90 px-2 py-0.5 rounded-full border border-white/70 text-[8.5px] font-medium text-ink shadow-xs">
                     <span id="hero-preview-badge">Fine line · Авторские эскизы</span>
                   </div>
@@ -232,6 +233,7 @@
                 <!-- Overlapping inset card -->
                 <div class="absolute right-0 bottom-2 w-[48%] h-[115px] rounded-xl overflow-hidden border-2 border-alabaster shadow-lg bg-eggshell">
                   <img id="hero-preview-inset-img" src="assets/lip-blush.jpg" alt="Накладное фото" class="w-full h-full object-cover"/>
+                  <video id="hero-preview-inset-video" autoplay loop muted playsinline class="w-full h-full object-cover hidden"></video>
                 </div>
               </div>
             </div>
@@ -263,17 +265,17 @@
 
             <!-- Photos & Badges -->
             <div class="bg-alabaster border border-linen p-5 rounded-sm shadow-xs flex flex-col gap-4">
-              <h3 class="font-serif text-[16px] font-medium text-ink border-b border-linen pb-2">2. Фотографии коллажа</h3>
+              <h3 class="font-serif text-[16px] font-medium text-ink border-b border-linen pb-2">2. Фотографии и видео коллажа</h3>
 
               <!-- Photo 1: Main (Tattoo) -->
               <div class="bg-eggshell/40 border border-linen p-3.5 rounded-sm flex flex-col gap-3">
                 <div class="flex items-center justify-between">
-                  <span class="text-[12px] font-semibold text-ink">Основное фото коллажа (Татуировка)</span>
+                  <span class="text-[12px] font-semibold text-ink">Основное фото / видео коллажа (Татуировка)</span>
                   <span class="text-[9px] uppercase tracking-wider bg-ink text-alabaster px-2 py-0.5 rounded-sm">76% ширины</span>
                 </div>
 
                 <div class="flex flex-col gap-1">
-                  <label class="text-[10px] uppercase tracking-wider text-ink-muted font-medium">Ссылка на фото или загрузка</label>
+                  <label class="text-[10px] uppercase tracking-wider text-ink-muted font-medium">Ссылка на фото/видео или загрузка</label>
                   <input type="text" id="hero-main-img-src" oninput="updateHeroPreview()" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
                 </div>
 
@@ -284,27 +286,27 @@
 
                 <label class="py-2 px-3 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-xs">
                   <span class="material-symbols-outlined text-[15px] text-clay">upload_file</span>
-                  <span>Загрузить основное фото с устройства</span>
-                  <input type="file" accept="image/*" class="hidden" onchange="uploadHeroImageFile(this, 'hero-main-img-src')"/>
+                  <span>Загрузить фото или видео с устройства</span>
+                  <input type="file" accept="image/*,video/*" class="hidden" onchange="uploadHeroImageFile(this, 'hero-main-img-src')"/>
                 </label>
               </div>
 
               <!-- Photo 2: Inset (PMU) -->
               <div class="bg-eggshell/40 border border-linen p-3.5 rounded-sm flex flex-col gap-3">
                 <div class="flex items-center justify-between">
-                  <span class="text-[12px] font-semibold text-ink">Накладное фото коллажа (Перманент)</span>
+                  <span class="text-[12px] font-semibold text-ink">Накладное фото / видео коллажа (Перманент)</span>
                   <span class="text-[9px] uppercase tracking-wider bg-clay text-alabaster px-2 py-0.5 rounded-sm">48% ширины</span>
                 </div>
 
                 <div class="flex flex-col gap-1">
-                  <label class="text-[10px] uppercase tracking-wider text-ink-muted font-medium">Ссылка на фото или загрузка</label>
+                  <label class="text-[10px] uppercase tracking-wider text-ink-muted font-medium">Ссылка на фото/видео или загрузка</label>
                   <input type="text" id="hero-inset-img-src" oninput="updateHeroPreview()" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
                 </div>
 
                 <label class="py-2 px-3 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-xs">
                   <span class="material-symbols-outlined text-[15px] text-clay">upload_file</span>
-                  <span>Загрузить накладное фото с устройства</span>
-                  <input type="file" accept="image/*" class="hidden" onchange="uploadHeroImageFile(this, 'hero-inset-img-src')"/>
+                  <span>Загрузить накладное фото или видео с устройства</span>
+                  <input type="file" accept="image/*,video/*" class="hidden" onchange="uploadHeroImageFile(this, 'hero-inset-img-src')"/>
                 </label>
               </div>
             </div>
@@ -344,6 +346,7 @@
             <div class="bg-alabaster rounded-sm border border-linen p-3 flex flex-col gap-2 shadow-xs">
               <div class="h-44 w-full rounded-sm overflow-hidden bg-eggshell relative border border-linen">
                 <img id="dir-tattoo-preview-img" src="assets/hero-hand-tattoo.jpg" alt="Татуировки" class="w-full h-full object-cover"/>
+                <video id="dir-tattoo-preview-video" autoplay loop muted playsinline class="w-full h-full object-cover hidden"></video>
                 <div id="dir-tattoo-preview-badge" class="absolute top-2 left-2 bg-alabaster/95 px-2 py-0.5 rounded-sm border border-linen text-[9px] uppercase tracking-wider font-semibold text-ink shadow-xs">
                   Tattoo
                 </div>
@@ -379,14 +382,14 @@
             </div>
 
             <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-tattoo-src">Ссылка на фото или загрузка</label>
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-tattoo-src">Ссылка на фото/видео или загрузка</label>
               <input type="text" id="dir-tattoo-src" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="assets/hero-hand-tattoo.jpg"/>
             </div>
 
             <label class="w-full py-2.5 px-3 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-xs">
               <span class="material-symbols-outlined text-[16px] text-clay">upload_file</span>
-              <span>Загрузить фото тату с устройства</span>
-              <input type="file" accept="image/*" class="hidden" onchange="uploadDirectionPhoto(this, 'dir-tattoo-src', 'dir-tattoo-preview-img')"/>
+              <span>Загрузить фото или видео тату с устройства</span>
+              <input type="file" accept="image/*,video/*" class="hidden" onchange="uploadDirectionPhoto(this, 'dir-tattoo-src', 'dir-tattoo-preview-img')"/>
             </label>
           </div>
 
@@ -404,6 +407,7 @@
             <div class="bg-alabaster rounded-sm border border-linen p-3 flex flex-col gap-2 shadow-xs">
               <div class="h-44 w-full rounded-sm overflow-hidden bg-eggshell relative border border-linen">
                 <img id="dir-pmu-preview-img" src="assets/powder-brows.jpg" alt="Перманент" class="w-full h-full object-cover"/>
+                <video id="dir-pmu-preview-video" autoplay loop muted playsinline class="w-full h-full object-cover hidden"></video>
                 <div id="dir-pmu-preview-badge" class="absolute top-2 left-2 bg-alabaster/95 px-2 py-0.5 rounded-sm border border-linen text-[9px] uppercase tracking-wider font-semibold text-clay shadow-xs">
                   PMU
                 </div>
@@ -439,14 +443,14 @@
             </div>
 
             <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-pmu-src">Ссылка на фото или загрузка</label>
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted" for="dir-pmu-src">Ссылка на фото/видео или загрузка</label>
               <input type="text" id="dir-pmu-src" oninput="updateDirectionsPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="assets/powder-brows.jpg"/>
             </div>
 
             <label class="w-full py-2.5 px-3 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-xs">
               <span class="material-symbols-outlined text-[16px] text-clay">upload_file</span>
-              <span>Загрузить фото перманента с устройства</span>
-              <input type="file" accept="image/*" class="hidden" onchange="uploadDirectionPhoto(this, 'dir-pmu-src', 'dir-pmu-preview-img')"/>
+              <span>Загрузить фото или видео перманента с устройства</span>
+              <input type="file" accept="image/*,video/*" class="hidden" onchange="uploadDirectionPhoto(this, 'dir-pmu-src', 'dir-pmu-preview-img')"/>
             </label>
           </div>
         </div>
@@ -556,14 +560,15 @@
             <div class="grid grid-cols-1 md:grid-cols-12 gap-5 bg-eggshell/30 border border-linen p-4 rounded-sm">
               <!-- Master Photo Preview & Upload Card -->
               <div class="md:col-span-4 flex flex-col gap-3">
-                <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Фотография мастера</label>
+                <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Фотография / видео мастера</label>
                 <div class="relative w-full aspect-[4/5] max-w-[220px] mx-auto rounded-lg overflow-hidden border-2 border-linen shadow-md bg-alabaster group">
                   <img id="about-photo-preview" src="assets/artist.jpg" alt="Фото мастера" class="w-full h-full object-cover"/>
+                  <video id="about-photo-preview-video" autoplay loop muted playsinline class="w-full h-full object-cover hidden"></video>
                   <div class="absolute inset-0 bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <label class="px-3.5 py-2 rounded-sm bg-alabaster text-ink text-[11px] font-semibold hover:bg-white cursor-pointer shadow-md flex items-center gap-1.5 transition-all">
                       <span class="material-symbols-outlined text-[16px]">photo_camera</span>
-                      <span>Сменить фото</span>
-                      <input type="file" accept="image/*" class="hidden" onchange="uploadMediaFile(this, 'txt-about-photo', 'about-photo-preview')"/>
+                      <span>Сменить фото / видео</span>
+                      <input type="file" accept="image/*,video/*" class="hidden" onchange="uploadMediaFile(this, 'txt-about-photo', 'about-photo-preview')"/>
                     </label>
                   </div>
                 </div>
@@ -571,10 +576,10 @@
                 <div class="flex flex-col gap-1.5">
                   <label class="px-4 py-2.5 rounded-sm bg-ink text-alabaster text-[12px] font-semibold hover:bg-clay cursor-pointer shadow-xs flex items-center justify-center gap-2 transition-all">
                     <span class="material-symbols-outlined text-[17px]">cloud_upload</span>
-                    <span>Загрузить фото мастера</span>
-                    <input type="file" accept="image/*" class="hidden" onchange="uploadMediaFile(this, 'txt-about-photo', 'about-photo-preview')"/>
+                    <span>Загрузить фото или видео</span>
+                    <input type="file" accept="image/*,video/*" class="hidden" onchange="uploadMediaFile(this, 'txt-about-photo', 'about-photo-preview')"/>
                   </label>
-                  <input type="text" id="txt-about-photo" placeholder="Ссылка на фото" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[11px] text-ink-muted font-mono focus:border-ink focus:outline-none" oninput="const p=document.getElementById('about-photo-preview'); if(p) p.src=this.value;"/>
+                  <input type="text" id="txt-about-photo" placeholder="Ссылка на фото или видео" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[11px] text-ink-muted font-mono focus:border-ink focus:outline-none" oninput="setPreviewMedia('about-photo-preview', 'about-photo-preview-video', this.value);"/>
                 </div>
               </div>
 
@@ -738,6 +743,7 @@
         <!-- Live Preview -->
         <div class="w-full h-44 rounded-sm overflow-hidden bg-eggshell border border-linen relative shadow-xs">
           <img id="item-modal-preview-img" src="assets/botanical-tattoo.jpg" alt="Превью" class="w-full h-full object-cover"/>
+          <video id="item-modal-preview-video" autoplay loop muted playsinline class="w-full h-full object-cover hidden"></video>
           <div id="item-modal-preview-badge" class="absolute top-2 left-2 bg-alabaster/95 px-2 py-0.5 rounded-sm border border-linen text-[8px] uppercase tracking-wider font-semibold text-ink shadow-xs">
             Татуировка
           </div>
@@ -749,13 +755,13 @@
 
         <!-- Image URL & Upload -->
         <div class="flex flex-col gap-1">
-          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Изображение (URL или загрузка)</label>
+          <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Медиа файл: Фото или видео (URL или загрузка)</label>
           <div class="flex gap-2">
             <input type="text" id="item-modal-src" required oninput="updateItemModalLivePreview()" class="flex-1 bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[12px] text-ink focus:border-ink focus:outline-none"/>
             <label class="px-3 py-2 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center gap-1.5 shrink-0 transition-all shadow-xs">
               <span class="material-symbols-outlined text-[15px]">upload</span>
               <span>Файл</span>
-              <input type="file" accept="image/*" class="hidden" onchange="uploadItemModalMedia(this)"/>
+              <input type="file" accept="image/*,video/*" class="hidden" onchange="uploadItemModalMedia(this)"/>
             </label>
           </div>
         </div>
@@ -844,7 +850,7 @@
   </div>
 
   <!-- ==================== INTERACTIVE PHOTO CROP & ADJUST MODAL ==================== -->
-  <div id="crop-modal" class="fixed inset-0 z-50 bg-ink/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4 select-none">
+  <div id="crop-modal" style="display: none;" class="fixed inset-0 z-[99999] bg-ink/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 select-none">
     <div class="max-w-xl w-full bg-alabaster border border-linen rounded-xl shadow-2xl p-4 sm:p-5 flex flex-col gap-3.5">
       <!-- Header -->
       <div class="flex items-center justify-between border-b border-linen pb-2.5">
@@ -1123,6 +1129,35 @@
       updateHeroPreview();
     }
 
+    function isVideoMedia(url) {
+      if (!url) return false;
+      const clean = url.split('?')[0].toLowerCase();
+      return clean.endsWith('.mp4') || clean.endsWith('.webm') || clean.endsWith('.mov') || clean.endsWith('.m4v') || clean.endsWith('.ogv') || clean.endsWith('.avi') || clean.endsWith('.mkv') || url.includes('/video/upload/');
+    }
+
+    function setPreviewMedia(imgId, videoId, src) {
+      const imgEl = document.getElementById(imgId);
+      const videoEl = videoId ? document.getElementById(videoId) : null;
+      if (!imgEl && !videoEl) return;
+
+      if (isVideoMedia(src)) {
+        if (imgEl) imgEl.classList.add('hidden');
+        if (videoEl) {
+          videoEl.classList.remove('hidden');
+          videoEl.src = src;
+        }
+      } else {
+        if (videoEl) {
+          videoEl.classList.add('hidden');
+          videoEl.src = '';
+        }
+        if (imgEl) {
+          imgEl.classList.remove('hidden');
+          if (src) imgEl.src = src;
+        }
+      }
+    }
+
     function updateHeroPreview() {
       const locVal = document.getElementById('txt-location-badge-tab1')?.value || 'Студия в Баку';
       const titleVal = document.getElementById('txt-hero-title')?.value || 'Искусство, которое\nостаётся с вами';
@@ -1140,14 +1175,12 @@
       const pSub = document.getElementById('hero-preview-sub');
       if (pSub) pSub.textContent = subVal;
 
-      const pMainImg = document.getElementById('hero-preview-main-img');
-      if (pMainImg) pMainImg.src = mainSrc;
+      setPreviewMedia('hero-preview-main-img', 'hero-preview-main-video', mainSrc);
 
       const pBadge = document.getElementById('hero-preview-badge');
       if (pBadge) pBadge.textContent = badgeVal;
 
-      const pInsetImg = document.getElementById('hero-preview-inset-img');
-      if (pInsetImg) pInsetImg.src = insetSrc;
+      setPreviewMedia('hero-preview-inset-img', 'hero-preview-inset-video', insetSrc);
 
       // Sync with Tab 4 inputs if present
       const tSubTab4 = document.getElementById('txt-hero-subtitle');
@@ -1167,6 +1200,7 @@
       img: null,
       targetInputId: null,
       targetPreviewImgId: null,
+      targetPreviewVideoId: null,
       onCompleteCallback: null,
       aspectRatio: 4 / 5,
       zoom: 1.0,
@@ -1180,18 +1214,32 @@
       boxHeight: 280
     };
 
-    function openCropModal({ file, targetInputId, targetPreviewImgId, defaultAspect = (4/5), onComplete = null }) {
+    function openCropModal({ file, targetInputId, targetPreviewImgId, targetPreviewVideoId = null, defaultAspect = (4/5), onComplete = null }) {
       if (!file) return;
 
+      const isVideo = (file.type && file.type.startsWith('video/')) || /\.(mp4|mov|webm|m4v|ogv|avi|mkv)$/i.test(file.name || '');
+      if (isVideo) {
+        uploadVideoDirect(file, targetInputId, targetPreviewImgId, targetPreviewVideoId, onComplete);
+        return;
+      }
+
       const reader = new FileReader();
+      reader.onerror = () => {
+        showToast('❌ Ошибка чтения файла', true);
+      };
       reader.onload = function(e) {
         const img = new Image();
+        img.onerror = function() {
+          showToast('Прямая загрузка файла...');
+          uploadVideoDirect(file, targetInputId, targetPreviewImgId, targetPreviewVideoId, onComplete);
+        };
         img.onload = function() {
           cropState.file = file;
           cropState.rawBase64 = e.target.result;
           cropState.img = img;
           cropState.targetInputId = targetInputId;
           cropState.targetPreviewImgId = targetPreviewImgId;
+          cropState.targetPreviewVideoId = targetPreviewVideoId;
           cropState.onCompleteCallback = onComplete;
           cropState.aspectRatio = defaultAspect;
           cropState.zoom = 1.0;
@@ -1220,7 +1268,8 @@
             activeBtn.classList.add('bg-ink', 'text-alabaster', 'border-ink');
           }
 
-          document.getElementById('crop-modal').classList.remove('hidden');
+          const modal = document.getElementById('crop-modal');
+          if (modal) modal.style.display = 'flex';
           initCropMouseEvents();
         };
         img.src = e.target.result;
@@ -1229,7 +1278,8 @@
     }
 
     function closeCropModal() {
-      document.getElementById('crop-modal').classList.add('hidden');
+      const modal = document.getElementById('crop-modal');
+      if (modal) modal.style.display = 'none';
       cropState.file = null;
       cropState.img = null;
     }
@@ -1438,8 +1488,7 @@
             }
           }
           if (cropState.targetPreviewImgId) {
-            const prevEl = document.getElementById(cropState.targetPreviewImgId);
-            if (prevEl) prevEl.src = data.url;
+            setPreviewMedia(cropState.targetPreviewImgId, cropState.targetPreviewVideoId, data.url);
           }
           if (cropState.onCompleteCallback) {
             cropState.onCompleteCallback(data.url);
@@ -1482,13 +1531,12 @@
             }
           }
           if (cropState.targetPreviewImgId) {
-            const prevEl = document.getElementById(cropState.targetPreviewImgId);
-            if (prevEl) prevEl.src = data.url;
+            setPreviewMedia(cropState.targetPreviewImgId, cropState.targetPreviewVideoId, data.url);
           }
           if (cropState.onCompleteCallback) {
             cropState.onCompleteCallback(data.url);
           }
-          showToast('✅ Оригинальное фото загружено!');
+          showToast('✅ Оригинальный файл загружен!');
           await saveAllChanges(true);
         } else {
           showToast('Ошибка загрузки: ' + (data.error || 'Неизвестная ошибка'), true);
@@ -1498,26 +1546,94 @@
       }
     }
 
-    // --- UPLOAD ROUTERS TO CROP MODAL ---
-    function uploadHeroImageFile(input, targetInputId) {
+    // --- UNIFIED MEDIA UPLOAD & ROUTING ENGINE ---
+    function handleMediaUpload(input, targetInputId, targetPreviewImgId, targetPreviewVideoId = null, defaultAspect = (4/5), onComplete = null) {
       const file = input.files[0];
       if (!file) return;
       input.value = '';
+
+      const isVideo = (file.type && file.type.startsWith('video/')) || /\.(mp4|mov|webm|m4v|ogv|avi|mkv)$/i.test(file.name || '');
+
+      if (isVideo) {
+        uploadVideoDirect(file, targetInputId, targetPreviewImgId, targetPreviewVideoId, onComplete);
+      } else {
+        openCropModal({
+          file,
+          targetInputId,
+          targetPreviewImgId,
+          targetPreviewVideoId,
+          defaultAspect,
+          onComplete
+        });
+      }
+    }
+
+    async function uploadVideoDirect(file, targetInputId, targetPreviewImgId, targetPreviewVideoId, onComplete) {
+      showToast('Загрузка видео в облако Cloudinary... Подождите.');
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              password: authPassword,
+              fileName: file.name,
+              fileData: e.target.result
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            if (targetInputId) {
+              const inputEl = document.getElementById(targetInputId);
+              if (inputEl) {
+                inputEl.value = data.url;
+                inputEl.dispatchEvent(new Event('input'));
+              }
+            }
+            if (targetPreviewImgId) {
+              setPreviewMedia(targetPreviewImgId, targetPreviewVideoId, data.url);
+            }
+            if (onComplete) onComplete(data.url);
+            showToast('✅ Видео успешно сохранено!');
+            await saveAllChanges(true);
+          } else {
+            showToast('❌ Ошибка загрузки видео: ' + (data.error || 'Неизвестная ошибка'), true);
+          }
+        } catch (err) {
+          showToast('❌ Ошибка связи с сервером', true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // --- UPLOAD ROUTERS TO CROP MODAL ---
+    function uploadHeroImageFile(input, targetInputId) {
       const isInset = (targetInputId === 'hero-inset-img-src');
-      openCropModal({
-        file,
+      handleMediaUpload(
+        input,
         targetInputId,
-        targetPreviewImgId: isInset ? 'hero-preview-inset-img' : 'hero-preview-main-img',
-        defaultAspect: isInset ? (4/3) : (4/5),
-        onComplete: () => updateHeroPreview()
-      });
+        isInset ? 'hero-preview-inset-img' : 'hero-preview-main-img',
+        isInset ? 'hero-preview-inset-video' : 'hero-preview-main-video',
+        isInset ? (4/3) : (4/5),
+        () => updateHeroPreview()
+      );
     }
 
     function uploadMediaFile(input, targetInputId, targetPreviewImgId, defaultAspect = (4/5)) {
-      const file = input.files[0];
-      if (!file) return;
-      input.value = '';
-      openCropModal({ file, targetInputId, targetPreviewImgId, defaultAspect });
+      const isAbout = (targetInputId === 'txt-about-photo');
+      handleMediaUpload(
+        input,
+        targetInputId,
+        targetPreviewImgId,
+        isAbout ? 'about-photo-preview-video' : null,
+        defaultAspect,
+        (url) => {
+          if (isAbout) {
+            setPreviewMedia('about-photo-preview', 'about-photo-preview-video', url);
+          }
+        }
+      );
     }
 
     // --- TAB 2: DIRECTIONS SECTION ---
@@ -1588,7 +1704,7 @@
       const tTitle = document.getElementById('dir-tattoo-title').value || 'Татуировки';
       const tDesc = document.getElementById('dir-tattoo-desc').value || 'Ботаника, надписи, минимализм.';
 
-      document.getElementById('dir-tattoo-preview-img').src = tSrc;
+      setPreviewMedia('dir-tattoo-preview-img', 'dir-tattoo-preview-video', tSrc);
       document.getElementById('dir-tattoo-preview-badge').textContent = tBadge;
       document.getElementById('dir-tattoo-preview-title').textContent = tTitle;
       document.getElementById('dir-tattoo-preview-desc').textContent = tDesc;
@@ -1598,7 +1714,7 @@
       const pTitle = document.getElementById('dir-pmu-title').value || 'Перманент';
       const pDesc = document.getElementById('dir-pmu-desc').value || 'Губы, брови, межресничка.';
 
-      document.getElementById('dir-pmu-preview-img').src = pSrc;
+      setPreviewMedia('dir-pmu-preview-img', 'dir-pmu-preview-video', pSrc);
       document.getElementById('dir-pmu-preview-badge').textContent = pBadge;
       document.getElementById('dir-pmu-preview-title').textContent = pTitle;
       document.getElementById('dir-pmu-preview-desc').textContent = pDesc;
@@ -1614,16 +1730,15 @@
     }
 
     function uploadDirectionPhoto(input, targetInputId, targetPreviewImgId) {
-      const file = input.files[0];
-      if (!file) return;
-      input.value = '';
-      openCropModal({
-        file,
+      const isPmu = (targetInputId === 'dir-pmu-src');
+      handleMediaUpload(
+        input,
         targetInputId,
         targetPreviewImgId,
-        defaultAspect: (4/5),
-        onComplete: () => updateDirectionsPreview()
-      });
+        isPmu ? 'dir-pmu-preview-video' : 'dir-tattoo-preview-video',
+        (4/5),
+        () => updateDirectionsPreview()
+      );
     }
 
     // --- TAB 3: PORTFOLIO & BADGES ---
@@ -1789,7 +1904,7 @@
       const metaAz = document.getElementById('item-modal-meta-az')?.value;
       const meta = (isAz && metaAz) ? metaAz : metaRu;
 
-      document.getElementById('item-modal-preview-img').src = src;
+      setPreviewMedia('item-modal-preview-img', 'item-modal-preview-video', src);
       document.getElementById('item-modal-preview-badge').textContent = badge;
       document.getElementById('item-modal-preview-title').textContent = title;
       document.getElementById('item-modal-preview-meta').textContent = meta;
@@ -1839,55 +1954,14 @@
     }
 
     function uploadItemModalMedia(input) {
-      const file = input.files[0];
-      if (!file) return;
-      input.value = '';
-      if (file.type && file.type.startsWith('video/')) {
-        uploadRawDirect(file, 'item-modal-src', 'item-modal-preview-img', () => updateItemModalLivePreview());
-        return;
-      }
-      openCropModal({
-        file,
-        targetInputId: 'item-modal-src',
-        targetPreviewImgId: 'item-modal-preview-img',
-        defaultAspect: (4/5),
-        onComplete: () => updateItemModalLivePreview()
-      });
-    }
-
-    async function uploadRawDirect(file, targetInputId, targetPreviewImgId, onComplete) {
-      showToast('Загрузка видео в облако...');
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        try {
-          const res = await fetch('/api/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              password: authPassword,
-              fileName: file.name,
-              fileData: e.target.result
-            })
-          });
-          const data = await res.json();
-          if (data.success) {
-            const inputEl = document.getElementById(targetInputId);
-            if (inputEl) inputEl.value = data.url;
-            if (targetPreviewImgId) {
-              const prev = document.getElementById(targetPreviewImgId);
-              if (prev) prev.src = data.url;
-            }
-            if (onComplete) onComplete();
-            showToast('✅ Видео загружено!');
-            await saveAllChanges(true);
-          } else {
-            showToast('Ошибка загрузки: ' + data.error, true);
-          }
-        } catch (err) {
-          showToast('Ошибка связи: ' + err.message, true);
-        }
-      };
-      reader.readAsDataURL(file);
+      handleMediaUpload(
+        input,
+        'item-modal-src',
+        'item-modal-preview-img',
+        'item-modal-preview-video',
+        (4/5),
+        () => updateItemModalLivePreview()
+      );
     }
 
     async function submitItemModal(e) {
@@ -1934,7 +2008,7 @@
 
       const itemData = {
         id: prevItem ? prevItem.id : ('port-' + Date.now()),
-        type: 'image',
+        type: isVideoMedia(src) ? 'video' : 'image',
         category: cat,
         title: title,
         title_az: titleAz || (prevItem?.title_az) || title,
@@ -2052,8 +2126,7 @@
       const aboutPhotoVal = appData.texts?.aboutPhoto || 'assets/artist.jpg';
       const aboutPhotoInput = document.getElementById('txt-about-photo');
       if (aboutPhotoInput) aboutPhotoInput.value = aboutPhotoVal;
-      const aboutPhotoPrev = document.getElementById('about-photo-preview');
-      if (aboutPhotoPrev) aboutPhotoPrev.src = aboutPhotoVal;
+      setPreviewMedia('about-photo-preview', 'about-photo-preview-video', aboutPhotoVal);
       const aboutBadgeInput = document.getElementById('txt-about-badge');
       if (aboutBadgeInput) aboutBadgeInput.value = t.aboutBadge || (isAz ? 'Bakı · 28 May metrosu yaxınlığında' : 'Баку · рядом с метро 28 Мая');
       document.getElementById('txt-footer-address').value = t.footerAddress || (isAz ? 'Bakı · 28 May metrosu yaxınlığında (dəqiq ünvan yazılışdan sonra göndərilir)' : 'Баку · 28 Мая (точный адрес высылается после записи)');
@@ -2261,39 +2334,6 @@
         msg.textContent = 'Ошибка сети';
         msg.className = 'text-[11px] text-red-600 block';
       }
-    }
-
-    // --- MEDIA UPLOAD HELPER ---
-    async function uploadMediaFile(input, targetInputId) {
-      const file = input.files[0];
-      if (!file) return;
-
-      showToast('Загрузка файла...');
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        try {
-          const res = await fetch('/api/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              password: authPassword,
-              fileName: file.name,
-              fileData: e.target.result
-            })
-          });
-          const data = await res.json();
-          if (data.success) {
-            document.getElementById(targetInputId).value = data.url;
-            showToast('Файл успешно загружен!');
-            await saveAllChanges(true);
-          } else {
-            showToast('Ошибка загрузки: ' + data.error, true);
-          }
-        } catch (err) {
-          showToast('Ошибка связи с сервером', true);
-        }
-      };
-      reader.readAsDataURL(file);
     }
 
     // --- TOAST NOTIFICATION ---

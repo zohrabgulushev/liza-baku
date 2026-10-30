@@ -1626,8 +1626,8 @@
           }
 
           // WhatsApp numbers
-          if (t.phoneTattoo) PHONE_TATTOO = t.phoneTattoo;
-          if (t.phonePmu) PHONE_PMU = t.phonePmu;
+          if (t.phoneTattoo) PHONE_TATTOO = String(t.phoneTattoo).replace(/\D/g, '');
+          if (t.phonePmu) PHONE_PMU = String(t.phonePmu).replace(/\D/g, '');
           if (t.phoneTattooDisplay) {
             const navWp = document.getElementById('nav-wp-tattoo-label'); if (navWp) navWp.textContent = t.phoneTattooDisplay;
             const footWp = document.getElementById('footer-wp-tattoo-number'); if (footWp) footWp.textContent = t.phoneTattooDisplay;
@@ -1639,20 +1639,22 @@
 
           // Instagram handles
           if (t.igTattoo) {
-            const igTUrl = 'https://instagram.com/' + t.igTattoo;
+            const cleanT = String(t.igTattoo).replace(/^@+/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/\/+$/, '');
+            const igTUrl = 'https://instagram.com/' + cleanT;
             const navL = document.getElementById('nav-ig-tattoo-link'); if (navL) navL.href = igTUrl;
-            const cardL = document.getElementById('card-ig-tattoo'); if (cardL) { cardL.href = igTUrl; cardL.title = 'Instagram: @' + t.igTattoo; }
-            const footL = document.getElementById('footer-ig-tattoo'); if (footL) { footL.href = igTUrl; footL.title = 'Instagram: @' + t.igTattoo; }
-            const navH = document.getElementById('nav-ig-tattoo-handle'); if (navH) navH.textContent = '@' + t.igTattoo;
-            const footH = document.getElementById('footer-ig-tattoo-handle'); if (footH) footH.textContent = '@' + t.igTattoo;
+            const cardL = document.getElementById('card-ig-tattoo'); if (cardL) { cardL.href = igTUrl; cardL.title = 'Instagram: @' + cleanT; }
+            const footL = document.getElementById('footer-ig-tattoo'); if (footL) { footL.href = igTUrl; footL.title = 'Instagram: @' + cleanT; }
+            const navH = document.getElementById('nav-ig-tattoo-handle'); if (navH) navH.textContent = '@' + cleanT;
+            const footH = document.getElementById('footer-ig-tattoo-handle'); if (footH) footH.textContent = '@' + cleanT;
           }
           if (t.igPmu) {
-            const igPUrl = 'https://instagram.com/' + t.igPmu;
+            const cleanP = String(t.igPmu).replace(/^@+/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/\/+$/, '');
+            const igPUrl = 'https://instagram.com/' + cleanP;
             const navL = document.getElementById('nav-ig-pmu-link'); if (navL) navL.href = igPUrl;
-            const cardL = document.getElementById('card-ig-pmu'); if (cardL) { cardL.href = igPUrl; cardL.title = 'Instagram: @' + t.igPmu; }
-            const footL = document.getElementById('footer-ig-pmu'); if (footL) { footL.href = igPUrl; footL.title = 'Instagram: @' + t.igPmu; }
-            const navH = document.getElementById('nav-ig-pmu-handle'); if (navH) navH.textContent = '@' + t.igPmu;
-            const footH = document.getElementById('footer-ig-pmu-handle'); if (footH) footH.textContent = '@' + t.igPmu;
+            const cardL = document.getElementById('card-ig-pmu'); if (cardL) { cardL.href = igPUrl; cardL.title = 'Instagram: @' + cleanP; }
+            const footL = document.getElementById('footer-ig-pmu'); if (footL) { footL.href = igPUrl; footL.title = 'Instagram: @' + cleanP; }
+            const navH = document.getElementById('nav-ig-pmu-handle'); if (navH) navH.textContent = '@' + cleanP;
+            const footH = document.getElementById('footer-ig-pmu-handle'); if (footH) footH.textContent = '@' + cleanP;
           }
         }
 

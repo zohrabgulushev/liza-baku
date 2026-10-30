@@ -246,7 +246,7 @@
               <h3 class="font-serif text-[16px] font-medium text-ink border-b border-linen pb-2">1. Тексты первого экрана</h3>
               
               <div class="flex flex-col gap-1.5">
-                <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Главный заголовок (перенос строки делит на 2 строки)</label>
+                <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Главный заголовок</label>
                 <textarea id="txt-hero-title" rows="2" oninput="updateHeroPreview()" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"></textarea>
               </div>
 
@@ -515,12 +515,12 @@
           <!-- Row 1: Names & Brand -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Имя мастера (Русский)</label>
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Имя мастера (RU)</label>
               <input type="text" id="txt-artist-name" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
             </div>
 
             <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Имя мастера (Латиница)</label>
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Имя мастера на латинице (EN)</label>
               <input type="text" id="txt-brand-latin" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
             </div>
           </div>
@@ -528,7 +528,7 @@
           <!-- Row 2: Location & Hero Subtitle -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Бейдж локации (Один раз на первом экране)</label>
+              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Бейдж локации</label>
               <input type="text" id="txt-location-badge" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
             </div>
 
@@ -540,7 +540,7 @@
 
           <!-- Row 3: Hero Description -->
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Короткое позиционирование (без лишнего тумана)</label>
+            <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Краткое позиционирование</label>
             <input type="text" id="txt-hero-desc" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
           </div>
 
@@ -550,9 +550,9 @@
               <div>
                 <h3 class="font-serif text-[18px] text-ink font-normal flex items-center gap-2">
                   <span class="material-symbols-outlined text-[20px] text-clay">person</span>
-                  <span>Раздел «О мастере» (Фото, цитата и описание)</span>
+                  <span>Раздел «О мастере»</span>
                 </h3>
-                <p class="text-[12px] text-ink-muted">Здесь настраивается фото мастера, цитата и текст под ней на главной странице сайта</p>
+                <p class="text-[12px] text-ink-muted">Фотография, цитата и краткое описание на главной странице</p>
               </div>
               <span class="text-[10px] uppercase tracking-wider bg-eggshell px-2.5 py-1 rounded-sm border border-linen font-semibold text-clay">О мастере</span>
             </div>
@@ -586,18 +586,18 @@
               <!-- Master Texts -->
               <div class="md:col-span-8 flex flex-col gap-3.5">
                 <div class="flex flex-col gap-1.5">
-                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Цитата мастера (курсив под фото)</label>
-                  <textarea id="txt-about-quote" rows="3" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="«Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий»"></textarea>
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Цитата мастера</label>
+                  <textarea id="txt-about-quote" rows="3" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий"></textarea>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Короткая справка / описание (с галочкой)</label>
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Краткое описание мастера</label>
                   <textarea id="txt-about-bio" rows="2" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="Соблюдаю правила стерильности и использую одноразовые расходные материалы."></textarea>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                   <div class="flex flex-col gap-1.5">
-                    <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Бейдж мастера (Локация)</label>
+                    <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Локация мастера</label>
                     <input type="text" id="txt-about-badge" placeholder="Баку · рядом с метро 28 Мая" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
                   </div>
 
@@ -613,8 +613,8 @@
           <!-- Row 6: Two Dedicated Contact Pairs -->
           <div class="pt-3 border-t border-linen flex flex-col gap-4">
             <div class="border-b border-linen pb-2">
-              <h3 class="font-serif text-[17px] text-ink font-normal">Контакты по двум направлениям</h3>
-              <p class="text-[12px] text-ink-muted">Отдельные WhatsApp и Instagram для Татуировок и Перманентного макияжа</p>
+              <h3 class="font-serif text-[17px] text-ink font-normal">Контакты</h3>
+              <p class="text-[12px] text-ink-muted">Номера WhatsApp и профили Instagram для каждого направления</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -625,19 +625,14 @@
                   <span class="font-serif text-[15px] font-medium text-ink">Татуировки</span>
                 </div>
 
-                <div class="flex flex-col gap-1">
-                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp (для ссылок: 99450...)</label>
-                  <input type="text" id="txt-phone-tattoo" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp</label>
+                  <input type="text" id="txt-phone-tattoo" placeholder="+994 77 357 20 21" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
                 </div>
 
-                <div class="flex flex-col gap-1">
-                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp (отображение: +994 50 ...)</label>
-                  <input type="text" id="txt-phone-tattoo-disp" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
-                </div>
-
-                <div class="flex flex-col gap-1">
-                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">Instagram (без @: leyla.ink)</label>
-                  <input type="text" id="txt-ig-tattoo" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Instagram</label>
+                  <input type="text" id="txt-ig-tattoo" placeholder="liza_tattoo_baku" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
                 </div>
               </div>
 
@@ -648,19 +643,14 @@
                   <span class="font-serif text-[15px] font-medium text-ink">Перманентный макияж</span>
                 </div>
 
-                <div class="flex flex-col gap-1">
-                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp (для ссылок: 99450...)</label>
-                  <input type="text" id="txt-phone-pmu" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp</label>
+                  <input type="text" id="txt-phone-pmu" placeholder="+994 55 498 29 57" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
                 </div>
 
-                <div class="flex flex-col gap-1">
-                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">WhatsApp (отображение: +994 50 ...)</label>
-                  <input type="text" id="txt-phone-pmu-disp" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
-                </div>
-
-                <div class="flex flex-col gap-1">
-                  <label class="text-[10px] font-medium uppercase tracking-wider text-ink-muted">Instagram (без @: leyla.permanent)</label>
-                  <input type="text" id="txt-ig-pmu" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[12px] text-ink focus:border-ink focus:outline-none"/>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Instagram</label>
+                  <input type="text" id="txt-ig-pmu" placeholder="liza_permanent_baku" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
                 </div>
               </div>
             </div>
@@ -2130,12 +2120,55 @@
       const aboutBadgeInput = document.getElementById('txt-about-badge');
       if (aboutBadgeInput) aboutBadgeInput.value = t.aboutBadge || (isAz ? 'Bakı · 28 May metrosu yaxınlığında' : 'Баку · рядом с метро 28 Мая');
       document.getElementById('txt-footer-address').value = t.footerAddress || (isAz ? 'Bakı · 28 May metrosu yaxınlığında (dəqiq ünvan yazılışdan sonra göndərilir)' : 'Баку · 28 Мая (точный адрес высылается после записи)');
-      document.getElementById('txt-phone-tattoo').value = base.phoneTattoo || '';
-      document.getElementById('txt-phone-tattoo-disp').value = base.phoneTattooDisplay || '';
-      document.getElementById('txt-phone-pmu').value = base.phonePmu || '';
-      document.getElementById('txt-phone-pmu-disp').value = base.phonePmuDisplay || '';
-      document.getElementById('txt-ig-tattoo').value = base.igTattoo || '';
-      document.getElementById('txt-ig-pmu').value = base.igPmu || '';
+      const tattooPhone = base.phoneTattooDisplay || formatPhoneDisplay(base.phoneTattoo) || '';
+      const elPhoneTattoo = document.getElementById('txt-phone-tattoo');
+      if (elPhoneTattoo) elPhoneTattoo.value = tattooPhone;
+
+      const pmuPhone = base.phonePmuDisplay || formatPhoneDisplay(base.phonePmu) || '';
+      const elPhonePmu = document.getElementById('txt-phone-pmu');
+      if (elPhonePmu) elPhonePmu.value = pmuPhone;
+
+      const elIgTattoo = document.getElementById('txt-ig-tattoo');
+      if (elIgTattoo) elIgTattoo.value = cleanInstagramHandle(base.igTattoo || '');
+
+      const elIgPmu = document.getElementById('txt-ig-pmu');
+      if (elIgPmu) elIgPmu.value = cleanInstagramHandle(base.igPmu || '');
+    }
+
+    function formatPhoneDisplay(val) {
+      if (!val) return '';
+      let str = String(val).trim();
+      let digits = str.replace(/\D/g, '');
+      if (digits.startsWith('0') && digits.length === 10) {
+        digits = '994' + digits.slice(1);
+      } else if (!digits.startsWith('994') && digits.length === 9) {
+        digits = '994' + digits;
+      }
+      if (digits.length === 12 && digits.startsWith('994')) {
+        return `+${digits.slice(0,3)} ${digits.slice(3,5)} ${digits.slice(5,8)} ${digits.slice(8,10)} ${digits.slice(10,12)}`;
+      }
+      return str.startsWith('+') ? str : (digits ? '+' + digits : str);
+    }
+
+    function extractPhoneDigits(val) {
+      if (!val) return '';
+      let digits = String(val).replace(/\D/g, '');
+      if (digits.startsWith('0') && digits.length === 10) {
+        digits = '994' + digits.slice(1);
+      } else if (!digits.startsWith('994') && digits.length === 9) {
+        digits = '994' + digits;
+      }
+      return digits;
+    }
+
+    function cleanInstagramHandle(val) {
+      if (!val) return '';
+      return String(val)
+        .trim()
+        .replace(/^@+/, '')
+        .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
+        .replace(/\/+$/, '')
+        .trim();
     }
 
     function collectAllInputs() {
@@ -2167,12 +2200,30 @@
       const masterPhoto = document.getElementById('txt-about-photo')?.value || appData.texts.aboutPhoto || 'assets/artist.jpg';
       appData.texts.aboutPhoto = masterPhoto;
       if (appData.texts_az) appData.texts_az.aboutPhoto = masterPhoto;
-      appData.texts.phoneTattoo = document.getElementById('txt-phone-tattoo')?.value || appData.texts.phoneTattoo || '';
-      appData.texts.phoneTattooDisplay = document.getElementById('txt-phone-tattoo-disp')?.value || appData.texts.phoneTattooDisplay || '';
-      appData.texts.phonePmu = document.getElementById('txt-phone-pmu')?.value || appData.texts.phonePmu || '';
-      appData.texts.phonePmuDisplay = document.getElementById('txt-phone-pmu-disp')?.value || appData.texts.phonePmuDisplay || '';
-      appData.texts.igTattoo = document.getElementById('txt-ig-tattoo')?.value || appData.texts.igTattoo || '';
-      appData.texts.igPmu = document.getElementById('txt-ig-pmu')?.value || appData.texts.igPmu || '';
+
+      const rawPhoneTattoo = document.getElementById('txt-phone-tattoo')?.value || '';
+      const tattooDigits = extractPhoneDigits(rawPhoneTattoo);
+      if (tattooDigits) {
+        appData.texts.phoneTattoo = tattooDigits;
+        appData.texts.phoneTattooDisplay = (rawPhoneTattoo.includes(' ') || rawPhoneTattoo.includes('-')) 
+          ? rawPhoneTattoo.trim() 
+          : formatPhoneDisplay(rawPhoneTattoo);
+      }
+
+      const rawPhonePmu = document.getElementById('txt-phone-pmu')?.value || '';
+      const pmuDigits = extractPhoneDigits(rawPhonePmu);
+      if (pmuDigits) {
+        appData.texts.phonePmu = pmuDigits;
+        appData.texts.phonePmuDisplay = (rawPhonePmu.includes(' ') || rawPhonePmu.includes('-')) 
+          ? rawPhonePmu.trim() 
+          : formatPhoneDisplay(rawPhonePmu);
+      }
+
+      const cleanIgTattoo = cleanInstagramHandle(document.getElementById('txt-ig-tattoo')?.value || '');
+      if (cleanIgTattoo) appData.texts.igTattoo = cleanIgTattoo;
+
+      const cleanIgPmu = cleanInstagramHandle(document.getElementById('txt-ig-pmu')?.value || '');
+      if (cleanIgPmu) appData.texts.igPmu = cleanIgPmu;
 
       // Directions
       if (!targetDirs.tattoo) targetDirs.tattoo = {};

@@ -540,36 +540,68 @@
             <input type="text" id="txt-hero-desc" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
           </div>
 
-          <!-- Row 4: About Quote & Bio -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-linen">
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Цитата мастера в разделе «О мастере»</label>
-              <textarea id="txt-about-quote" rows="3" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"></textarea>
-            </div>
-
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Короткая справка (максимум два предложения)</label>
-              <textarea id="txt-about-bio" rows="3" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"></textarea>
-            </div>
-          </div>
-
-          <!-- Row 5: About Photo & Location -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-linen">
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Фото мастера</label>
-              <div class="flex gap-2">
-                <input type="text" id="txt-about-photo" class="flex-1 bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
-                <label class="px-3 py-2 rounded-sm bg-eggshell border border-linen text-ink text-[11px] font-medium hover:border-ink cursor-pointer flex items-center gap-1.5 shrink-0 transition-all">
-                  <span class="material-symbols-outlined text-[15px]">upload</span>
-                  <span>Загрузить</span>
-                  <input type="file" accept="image/*" class="hidden" onchange="uploadMediaFile(this, 'txt-about-photo')"/>
-                </label>
+          <!-- Section: About the Master (О мастере) -->
+          <div class="pt-4 border-t border-linen flex flex-col gap-4">
+            <div class="border-b border-linen pb-2 flex items-center justify-between">
+              <div>
+                <h3 class="font-serif text-[18px] text-ink font-normal flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[20px] text-clay">person</span>
+                  <span>Раздел «О мастере» (Фото, цитата и описание)</span>
+                </h3>
+                <p class="text-[12px] text-ink-muted">Здесь настраивается фото мастера, цитата и текст под ней на главной странице сайта</p>
               </div>
+              <span class="text-[10px] uppercase tracking-wider bg-eggshell px-2.5 py-1 rounded-sm border border-linen font-semibold text-clay">О мастере</span>
             </div>
 
-            <div class="flex flex-col gap-1.5">
-              <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Адрес в футере</label>
-              <input type="text" id="txt-footer-address" class="bg-eggshell/60 border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 bg-eggshell/30 border border-linen p-4 rounded-sm">
+              <!-- Master Photo Preview & Upload Card -->
+              <div class="md:col-span-4 flex flex-col gap-3">
+                <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Фотография мастера</label>
+                <div class="relative w-full aspect-[4/5] max-w-[220px] mx-auto rounded-lg overflow-hidden border-2 border-linen shadow-md bg-alabaster group">
+                  <img id="about-photo-preview" src="assets/artist.jpg" alt="Фото мастера" class="w-full h-full object-cover"/>
+                  <div class="absolute inset-0 bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <label class="px-3.5 py-2 rounded-sm bg-alabaster text-ink text-[11px] font-semibold hover:bg-white cursor-pointer shadow-md flex items-center gap-1.5 transition-all">
+                      <span class="material-symbols-outlined text-[16px]">photo_camera</span>
+                      <span>Сменить фото</span>
+                      <input type="file" accept="image/*" class="hidden" onchange="uploadMediaFile(this, 'txt-about-photo', 'about-photo-preview')"/>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="px-4 py-2.5 rounded-sm bg-ink text-alabaster text-[12px] font-semibold hover:bg-clay cursor-pointer shadow-xs flex items-center justify-center gap-2 transition-all">
+                    <span class="material-symbols-outlined text-[17px]">cloud_upload</span>
+                    <span>Загрузить фото мастера</span>
+                    <input type="file" accept="image/*" class="hidden" onchange="uploadMediaFile(this, 'txt-about-photo', 'about-photo-preview')"/>
+                  </label>
+                  <input type="text" id="txt-about-photo" placeholder="Ссылка на фото" class="bg-alabaster border border-linen rounded-sm px-3 py-1.5 text-[11px] text-ink-muted font-mono focus:border-ink focus:outline-none" oninput="const p=document.getElementById('about-photo-preview'); if(p) p.src=this.value;"/>
+                </div>
+              </div>
+
+              <!-- Master Texts -->
+              <div class="md:col-span-8 flex flex-col gap-3.5">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Цитата мастера (курсив под фото)</label>
+                  <textarea id="txt-about-quote" rows="3" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="«Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий»"></textarea>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Короткая справка / описание (с галочкой)</label>
+                  <textarea id="txt-about-bio" rows="2" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none" placeholder="Соблюдаю правила стерильности и использую одноразовые расходные материалы."></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div class="flex flex-col gap-1.5">
+                    <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Бейдж мастера (Локация)</label>
+                    <input type="text" id="txt-about-badge" placeholder="Баку · рядом с метро 28 Мая" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+                  </div>
+
+                  <div class="flex flex-col gap-1.5">
+                    <label class="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Адрес в футере сайта</label>
+                    <input type="text" id="txt-footer-address" class="bg-alabaster border border-linen rounded-sm px-3 py-2 text-[13px] text-ink focus:border-ink focus:outline-none"/>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1061,6 +1093,43 @@
             await saveAllChanges(true);
           } else {
             showToast('Ошибка загрузки: ' + data.error, true);
+          }
+        } catch (err) {
+          showToast('Ошибка связи с сервером', true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function uploadMediaFile(input, targetInputId, targetPreviewImgId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      showToast('Загрузка фото в облако...');
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              password: authPassword,
+              fileName: file.name,
+              fileData: e.target.result
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            const inputEl = document.getElementById(targetInputId);
+            if (inputEl) inputEl.value = data.url;
+            if (targetPreviewImgId) {
+              const previewEl = document.getElementById(targetPreviewImgId);
+              if (previewEl) previewEl.src = data.url;
+            }
+            showToast('Фото успешно загружено!');
+            await saveAllChanges(true);
+          } else {
+            showToast('Ошибка загрузки: ' + (data.error || 'Неизвестная ошибка'), true);
           }
         } catch (err) {
           showToast('Ошибка связи с сервером', true);
@@ -1599,7 +1668,13 @@
       document.getElementById('txt-hero-desc').value = t.heroDesc || (isAz ? 'İstəkləriniz nəzərə alınmaqla fərdi eskizlər və zərif permanent.' : 'Индивидуальные эскизы и деликатный перманент с учётом ваших пожеланий.');
       document.getElementById('txt-about-quote').value = t.aboutQuote || (isAz ? '«İstəkləriniz nəzərə alınmaqla fərdi tatuaj eskizləri və zərif permanent».' : '«Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий».');
       document.getElementById('txt-about-bio').value = t.aboutBio || (isAz ? 'Sterillik qaydalarına tam riayət edirəm və birdəfəlik materiallardan istifadə edirəm.' : 'Соблюдаю правила стерильности и использую одноразовые расходные материалы.');
-      document.getElementById('txt-about-photo').value = appData.texts?.aboutPhoto || 'assets/artist.jpg';
+      const aboutPhotoVal = appData.texts?.aboutPhoto || 'assets/artist.jpg';
+      const aboutPhotoInput = document.getElementById('txt-about-photo');
+      if (aboutPhotoInput) aboutPhotoInput.value = aboutPhotoVal;
+      const aboutPhotoPrev = document.getElementById('about-photo-preview');
+      if (aboutPhotoPrev) aboutPhotoPrev.src = aboutPhotoVal;
+      const aboutBadgeInput = document.getElementById('txt-about-badge');
+      if (aboutBadgeInput) aboutBadgeInput.value = t.aboutBadge || (isAz ? 'Bakı · 28 May metrosu yaxınlığında' : 'Баку · рядом с метро 28 Мая');
       document.getElementById('txt-footer-address').value = t.footerAddress || (isAz ? 'Bakı · 28 May metrosu yaxınlığında (dəqiq ünvan yazılışdan sonra göndərilir)' : 'Баку · 28 Мая (точный адрес высылается после записи)');
       document.getElementById('txt-phone-tattoo').value = base.phoneTattoo || '';
       document.getElementById('txt-phone-tattoo-disp').value = base.phoneTattooDisplay || '';
@@ -1629,12 +1704,15 @@
       targetTexts.heroDesc = document.getElementById('txt-hero-desc')?.value || targetTexts.heroDesc;
       targetTexts.aboutQuote = document.getElementById('txt-about-quote')?.value || targetTexts.aboutQuote;
       targetTexts.aboutBio = document.getElementById('txt-about-bio')?.value || targetTexts.aboutBio;
+      targetTexts.aboutBadge = document.getElementById('txt-about-badge')?.value || targetTexts.aboutBadge;
       targetTexts.footerAddress = document.getElementById('txt-footer-address')?.value || targetTexts.footerAddress;
 
       // Shared media and contacts
       appData.texts.heroMainImg = document.getElementById('hero-main-img-src')?.value || appData.texts.heroMainImg || 'assets/hero-fine-line.jpg';
       appData.texts.heroInsetImg = document.getElementById('hero-inset-img-src')?.value || appData.texts.heroInsetImg || 'assets/lip-blush.jpg';
-      appData.texts.aboutPhoto = document.getElementById('txt-about-photo')?.value || appData.texts.aboutPhoto || 'assets/artist.jpg';
+      const masterPhoto = document.getElementById('txt-about-photo')?.value || appData.texts.aboutPhoto || 'assets/artist.jpg';
+      appData.texts.aboutPhoto = masterPhoto;
+      if (appData.texts_az) appData.texts_az.aboutPhoto = masterPhoto;
       appData.texts.phoneTattoo = document.getElementById('txt-phone-tattoo')?.value || appData.texts.phoneTattoo || '';
       appData.texts.phoneTattooDisplay = document.getElementById('txt-phone-tattoo-disp')?.value || appData.texts.phoneTattooDisplay || '';
       appData.texts.phonePmu = document.getElementById('txt-phone-pmu')?.value || appData.texts.phonePmu || '';

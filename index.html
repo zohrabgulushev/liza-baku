@@ -293,7 +293,7 @@
         </svg>
 
         <!-- Main Card: Fine line botanical tattoo on linen -->
-        <div class="relative w-[76%] h-[245px] sm:h-[280px] rounded-2xl overflow-hidden shadow-[0_8px_26px_rgba(26,25,24,0.08)] bg-eggshell photo-card z-0 cursor-pointer" onclick="openModal('assets/hero-fine-line.jpg', 'Fine line · Авторские эскизы', 'Татуировка', 'Художественная тонкая ботаника на руке. Авторский эскиз.')">
+        <div class="relative w-[76%] aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_8px_26px_rgba(26,25,24,0.08)] bg-eggshell photo-card z-0 cursor-pointer" onclick="openModal('assets/hero-fine-line.jpg', 'Fine line · Авторские эскизы', 'Татуировка', 'Художественная тонкая ботаника на руке. Авторский эскиз.')">
           <img id="hero-main-img" alt="Fine line татуировка в Баку" class="w-full h-full object-cover" src="assets/hero-fine-line.jpg"/>
           
           <!-- Floating Pill Badge on Main Card -->
@@ -303,7 +303,7 @@
         </div>
 
         <!-- Overlapping Inset Card: Lip blush permanent makeup -->
-        <div class="absolute right-0 bottom-3 w-[48%] h-[155px] sm:h-[180px] rounded-2xl overflow-hidden border-[3px] border-[#FAF8F5] shadow-[0_12px_32px_rgba(26,25,24,0.16)] z-10 bg-eggshell photo-card cursor-pointer" onclick="openModal('assets/lip-blush.jpg', 'Деликатный перманент губ', 'Перманент', 'Мягкая акварельная растушевка без эффекта помады. Естественный блеск и тон.')">
+        <div class="absolute right-0 bottom-3 w-[48%] aspect-[4/3] rounded-2xl overflow-hidden border-[3px] border-[#FAF8F5] shadow-[0_12px_32px_rgba(26,25,24,0.16)] z-10 bg-eggshell photo-card cursor-pointer" onclick="openModal('assets/lip-blush.jpg', 'Деликатный перманент губ', 'Перманент', 'Мягкая акварельная растушевка без эффекта помады. Естественный блеск и тон.')">
           <img id="hero-inset-img" alt="Перманентный макияж губ в Баку" class="w-full h-full object-cover object-center" src="assets/lip-blush.jpg"/>
         </div>
       </div>
@@ -341,7 +341,7 @@
         <div class="bg-alabaster rounded-lg border border-linen overflow-hidden flex flex-col justify-between shadow-xs hover:border-clay/40 transition-all" style="min-width: 0 !important; width: 100% !important;">
           <div class="flex flex-col">
             <!-- Full bleed photo (top, left, right edges) -->
-            <div class="h-[210px] sm:h-[250px] w-full overflow-hidden bg-eggshell relative photo-card group cursor-pointer border-b border-linen/60" onclick="openModal(document.getElementById('dir-card-tattoo-img').src, document.getElementById('dir-card-tattoo-title').textContent, document.getElementById('dir-card-tattoo-badge').textContent, document.getElementById('dir-card-tattoo-desc').textContent)">
+            <div class="aspect-[4/5] w-full overflow-hidden bg-eggshell relative photo-card group cursor-pointer border-b border-linen/60" onclick="openModal(document.getElementById('dir-card-tattoo-img').src, document.getElementById('dir-card-tattoo-title').textContent, document.getElementById('dir-card-tattoo-badge').textContent, document.getElementById('dir-card-tattoo-desc').textContent)">
               <img id="dir-card-tattoo-img" alt="Татуировки" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="assets/hero-hand-tattoo.jpg"/>
               <div id="dir-card-tattoo-badge" class="absolute top-2 left-2 bg-alabaster/90 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/80 text-[8px] sm:text-[9px] uppercase tracking-wider text-ink font-semibold shadow-xs">Tattoo</div>
             </div>
@@ -379,7 +379,7 @@
         <div class="bg-alabaster rounded-lg border border-linen overflow-hidden flex flex-col justify-between shadow-xs hover:border-clay/40 transition-all" style="min-width: 0 !important; width: 100% !important;">
           <div class="flex flex-col">
             <!-- Full bleed photo (top, left, right edges) -->
-            <div class="h-[210px] sm:h-[250px] w-full overflow-hidden bg-eggshell relative photo-card group cursor-pointer border-b border-linen/60" onclick="openModal(document.getElementById('dir-card-pmu-img').src, document.getElementById('dir-card-pmu-title').textContent, document.getElementById('dir-card-pmu-badge').textContent, document.getElementById('dir-card-pmu-desc').textContent)">
+            <div class="aspect-[4/5] w-full overflow-hidden bg-eggshell relative photo-card group cursor-pointer border-b border-linen/60" onclick="openModal(document.getElementById('dir-card-pmu-img').src, document.getElementById('dir-card-pmu-title').textContent, document.getElementById('dir-card-pmu-badge').textContent, document.getElementById('dir-card-pmu-desc').textContent)">
               <img id="dir-card-pmu-img" alt="Перманентный макияж" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="assets/powder-brows.jpg"/>
               <div id="dir-card-pmu-badge" class="absolute top-2 left-2 bg-alabaster/90 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/80 text-[8px] sm:text-[9px] uppercase tracking-wider text-clay font-semibold shadow-xs">PMU</div>
             </div>
@@ -444,8 +444,8 @@
         <h2 id="about-artist-name" class="font-serif text-[24px] text-ink font-normal">О мастере</h2>
       </div>
 
-      <div class="rounded-sm overflow-hidden bg-eggshell border border-linen h-72 sm:h-80 relative photo-card group" id="about-artist-card" onclick="openModal('assets/artist.jpg', 'Лиза Аидаралиева', 'Татуировка &amp; Перманент', 'Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий.')">
-        <img id="about-artist-img" alt="Лиза Аидаралиева" class="w-full h-full object-cover object-top" src="assets/artist.jpg"/>
+      <div class="rounded-2xl overflow-hidden bg-eggshell border border-linen aspect-[4/5] w-full max-w-[340px] mx-auto relative photo-card group shadow-md" id="about-artist-card" onclick="openModal('assets/artist.jpg', 'Лиза Аидаралиева', 'Татуировка &amp; Перманент', 'Индивидуальные эскизы татуировок и деликатный перманент с учётом ваших пожеланий.')">
+        <img id="about-artist-img" alt="Лиза Аидаралиева" class="w-full h-full object-cover" src="assets/artist.jpg"/>
         <div class="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <span id="about-location-badge" class="hidden"></span>
       </div>
@@ -1744,7 +1744,7 @@
             itemEl.onclick = () => openModal(item.src, itemTitle, itemBadge, itemDesc);
 
             itemEl.innerHTML = `
-              <div class="h-52 sm:h-56 overflow-hidden bg-eggshell relative">
+              <div class="aspect-[4/5] w-full overflow-hidden bg-eggshell relative">
                 ${mediaHtml}
                 
                 <!-- Category Badge -->

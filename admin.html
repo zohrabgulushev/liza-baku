@@ -857,11 +857,14 @@
       </div>
 
       <!-- Interactive Viewport -->
-      <div class="relative w-full h-[340px] bg-[#141211] rounded-lg overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing border border-linen touch-none" id="crop-viewport-container">
-        <!-- Mask / Frame -->
-        <div id="crop-box" class="relative overflow-hidden border-2 border-white/90 shadow-[0_0_0_9999px_rgba(0,0,0,0.65)] pointer-events-none transition-[width,height] duration-200 z-10">
+      <div class="relative w-full h-[360px] bg-[#141211] rounded-lg overflow-hidden cursor-grab active:cursor-grabbing border border-linen touch-none select-none" id="crop-viewport-container">
+        <!-- The image being transformed (centered at 50% 50%) -->
+        <img id="crop-img" src="" alt="Редактируемое фото" style="position: absolute; top: 50%; left: 50%; max-width: none; max-height: none; pointer-events: none; will-change: transform;" class="transition-none z-10"/>
+
+        <!-- Mask / Frame (centered at 50% 50%) with dark mask outside -->
+        <div id="crop-box" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="overflow-hidden border-2 border-white shadow-[0_0_0_9999px_rgba(10,9,8,0.72)] pointer-events-none transition-[width,height] duration-200 z-20">
           <!-- Guide lines (Rule of thirds) -->
-          <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-30">
+          <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-25">
             <div class="border-r border-b border-white"></div>
             <div class="border-r border-b border-white"></div>
             <div class="border-b border-white"></div>
@@ -874,8 +877,11 @@
           </div>
         </div>
 
-        <!-- The image being transformed -->
-        <img id="crop-img" src="" alt="Редактируемое фото" class="absolute max-w-none pointer-events-none transition-none"/>
+        <!-- Live Badge showing which section on the site this is -->
+        <div class="absolute top-2.5 left-2.5 z-30 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-sm text-[10.5px] text-white font-medium tracking-wide flex items-center gap-1.5 border border-white/20 pointer-events-none">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span id="crop-frame-title">Рамка фото на сайте (4:5)</span>
+        </div>
       </div>
 
       <!-- Controls Toolbar -->
@@ -1204,7 +1210,7 @@
       boxHeight: 280
     };
 
-    function openCropModal({ file, targetInputId, targetPreviewImgId, targetPreviewVideoId = null, defaultAspect = (4/5), onComplete = null }) {
+    function openCropModal({ file, targetInputId, targetPreviewImgId, targetPreviewVideoId = null, defaultAspect = (4/5), onComplete = null, frameTitle = 'Рамка отображения на сайте (4:5)' }) {
       if (!file) return;
 
       const isVideo = (file.type && file.type.startsWith('video/')) || /\.(mp4|mov|webm|m4v|ogv|avi|mkv)$/i.test(file.name || '');
@@ -1232,10 +1238,16 @@
           cropState.targetPreviewVideoId = targetPreviewVideoId;
           cropState.onCompleteCallback = onComplete;
           cropState.aspectRatio = defaultAspect;
+          cropState.frameTitle = frameTitle || 'Рамка отображения на сайте';
           cropState.zoom = 1.0;
           cropState.panX = 0;
           cropState.panY = 0;
           cropState.rotation = 0;
+
+          const titleBadge = document.getElementById('crop-frame-title');
+          if (titleBadge) {
+            titleBadge.textContent = cropState.frameTitle;
+          }
 
           const cropImgEl = document.getElementById('crop-img');
           cropImgEl.src = img.src;
@@ -1278,7 +1290,7 @@
       const box = document.getElementById('crop-box');
       if (!box) return;
 
-      const maxW = 340;
+      const maxW = 320;
       const maxH = 280;
 
       let w, h;
@@ -1308,8 +1320,10 @@
     function getCropBaseScale() {
       if (!cropState.img) return 1.0;
       const isRotated90 = (cropState.rotation % 180 !== 0);
-      const imgW = isRotated90 ? cropState.img.height : cropState.img.width;
-      const imgH = isRotated90 ? cropState.img.width : cropState.img.height;
+      const natW = cropState.img.naturalWidth || cropState.img.width;
+      const natH = cropState.img.naturalHeight || cropState.img.height;
+      const imgW = isRotated90 ? natH : natW;
+      const imgH = isRotated90 ? natW : natH;
       return Math.max(cropState.boxWidth / imgW, cropState.boxHeight / imgH);
     }
 
@@ -1320,7 +1334,7 @@
       const baseScale = getCropBaseScale();
       const currentScale = baseScale * cropState.zoom;
 
-      cropImg.style.transform = `translate(${cropState.panX}px, ${cropState.panY}px) rotate(${cropState.rotation}deg) scale(${currentScale})`;
+      cropImg.style.transform = `translate(-50%, -50%) translate(${cropState.panX}px, ${cropState.panY}px) rotate(${cropState.rotation}deg) scale(${currentScale})`;
       document.getElementById('crop-zoom-range').value = cropState.zoom;
       document.getElementById('crop-zoom-val').textContent = Math.round(cropState.zoom * 100) + '%';
     }
@@ -1446,12 +1460,14 @@
         ctx.translate(targetW / 2 + cropState.panX * scaleRatio, targetH / 2 + cropState.panY * scaleRatio);
         ctx.rotate(cropState.rotation * Math.PI / 180);
         const drawScale = currentScale * scaleRatio;
+        const natW = cropState.img.naturalWidth || cropState.img.width;
+        const natH = cropState.img.naturalHeight || cropState.img.height;
         ctx.drawImage(
           cropState.img,
-          -cropState.img.width * drawScale / 2,
-          -cropState.img.height * drawScale / 2,
-          cropState.img.width * drawScale,
-          cropState.img.height * drawScale
+          -natW * drawScale / 2,
+          -natH * drawScale / 2,
+          natW * drawScale,
+          natH * drawScale
         );
         ctx.restore();
 
@@ -1537,7 +1553,7 @@
     }
 
     // --- UNIFIED MEDIA UPLOAD & ROUTING ENGINE ---
-    function handleMediaUpload(input, targetInputId, targetPreviewImgId, targetPreviewVideoId = null, defaultAspect = (4/5), onComplete = null) {
+    function handleMediaUpload(input, targetInputId, targetPreviewImgId, targetPreviewVideoId = null, defaultAspect = (4/5), onComplete = null, frameTitle = 'Рамка отображения на сайте (4:5)') {
       const file = input.files[0];
       if (!file) return;
       input.value = '';
@@ -1553,7 +1569,8 @@
           targetPreviewImgId,
           targetPreviewVideoId,
           defaultAspect,
-          onComplete
+          onComplete,
+          frameTitle
         });
       }
     }
@@ -1606,7 +1623,8 @@
         isInset ? 'hero-preview-inset-img' : 'hero-preview-main-img',
         isInset ? 'hero-preview-inset-video' : 'hero-preview-main-video',
         isInset ? (4/3) : (4/5),
-        () => updateHeroPreview()
+        () => updateHeroPreview(),
+        isInset ? 'Накладное фото коллажа (4:3)' : 'Основное фото первого экрана (4:5)'
       );
     }
 
@@ -1622,7 +1640,8 @@
           if (isAbout) {
             setPreviewMedia('about-photo-preview', 'about-photo-preview-video', url);
           }
-        }
+        },
+        isAbout ? 'Фото мастера на сайте (4:5)' : 'Фотография на сайте (4:5)'
       );
     }
 
@@ -1727,7 +1746,8 @@
         targetPreviewImgId,
         isPmu ? 'dir-pmu-preview-video' : 'dir-tattoo-preview-video',
         (4/5),
-        () => updateDirectionsPreview()
+        () => updateDirectionsPreview(),
+        isPmu ? 'Фото направления «Перманент» (4:5)' : 'Фото направления «Татуировки» (4:5)'
       );
     }
 
@@ -1950,7 +1970,8 @@
         'item-modal-preview-img',
         'item-modal-preview-video',
         (4/5),
-        () => updateItemModalLivePreview()
+        () => updateItemModalLivePreview(),
+        'Работа в портфолио (4:5)'
       );
     }
 
